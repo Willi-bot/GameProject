@@ -13,12 +13,17 @@ var resolutions = {
 	"800x600": Vector2i(800,600)
 }
 
+@onready var resolution_option_button = $PanelContainer/MenuOptions/ResolutionOption/OptionButton
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$PanelContainer/MenuOptions/VolumeSliders/Controls/MasterSlider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
 	$PanelContainer/MenuOptions/VolumeSliders/Controls/MusicSlider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
 	$PanelContainer/MenuOptions/VolumeSliders/Controls/EffectsSlider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
+	
+	for r in resolutions:
+		resolution_option_button.add_item(r)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -47,3 +52,15 @@ func _on_effects_slider_value_changed(value: float) -> void:
 
 func _on_check_box_toggled(toggled_on: bool) -> void:
 	AudioServer.set_bus_mute(0, toggled_on)
+
+
+func update_button_values():
+	var window_size_string = str(get_window().size.x, "x", get_window().size.x, "y")
+	var resolutions_index = resolutions.keys().find(window_size_string)
+	resolution_option_button.selected = resolutions_index
+
+
+func _on_option_button_item_selected(index: int) -> void:
+	var key = resolution_option_button.get_item_text(index)
+	get_window().set_size(resolutions[key])
+	get_window().move_to_center()

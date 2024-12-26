@@ -147,6 +147,7 @@ stream = ExtResource("2_salj4")
 autoplay = true
 bus = &"Music"
 
+[connection signal="item_selected" from="PanelContainer/MenuOptions/ResolutionOption/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="value_changed" from="PanelContainer/MenuOptions/VolumeSliders/Controls/MasterSlider" to="." method="_on_master_slider_value_changed"]
 [connection signal="value_changed" from="PanelContainer/MenuOptions/VolumeSliders/Controls/MusicSlider" to="." method="_on_music_slider_value_changed"]
 [connection signal="value_changed" from="PanelContainer/MenuOptions/VolumeSliders/Controls/EffectsSlider" to="." method="_on_effects_slider_value_changed"]
