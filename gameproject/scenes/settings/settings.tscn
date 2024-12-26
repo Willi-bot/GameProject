@@ -1,9 +1,18 @@
 [gd_scene load_steps=3 format=3 uid="uid://uofwoknn6ei8"]
 
-[ext_resource type="Texture2D" uid="uid://277rqherrka3" path="res://scenes/settings/photo.jpg" id="1_u5qld"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0g7f2"]
+bg_color = Color(0.50532, 0.651007, 0.425991, 1)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xbkr5"]
-texture = ExtResource("1_u5qld")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_10von"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.294118, 0.294118, 0.294118, 0.439216)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -13,31 +22,86 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="."]
+[node name="SettingsBackground" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_xbkr5")
+theme_override_styles/panel = SubResource("StyleBoxFlat_0g7f2")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -89.5
+offset_top = -11.5
+offset_right = 89.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+rotation = -0.000727543
+theme_override_styles/panel = SubResource("StyleBoxFlat_10von")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Labels" type="VBoxContainer" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer"]
+[node name="MasterVol" type="Label" parent="PanelContainer/HBoxContainer/Labels"]
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+text = "Master Volume"
+vertical_alignment = 1
+
+[node name="MusicVol" type="Label" parent="PanelContainer/HBoxContainer/Labels"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+text = "Music Volume"
+vertical_alignment = 1
+
+[node name="EffectsVol" type="Label" parent="PanelContainer/HBoxContainer/Labels"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+text = "Effects Volume"
+vertical_alignment = 1
+
+[node name="Controls" type="VBoxContainer" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="MasterSlider" type="HSlider" parent="PanelContainer/HBoxContainer/Controls"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.001
+value = 1.0
+
+[node name="MusicSlider" type="HSlider" parent="PanelContainer/HBoxContainer/Controls"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.001
+value = 1.0
+
+[node name="EffectsSlider" type="HSlider" parent="PanelContainer/HBoxContainer/Controls"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.001
+value = 1.0
