@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3 uid="uid://ddcqmwgt0m5rv"]
+
+[ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
+[ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://imgs/Background.png" id="2_ygs6r"]
+[ext_resource type="PackedScene" uid="uid://bxpubv3qnx3eu" path="res://scenes/entities/player_entity.tscn" id="3_wmvx2"]
+[ext_resource type="Script" path="res://scenes/entities/base_entity.gd" id="4_0v3qh"]
+[ext_resource type="PackedScene" uid="uid://b2v7h066l6yr7" path="res://scenes/entities/enemy_entity.tscn" id="4_to5gx"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
+texture = ExtResource("2_ygs6r")
+
+[sub_resource type="Resource" id="Resource_5b8ab"]
+script = ExtResource("4_0v3qh")
+type = 1
+max_hp = 200
+current_hp = 0
+damage = 60
+agility = 1
+
+[sub_resource type="Resource" id="Resource_lj402"]
+script = ExtResource("4_0v3qh")
+type = 0
+max_hp = 150
+current_hp = 0
+damage = 80
+agility = 3
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a8f3l")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_6e2ut")
+
+[node name="EnemyEntity" parent="." instance=ExtResource("4_to5gx")]
+position = Vector2(768, 223)
+entity = SubResource("Resource_5b8ab")
+
+[node name="PlayerEntity" parent="." instance=ExtResource("3_wmvx2")]
+position = Vector2(359, 446)
+entity = SubResource("Resource_lj402")
+
+[node name="AttackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -8.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "ATTACK !!!"
