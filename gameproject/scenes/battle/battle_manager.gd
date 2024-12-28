@@ -1,6 +1,6 @@
 extends Control
 
-@onready var attack_button : Button = $AttackButton
+@onready var attack_button : Button = $MenuBox/ButtonBox/LeftSide/AttackButton
 
 var all_battlers = []
 var player_battlers = []

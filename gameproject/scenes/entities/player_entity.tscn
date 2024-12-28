@@ -1,10 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://bxpubv3qnx3eu"]
 
 [ext_resource type="Script" path="res://scenes/entities/player_entity.gd" id="1_xpavd"]
-[ext_resource type="Texture2D" uid="uid://bm7pd3cpq3fps" path="res://imgs/db1.jpg" id="3_c4j3t"]
+[ext_resource type="Texture2D" uid="uid://12477ptjebh6" path="res://imgs/player.png" id="2_83rcq"]
 
 [node name="PlayerEntity" type="Node2D" groups=["PlayerEntity"]]
 script = ExtResource("1_xpavd")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("3_c4j3t")
+texture = ExtResource("2_83rcq")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(300, 0)
+offset_right = 4.0
+offset_bottom = 27.0

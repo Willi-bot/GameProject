@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fejd2p14pn73"
-path="res://.godot/imported/smile.jpg-b41977b20e214428f3030b2ba9c3e55a.ctex"
+uid="uid://87tml07ye78n"
+path="res://.godot/imported/enemy.png-3b549308f1d7f377fe9d84b342a6c137.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imgs/smile.jpg"
-dest_files=["res://.godot/imported/smile.jpg-b41977b20e214428f3030b2ba9c3e55a.ctex"]
+source_file="res://imgs/enemy.png"
+dest_files=["res://.godot/imported/enemy.png-3b549308f1d7f377fe9d84b342a6c137.ctex"]
 
 [params]
 

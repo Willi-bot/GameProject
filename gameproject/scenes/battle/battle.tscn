@@ -51,16 +51,45 @@ entity = SubResource("Resource_5b8ab")
 position = Vector2(359, 446)
 entity = SubResource("Resource_lj402")
 
-[node name="AttackButton" type="Button" parent="."]
+[node name="MenuBox" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 12
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -4.0
-offset_top = -8.0
-offset_right = 4.0
+offset_top = -66.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "ATTACK !!!"
+
+[node name="ButtonBox" type="HBoxContainer" parent="MenuBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftSide" type="VBoxContainer" parent="MenuBox/ButtonBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AttackButton" type="Button" parent="MenuBox/ButtonBox/LeftSide"]
+layout_mode = 2
+text = "Attack"
+
+[node name="ItemButton" type="Button" parent="MenuBox/ButtonBox/LeftSide"]
+layout_mode = 2
+text = "Use Item"
+
+[node name="RightSide" type="VBoxContainer" parent="MenuBox/ButtonBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SkillButton" type="Button" parent="MenuBox/ButtonBox/RightSide"]
+layout_mode = 2
+text = "Skills"
+
+[node name="NegButton" type="Button" parent="MenuBox/ButtonBox/RightSide"]
+layout_mode = 2
+text = "Start Negotiation"
+
+[node name="TextBox" type="Label" parent="MenuBox"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Samples Text"
