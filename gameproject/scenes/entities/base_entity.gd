@@ -22,5 +22,6 @@ func start_attacking(enemy_target : Node2D) -> void:
 	
 
 func be_damaged(amount : int) -> void:
-	current_hp -= amount
+	
+	current_hp = max(0, current_hp - amount)
 	health_changed.emit()

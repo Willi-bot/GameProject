@@ -10,6 +10,8 @@ script = ExtResource("1_nhv1i")
 texture = ExtResource("2_5bq6k")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
-custom_minimum_size = Vector2(300, 0)
-offset_right = 4.0
-offset_bottom = 27.0
+custom_minimum_size = Vector2(200, 0)
+offset_left = -100.0
+offset_top = -180.0
+offset_right = 100.0
+offset_bottom = -150.0

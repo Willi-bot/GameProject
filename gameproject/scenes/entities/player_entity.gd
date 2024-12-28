@@ -2,6 +2,10 @@ extends Node2D
 
 @export var entity : BaseEntity
 
+@onready var current_health: Label = $PanelContainer/PlayerInfo/Health/CurrentHP
+@onready var max_health: Label = $PanelContainer/PlayerInfo/Health/MaxHP
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	entity.current_hp = entity.max_hp
@@ -17,4 +21,5 @@ func start_turn() -> void:
 	pass
 
 func _update_health_indicator():
-	print("Health indicator needs to be updated!")	
+	max_health.text = str(entity.max_hp)
+	current_health.text = str(entity.current_hp)

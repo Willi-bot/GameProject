@@ -9,7 +9,61 @@ script = ExtResource("1_xpavd")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_83rcq")
 
-[node name="HealthBar" type="ProgressBar" parent="."]
-custom_minimum_size = Vector2(300, 0)
-offset_right = 4.0
-offset_bottom = 27.0
+[node name="PanelContainer" type="PanelContainer" parent="."]
+offset_left = -100.0
+offset_top = 140.0
+offset_right = 100.0
+offset_bottom = 220.0
+
+[node name="PlayerInfo" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Name" type="Label" parent="PanelContainer/PlayerInfo"]
+layout_mode = 2
+text = "Jeremiah"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Health" type="HBoxContainer" parent="PanelContainer/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="HP" type="Label" parent="PanelContainer/PlayerInfo/Health"]
+layout_mode = 2
+text = "HP:"
+
+[node name="CurrentHP" type="Label" parent="PanelContainer/PlayerInfo/Health"]
+layout_mode = 2
+text = "32"
+
+[node name="Separator" type="Label" parent="PanelContainer/PlayerInfo/Health"]
+layout_mode = 2
+text = "/"
+
+[node name="MaxHP" type="Label" parent="PanelContainer/PlayerInfo/Health"]
+layout_mode = 2
+text = "320	"
+
+[node name="Mana" type="HBoxContainer" parent="PanelContainer/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="MP" type="Label" parent="PanelContainer/PlayerInfo/Mana"]
+layout_mode = 2
+text = "MP	"
+
+[node name="CurrentMP" type="Label" parent="PanelContainer/PlayerInfo/Mana"]
+layout_mode = 2
+text = "32"
+
+[node name="Separator" type="Label" parent="PanelContainer/PlayerInfo/Mana"]
+layout_mode = 2
+text = "/"
+
+[node name="MaxMP" type="Label" parent="PanelContainer/PlayerInfo/Mana"]
+layout_mode = 2
+text = "320	"

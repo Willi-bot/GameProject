@@ -48,7 +48,7 @@ position = Vector2(768, 223)
 entity = SubResource("Resource_5b8ab")
 
 [node name="PlayerEntity" parent="." instance=ExtResource("3_wmvx2")]
-position = Vector2(359, 446)
+position = Vector2(340, 416)
 entity = SubResource("Resource_lj402")
 
 [node name="MenuBox" type="HBoxContainer" parent="."]
