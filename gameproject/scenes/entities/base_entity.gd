@@ -14,7 +14,7 @@ enum EntityType {
 @export var agility : int
 
 signal turn_ended
-
+signal health_changed
 
 func start_attacking(enemy_target : Node2D) -> void:
 	enemy_target.entity.be_damaged(damage)
@@ -23,3 +23,4 @@ func start_attacking(enemy_target : Node2D) -> void:
 
 func be_damaged(amount : int) -> void:
 	current_hp -= amount
+	health_changed.emit()

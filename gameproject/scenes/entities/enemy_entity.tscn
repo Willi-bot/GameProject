@@ -8,3 +8,8 @@ script = ExtResource("1_nhv1i")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_543sf")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(300, 0)
+offset_right = 4.0
+offset_bottom = 27.0
