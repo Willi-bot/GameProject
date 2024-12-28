@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=10 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://imgs/Background.png" id="2_ygs6r"]
@@ -24,6 +24,18 @@ max_hp = 150
 current_hp = 0
 damage = 80
 agility = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iom26"]
+bg_color = Color(0.147672, 0.147672, 0.147672, 0.686275)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.103744, 0.103744, 0.103744, 0.992157)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -52,12 +64,16 @@ position = Vector2(340, 416)
 entity = SubResource("Resource_lj402")
 
 [node name="MenuBox" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = -1
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 10.0
 offset_top = -66.0
+offset_right = -10.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -66,16 +82,19 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LeftSide" type="VBoxContainer" parent="MenuBox/ButtonBox"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="AttackButton" type="Button" parent="MenuBox/ButtonBox/LeftSide"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Attack"
 
 [node name="ItemButton" type="Button" parent="MenuBox/ButtonBox/LeftSide"]
 layout_mode = 2
-text = "Use Item"
+size_flags_vertical = 3
+text = "Items"
 
 [node name="RightSide" type="VBoxContainer" parent="MenuBox/ButtonBox"]
 layout_mode = 2
@@ -83,13 +102,30 @@ size_flags_horizontal = 3
 
 [node name="SkillButton" type="Button" parent="MenuBox/ButtonBox/RightSide"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Skills"
 
 [node name="NegButton" type="Button" parent="MenuBox/ButtonBox/RightSide"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Start Negotiation"
 
-[node name="TextBox" type="Label" parent="MenuBox"]
+[node name="PanelContainer" type="PanelContainer" parent="MenuBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_iom26")
+
+[node name="InfoText" type="Label" parent="MenuBox/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
-text = "Samples Text"
+text = "Choose your next action"
+
+[connection signal="mouse_entered" from="MenuBox/ButtonBox/LeftSide/AttackButton" to="." method="_on_attack_button_mouse_entered"]
+[connection signal="mouse_exited" from="MenuBox/ButtonBox/LeftSide/AttackButton" to="." method="_on_attack_button_mouse_exited"]
+[connection signal="mouse_entered" from="MenuBox/ButtonBox/LeftSide/ItemButton" to="." method="_on_item_button_mouse_entered"]
+[connection signal="mouse_exited" from="MenuBox/ButtonBox/LeftSide/ItemButton" to="." method="_on_item_button_mouse_exited"]
+[connection signal="mouse_entered" from="MenuBox/ButtonBox/RightSide/SkillButton" to="." method="_on_skill_button_mouse_entered"]
+[connection signal="mouse_exited" from="MenuBox/ButtonBox/RightSide/SkillButton" to="." method="_on_skill_button_mouse_exited"]
+[connection signal="mouse_entered" from="MenuBox/ButtonBox/RightSide/NegButton" to="." method="_on_neg_button_mouse_entered"]
+[connection signal="mouse_exited" from="MenuBox/ButtonBox/RightSide/NegButton" to="." method="_on_neg_button_mouse_exited"]
+[connection signal="mouse_exited" from="MenuBox/PanelContainer/InfoText" to="." method="_on_info_text_mouse_exited"]
