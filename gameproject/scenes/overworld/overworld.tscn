@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://hhvnos2h8e6o"]
+[gd_scene load_steps=4 format=3 uid="uid://hhvnos2h8e6o"]
 
 [ext_resource type="PackedScene" uid="uid://bsy40uqn1b4gh" path="res://scenes/pause_menu/pause_menu.tscn" id="1_bkvdd"]
+[ext_resource type="Script" path="res://scenes/overworld/overworld.gd" id="1_t0jtm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vsvk"]
 bg_color = Color(0.864391, 0.495392, 0.069963, 1)
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_t0jtm")
 
 [node name="OverworldBackground" type="Panel" parent="."]
 layout_mode = 1
