@@ -6,6 +6,7 @@ extends Control
 
 
 func _ready():
+	changeBtnStates(true)
 	$AnimationPlayer.play("RESET")
 
 func changeBtnStates(disabled):
