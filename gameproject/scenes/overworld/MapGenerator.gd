@@ -7,8 +7,10 @@ func generate(plane_len, node_count, path_count):
 	
 	# step 1: generating points on a grid randomly
 	var points = []
-	points.append(Vector2(0, plane_len / 2))
-	points.append(Vector2(plane_len, plane_len / 2))
+	# Starting Point
+	points.append(Vector2(plane_len / 2, 0))
+	# End Point
+	points.append(Vector2(plane_len / 2, plane_len))
 	
 	var center = Vector2(plane_len / 2, plane_len / 2)
 	for i in range(node_count):

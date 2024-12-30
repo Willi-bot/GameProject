@@ -1,6 +1,6 @@
 extends Node2D
 
-const margin = 10
+const margin = 5
 
 var children: Array = []
 
@@ -18,3 +18,7 @@ func _draw():
 		line -= margin * normal
 		var color = Color.GRAY
 		draw_line(normal * margin, line, color, 2, true)
+
+
+func _on_button_pressed() -> void:
+	print("Button pressed!")
