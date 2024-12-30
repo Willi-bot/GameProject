@@ -28,7 +28,6 @@ func _ready() -> void:
 		var point = nodes[k]
 		var event = event_scene.instantiate()
 		event.position = point * map_scale + map_root_position
-		print(event.position)
 		add_child(event)
 		events[k] = event
 	
