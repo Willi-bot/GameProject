@@ -1,10 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://b2v7h066l6yr7"]
+[gd_scene load_steps=5 format=3 uid="uid://b2v7h066l6yr7"]
 
 [ext_resource type="Script" path="res://scenes/entities/enemy_entity.gd" id="1_nhv1i"]
 [ext_resource type="Texture2D" uid="uid://87tml07ye78n" path="res://imgs/enemy.png" id="2_5bq6k"]
+[ext_resource type="Script" path="res://scenes/entities/base_entity.gd" id="2_7b6xd"]
+
+[sub_resource type="Resource" id="Resource_efdqj"]
+script = ExtResource("2_7b6xd")
+name = ""
+type = 0
+max_hp = 0
+current_hp = 0
+damage = 0
+agility = 0
 
 [node name="EnemyEntity" type="Node2D" groups=["EnemyEntity"]]
 script = ExtResource("1_nhv1i")
+entity = SubResource("Resource_efdqj")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_5bq6k")

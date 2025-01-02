@@ -1,19 +1,30 @@
-[gd_scene load_steps=3 format=3 uid="uid://bxpubv3qnx3eu"]
+[gd_scene load_steps=5 format=3 uid="uid://bxpubv3qnx3eu"]
 
 [ext_resource type="Script" path="res://scenes/entities/player_entity.gd" id="1_xpavd"]
 [ext_resource type="Texture2D" uid="uid://12477ptjebh6" path="res://imgs/player.png" id="2_83rcq"]
+[ext_resource type="Script" path="res://scenes/entities/base_entity.gd" id="2_lmvf7"]
+
+[sub_resource type="Resource" id="Resource_4c661"]
+script = ExtResource("2_lmvf7")
+name = ""
+type = 0
+max_hp = 0
+current_hp = 0
+damage = 0
+agility = 0
 
 [node name="PlayerEntity" type="Node2D" groups=["PlayerEntity"]]
 script = ExtResource("1_xpavd")
+entity = SubResource("Resource_4c661")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="CharacterSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_83rcq")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 offset_left = -100.0
-offset_top = 140.0
+offset_top = 50.0
 offset_right = 100.0
-offset_bottom = 220.0
+offset_bottom = 130.0
 
 [node name="PlayerInfo" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2

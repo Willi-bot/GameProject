@@ -7,6 +7,7 @@ enum EntityType {
 	ENEMY
 }
 
+@export var name: String = ""
 @export var type : EntityType
 @export var max_hp : int
 @export var current_hp : int
