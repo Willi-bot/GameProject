@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=6 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://imgs/Background.png" id="2_ygs6r"]
+[ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="3_gv6ij"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
 texture = ExtResource("2_ygs6r")
@@ -36,8 +37,17 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_6e2ut")
 
+[node name="TargetIcon" type="TextureRect" parent="."]
+z_index = 1
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(-16, -16)
+texture = ExtResource("3_gv6ij")
+stretch_mode = 2
+
 [node name="MenuBox" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(0, 100)
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -55,7 +65,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LeftSide" type="VBoxContainer" parent="MenuBox/ButtonBox"]
-custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 

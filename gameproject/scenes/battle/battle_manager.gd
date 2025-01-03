@@ -7,6 +7,8 @@ extends Control
 
 @onready var info_text : Label = $MenuBox/PanelContainer/InfoText
 
+@onready var target_icon : TextureRect = $TargetIcon
+
 var player_scene = preload("res://scenes/entities/player_entity.tscn")
 var enemy_scene = preload("res://scenes/entities/enemy_entity.tscn")
 
@@ -55,9 +57,18 @@ func _ready() -> void:
 		p.entity.turn_ended.connect(_next_turn)
 		
 	for e in enemy_battlers:
+		e.list_id = enemy_battlers.find(e, 0)
 		e.deal_damage.connect(_attack_random_battler)
 		e.entity.turn_ended.connect(_next_turn)
+		e.target_enemy.connect(_choose_target)
 		
+	# position target cursor
+	var target_position = enemy_battlers[selected_target].position
+	target_icon.position = target_position
+	target_icon.position.y -= enemy_battlers[selected_target].get_node("Sprite").texture.get_height() / 1.15
+	target_icon.position.x -= target_icon.size.x
+	
+	
 	current_turn = all_battlers[current_turn_idx]
 	_update_turn()
 
@@ -86,6 +97,8 @@ func get_enemy_data() -> Array:
 	
 	enemy_data.append({"name": "Gooner", "max_hp": 400, "current_hp": 400, "damage": 70, 
 					   "agility": 3, "sprite": "res://imgs/enemy.png"})
+	enemy_data.append({"name": "Gooner 2", "max_hp": 300, "current_hp": 300, "damage": 80, 
+					   "agility": 5, "sprite": "res://imgs/enemy.png"})
 	
 	return enemy_data
 
@@ -127,6 +140,19 @@ func _choose_skill() -> void:
 	
 func _choose_item() -> void:
 	print("Choosing an item")
+	
+	
+func _choose_target(target: int) -> void:
+	selected_target = target
+	
+	# position target cursor
+	var target_position = enemy_battlers[selected_target].position
+	target_icon.position = target_position
+	target_icon.position.y -= enemy_battlers[selected_target].get_node("Sprite").texture.get_height() / 1.15
+	target_icon.position.x -= target_icon.size.x
+	
+	print(selected_target)
+	print("We did something")
 	
 	
 func _choose_neg_target() -> void:
