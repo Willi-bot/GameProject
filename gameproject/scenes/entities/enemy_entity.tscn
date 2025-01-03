@@ -17,8 +17,19 @@ agility = 0
 script = ExtResource("1_nhv1i")
 entity = SubResource("Resource_efdqj")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_5bq6k")
+[node name="Sprite" type="TextureButton" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -132.0
+offset_right = 96.0
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("2_5bq6k")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)
@@ -26,3 +37,5 @@ offset_left = -100.0
 offset_top = -180.0
 offset_right = 100.0
 offset_bottom = -150.0
+
+[connection signal="pressed" from="Sprite" to="." method="_on_sprite_pressed"]
