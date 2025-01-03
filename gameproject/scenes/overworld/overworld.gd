@@ -1,33 +1,47 @@
 extends Control
 
 
+@onready var mapTexture: TextureRect = $TextureRect
+
+
 var events = {}
 var event_scene = preload("res://scenes/overworld/Event.tscn")
 
 var map_root_position = Vector2(0, 0)
-var map_scale = 30.0
-var padding = 80
 
-const plane_len = 15
-const node_count = plane_len * plane_len / 9
+var scale_factor = 80
+var map_scale = 65
+var scale_diff = scale_factor - map_scale
+
+const plane_height = 25 # Scaled up this means 2000
+const plane_width = 16 # Scaled up this means 1280
+const node_count = plane_height * plane_width / 9
 const path_count = 6
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
 	var generator = preload("res://scenes/overworld/MapGenerator.gd").new()
-	var map_data = generator.generate(plane_len, node_count, path_count)
+	var map_data = generator.generate(plane_width, plane_height, node_count, path_count)
 	var nodes = map_data[0]
 	var paths = map_data[1]
 	
-	map_root_position = get_viewport_rect().size
-	map_root_position.x = map_root_position.x / 2 - (plane_len / 2 * map_scale)
-	map_root_position.y -= plane_len * map_scale + padding
+	map_root_position = mapTexture.position
+	print(mapTexture.position)
+	print(mapTexture.size)
+
+	map_root_position.x += (scale_diff * plane_width / 2)
+	map_root_position.y += (scale_diff * plane_height / 2)
 	
 	for k in nodes.keys():
 		var point = nodes[k]
 		var event = event_scene.instantiate()
+	
+		
 		event.position = point * map_scale + map_root_position
+		
+		print(event.position)
+		
 		add_child(event)
 		events[k] = event
 	
@@ -37,8 +51,3 @@ func _ready() -> void:
 			var index2 = path[i + 1]
 			
 			events[index1].add_child_event(events[index2])
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

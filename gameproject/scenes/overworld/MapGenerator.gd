@@ -1,25 +1,25 @@
 extends Node
 
 
-func generate(plane_len, node_count, path_count):
+func generate(plane_width, plane_height, node_count, path_count):
 	# make sure that we are not going to generate the same map every time
 	randomize()
 	
 	# step 1: generating points on a grid randomly
 	var points = []
 	# Starting Point
-	points.append(Vector2(plane_len / 2, 0))
+	points.append(Vector2(plane_width / 2, 0))
 	# End Point
-	points.append(Vector2(plane_len / 2, plane_len))
+	points.append(Vector2(plane_width / 2, plane_height))
 	
-	var center = Vector2(plane_len / 2, plane_len / 2)
+	var center = Vector2(plane_width / 2, plane_height / 2)
 	for i in range(node_count):
 		while true:
-			var point = Vector2(randi() % plane_len, randi() % plane_len)
+			var point = Vector2(randi() % plane_width, randi() % plane_height)
 			
 			var dist_from_center = (point - center).length_squared()
 			# only accept points insode of a circle
-			var in_circle = dist_from_center <= plane_len * plane_len / 4
+			var in_circle = dist_from_center <= plane_width * plane_height / 4
 			if not points.has(point) and in_circle:
 				points.append(point)
 				break
