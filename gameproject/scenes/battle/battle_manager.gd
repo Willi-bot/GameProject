@@ -169,7 +169,6 @@ func _next_turn() -> void:
 	if has_battle_ended():
 		pass # implement end of battle
 	
-	print("Starting next turn player")
 	current_turn_idx = (current_turn_idx + 1) % all_battlers.size()
 	current_turn = all_battlers[current_turn_idx]
 	_update_turn()
@@ -181,9 +180,6 @@ func _update_turn() -> void:
 	else:
 		attack_button.hide()
 		
-	for b in all_battlers:
-		print(b.entity.type)
-		print(b.entity.current_hp)
 	current_turn.start_turn()
 
 
