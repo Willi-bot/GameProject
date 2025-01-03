@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://hhvnos2h8e6o"]
 
+[ext_resource type="Texture2D" uid="uid://bbr4xuk1m3n02" path="res://imgs/map.png" id="1_4dm7d"]
 [ext_resource type="PackedScene" uid="uid://bsy40uqn1b4gh" path="res://scenes/pause_menu/pause_menu.tscn" id="1_bkvdd"]
 [ext_resource type="Script" path="res://scenes/overworld/overworld.gd" id="1_vif6w"]
-[ext_resource type="Texture2D" uid="uid://dgmawkddhag48" path="res://imgs/stretched_map_sprite.png" id="2_xob6c"]
 [ext_resource type="Script" path="res://scenes/overworld/camera_2d.gd" id="3_jjmku"]
 
 [node name="Overworld" type="Control"]
@@ -21,18 +21,19 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -640.0
-offset_top = -2000.0
-offset_right = 640.0
+offset_left = -160.0
+offset_top = -640.0
+offset_right = 160.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("2_xob6c")
+texture = ExtResource("1_4dm7d")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 script = ExtResource("3_jjmku")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("1_bkvdd")]
 process_mode = 3

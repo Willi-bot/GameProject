@@ -11,8 +11,8 @@ var scale_factor = 80
 var map_scale = 65
 var scale_diff = scale_factor - map_scale
 
-const plane_height = 25 # Scaled up by 80: 2000 / by 65: 1625
-const plane_width = 16 # Scaled up by 80: 1280 / by 65:  1040
+const plane_height = 16 # Scaled up by 80: 2000 / by 65: 1625
+const plane_width = 8 # Scaled up by 80: 1280 / by 65:  1040
 const node_count = plane_height * plane_width / 9
 const path_count = 6
 
