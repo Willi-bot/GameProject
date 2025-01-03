@@ -28,20 +28,17 @@ func _ready() -> void:
 	var enemy_data = get_enemy_data()
 	var char_pos = Vector2(900, 225)
 	for enemy_character in enemy_data:
-		add_char_to_battle(enemy_character, BaseEntity.EntityType.ENEMY, char_pos)
+		var character = add_char_to_battle(enemy_character, BaseEntity.EntityType.ENEMY, char_pos)
 		char_pos.x -= 300
+		enemy_battlers.append(character)
 	
 	# load player data from globals or sth
 	var player_data = get_player_data()
 	char_pos = Vector2(150, 450)
 	for player_character in player_data:
-		add_char_to_battle(player_character, BaseEntity.EntityType.PLAYER, char_pos)
+		var character = add_char_to_battle(player_character, BaseEntity.EntityType.PLAYER, char_pos)
 		char_pos.x += 300
-	
-	
-	# load battle order and ready buttons
-	player_battlers = get_tree().get_nodes_in_group("PlayerEntity")
-	enemy_battlers = get_tree().get_nodes_in_group("EnemyEntity")
+		player_battlers.append(character)
 	
 	all_battlers.append_array(player_battlers)
 	all_battlers.append_array(enemy_battlers)
@@ -65,7 +62,7 @@ func _ready() -> void:
 	# position target cursor
 	var target_position = enemy_battlers[selected_target].position
 	target_icon.position = target_position
-	target_icon.position.y -= enemy_battlers[selected_target].get_node("Sprite").texture.get_height() / 1.15
+	target_icon.position.y -= enemy_battlers[selected_target].get_node("Sprite").texture_normal.get_height() / 1.15
 	target_icon.position.x -= target_icon.size.x
 	
 	
@@ -103,7 +100,7 @@ func get_enemy_data() -> Array:
 	return enemy_data
 
 
-func add_char_to_battle(character, type, pos) -> void:
+func add_char_to_battle(character, type, pos) -> Node2D:
 	var instance = null
 	
 	if type == BaseEntity.EntityType.PLAYER:
@@ -126,11 +123,18 @@ func add_char_to_battle(character, type, pos) -> void:
 	
 	add_child(instance)
 	
+	return instance
 
 
 func _perform_attack() -> void:
 	var target = enemy_battlers[selected_target]
+	print(enemy_battlers)
 	current_turn.entity.start_attacking(target)
+	print("Enemies damaged")
+	for e in enemy_battlers:
+		print(e.list_id)
+		print(e.entity.current_hp)
+		print(e.entity.max_hp)
 	
 	
 func _choose_skill() -> void:
@@ -148,11 +152,8 @@ func _choose_target(target: int) -> void:
 	# position target cursor
 	var target_position = enemy_battlers[selected_target].position
 	target_icon.position = target_position
-	target_icon.position.y -= enemy_battlers[selected_target].get_node("Sprite").texture.get_height() / 1.15
+	target_icon.position.y -= enemy_battlers[selected_target].get_node("Sprite").texture_normal.get_height() / 1.15
 	target_icon.position.x -= target_icon.size.x
-	
-	print(selected_target)
-	print("We did something")
 	
 	
 func _choose_neg_target() -> void:

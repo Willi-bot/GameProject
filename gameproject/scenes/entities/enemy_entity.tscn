@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2v7h066l6yr7"]
+[gd_scene load_steps=5 format=3 uid="uid://b2v7h066l6yr7"]
 
 [ext_resource type="Script" path="res://scenes/entities/enemy_entity.gd" id="1_nhv1i"]
 [ext_resource type="Texture2D" uid="uid://87tml07ye78n" path="res://imgs/enemy.png" id="2_5bq6k"]
@@ -13,20 +13,23 @@ current_hp = 0
 damage = 0
 agility = 0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_j5ex3"]
-
 [node name="EnemyEntity" type="Node2D" groups=["EnemyEntity"]]
 script = ExtResource("1_nhv1i")
 entity = SubResource("Resource_efdqj")
 
-[node name="Sprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_5bq6k")
-
-[node name="TargetArea" type="Area2D" parent="Sprite"]
-
-[node name="CollisionBox" type="CollisionShape2D" parent="Sprite/TargetArea"]
-shape = SubResource("RectangleShape2D_j5ex3")
-debug_color = Color(0.264057, 0.35831, 0.975623, 0.42)
+[node name="Sprite" type="TextureButton" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -132.0
+offset_right = 96.0
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("2_5bq6k")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)
@@ -34,3 +37,5 @@ offset_left = -100.0
 offset_top = -180.0
 offset_right = 100.0
 offset_bottom = -150.0
+
+[connection signal="pressed" from="Sprite" to="." method="_on_sprite_pressed"]
