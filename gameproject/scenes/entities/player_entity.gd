@@ -1,10 +1,12 @@
 extends Node2D
 
-@export var entity : BaseEntity
+@export var entity: BaseEntity
+@export var scale_factor: float
 
 @onready var current_health: Label = $PanelContainer/PlayerInfo/Health/CurrentHP
 @onready var max_health: Label = $PanelContainer/PlayerInfo/Health/MaxHP
 @onready var entity_name: Label = $PanelContainer/PlayerInfo/Name
+@onready var sprite: Sprite2D = $CharacterSprite
 
 
 # Called when the node enters the scene tree for the first time.

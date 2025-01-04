@@ -23,21 +23,22 @@ var selected_target : int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
 	# load player character and enemies
 	# load enemy data from globals or sth
 	var enemy_data = get_enemy_data()
-	var char_pos = Vector2(900, 225)
+	var char_pos = Vector2(480, 120)
 	for enemy_character in enemy_data:
 		var character = add_char_to_battle(enemy_character, BaseEntity.EntityType.ENEMY, char_pos)
-		char_pos.x -= 300
+		char_pos.x -= 120
 		enemy_battlers.append(character)
 	
 	# load player data from globals or sth
 	var player_data = get_player_data()
-	char_pos = Vector2(150, 450)
+	char_pos = Vector2(75, 215)
 	for player_character in player_data:
 		var character = add_char_to_battle(player_character, BaseEntity.EntityType.PLAYER, char_pos)
-		char_pos.x += 300
+		char_pos.x += 120
 		player_battlers.append(character)
 	
 	all_battlers.append_array(player_battlers)
@@ -61,9 +62,11 @@ func _ready() -> void:
 		
 	# position target cursor
 	var target_position = enemy_battlers[selected_target].position
+	var icon_scale = enemy_battlers[selected_target].scale
+	target_icon.scale = icon_scale
 	target_icon.position = target_position
-	target_icon.position.y -= enemy_battlers[selected_target].get_node("Sprite").texture_normal.get_height() / 1.15
-	target_icon.position.x -= target_icon.size.x
+	var y_offset = enemy_battlers[selected_target].get_node("CharacterSprite").texture_normal.get_height() / 2
+	target_icon.position.y -= (2 * y_offset / 1.3) * icon_scale.y
 	
 	
 	current_turn = all_battlers[current_turn_idx]
@@ -115,9 +118,11 @@ func add_char_to_battle(character, type, pos) -> Node2D:
 	instance.entity.damage = character["damage"]
 	instance.entity.agility = character["agility"]
 	
-	# TODO
-	# var sprite = instance.get_node("CharacterSprite")
-	# sprite.texture.path = player_character["Sprite"]
+	var sprite = instance.get_node("CharacterSprite")
+	if type == BaseEntity.EntityType.PLAYER:
+		sprite.texture = load(character["sprite"])
+	else:
+		sprite.texture_normal = load(character["sprite"])
 	
 	instance.position = pos
 	
@@ -151,9 +156,11 @@ func _choose_target(target: int) -> void:
 	
 	# position target cursor
 	var target_position = enemy_battlers[selected_target].position
+	var icon_scale = enemy_battlers[selected_target].scale
+	target_icon.scale = icon_scale
 	target_icon.position = target_position
-	target_icon.position.y -= enemy_battlers[selected_target].get_node("Sprite").texture_normal.get_height() / 1.15
-	target_icon.position.x -= target_icon.size.x
+	var y_offset = enemy_battlers[selected_target].get_node("CharacterSprite").texture_normal.get_height() / 2
+	target_icon.position.y -= (2 * y_offset / 1.3) * icon_scale.y
 	
 	
 func _choose_neg_target() -> void:

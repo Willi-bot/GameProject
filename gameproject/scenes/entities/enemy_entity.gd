@@ -1,9 +1,10 @@
 extends Node2D
 
-@export var entity : BaseEntity
+@export var entity: BaseEntity
+@export var scale_factor: float
 
 @onready var health_bar: ProgressBar = $HealthBar
-@onready var sprite: TextureButton = $Sprite
+@onready var sprite: TextureButton = $CharacterSprite
 
 @export var list_id: int
 
@@ -32,11 +33,5 @@ func _update_health_bar() -> void:
 	health_bar.value = entity.current_hp
 
 
-func _on_sprite_pressed() -> void:
-	print(entity.name)
-	print(entity.max_hp)
-	print(entity.current_hp)
-	print(entity.damage)
-	print(entity.agility)
-	print(entity.type)
+func _on_character_sprite_pressed() -> void:
 	target_enemy.emit(list_id)
