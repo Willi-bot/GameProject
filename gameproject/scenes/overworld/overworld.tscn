@@ -1,9 +1,40 @@
-[gd_scene load_steps=5 format=3 uid="uid://hhvnos2h8e6o"]
+[gd_scene load_steps=14 format=3 uid="uid://hhvnos2h8e6o"]
 
 [ext_resource type="Texture2D" uid="uid://bbr4xuk1m3n02" path="res://imgs/map.png" id="1_4dm7d"]
 [ext_resource type="PackedScene" uid="uid://bsy40uqn1b4gh" path="res://scenes/pause_menu/pause_menu.tscn" id="1_bkvdd"]
 [ext_resource type="Script" path="res://scenes/overworld/overworld.gd" id="1_vif6w"]
 [ext_resource type="Script" path="res://scenes/overworld/camera_2d.gd" id="3_jjmku"]
+[ext_resource type="Script" path="res://scenes/overworld/menu_bar.gd" id="3_n567t"]
+[ext_resource type="Texture2D" uid="uid://bqo7kqo71nbre" path="res://imgs/overworld_icons/battle_icon_top_menu.png" id="5_4qf84"]
+[ext_resource type="Texture2D" uid="uid://c05p73gg1mvcw" path="res://imgs/overworld_icons/hear_icon_top_menu.png" id="6_crrf5"]
+[ext_resource type="Texture2D" uid="uid://cqlnvarsqeias" path="res://imgs/overworld_icons/coin_icon_top_menu.png" id="7_un8em"]
+[ext_resource type="Texture2D" uid="uid://b2tgn71mejkg6" path="res://imgs/overworld_icons/question_mark_icon.png" id="8_7ftgb"]
+[ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="9_lpb8i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpnix"]
+bg_color = Color(0.294118, 0.294118, 0.294118, 0.709804)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qs3os"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.238593, 0.273226, 0.252163, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgjmk"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.194052, 0.311339, 0.32989, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="Overworld" type="Control"]
 layout_mode = 3
@@ -21,9 +52,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -640.0
-offset_right = 160.0
+offset_left = -320.0
+offset_top = -1280.0
+offset_right = 320.0
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("1_4dm7d")
@@ -32,8 +63,168 @@ texture = ExtResource("1_4dm7d")
 anchor_mode = 0
 script = ExtResource("3_jjmku")
 
+[node name="MenuBar" type="MenuBar" parent="Camera2D"]
+z_index = 100
+offset_right = 640.0
+offset_bottom = 32.0
+script = ExtResource("3_n567t")
+
+[node name="Background" type="PanelContainer" parent="Camera2D/MenuBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gpnix")
+
+[node name="Info" type="HBoxContainer" parent="Camera2D/MenuBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_right = 0.99
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerInfo" type="HBoxContainer" parent="Camera2D/MenuBar/Info"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_constants/separation = 6
+
+[node name="NameContainer" type="PanelContainer" parent="Camera2D/MenuBar/Info/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
+
+[node name="Name" type="HBoxContainer" parent="Camera2D/MenuBar/Info/PlayerInfo/NameContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Camera2D/MenuBar/Info/PlayerInfo/NameContainer/Name"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 12
+text = "Jeremey"
+vertical_alignment = 1
+
+[node name="PlayerIcon" type="TextureRect" parent="Camera2D/MenuBar/Info/PlayerInfo/NameContainer/Name"]
+layout_mode = 2
+texture = ExtResource("5_4qf84")
+expand_mode = 2
+
+[node name="HealthContainer" type="PanelContainer" parent="Camera2D/MenuBar/Info/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
+
+[node name="Health" type="HBoxContainer" parent="Camera2D/MenuBar/Info/PlayerInfo/HealthContainer"]
+layout_mode = 2
+
+[node name="Health" type="Label" parent="Camera2D/MenuBar/Info/PlayerInfo/HealthContainer/Health"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_font_sizes/font_size = 12
+text = "33/78"
+
+[node name="HealthIcon" type="TextureRect" parent="Camera2D/MenuBar/Info/PlayerInfo/HealthContainer/Health"]
+layout_mode = 2
+texture = ExtResource("6_crrf5")
+expand_mode = 2
+
+[node name="GoldContainer" type="PanelContainer" parent="Camera2D/MenuBar/Info/PlayerInfo"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
+
+[node name="Gold" type="HBoxContainer" parent="Camera2D/MenuBar/Info/PlayerInfo/GoldContainer"]
+layout_mode = 2
+
+[node name="GoldIcon" type="TextureRect" parent="Camera2D/MenuBar/Info/PlayerInfo/GoldContainer/Gold"]
+layout_mode = 2
+texture = ExtResource("7_un8em")
+expand_mode = 2
+
+[node name="Gold" type="Label" parent="Camera2D/MenuBar/Info/PlayerInfo/GoldContainer/Gold"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_font_sizes/font_size = 12
+text = "102"
+
+[node name="GameInfo" type="HBoxContainer" parent="Camera2D/MenuBar/Info"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LevelContainer" type="PanelContainer" parent="Camera2D/MenuBar/Info/GameInfo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_sgjmk")
+
+[node name="Level" type="HBoxContainer" parent="Camera2D/MenuBar/Info/GameInfo/LevelContainer"]
+layout_mode = 2
+
+[node name="Level" type="Label" parent="Camera2D/MenuBar/Info/GameInfo/LevelContainer/Level"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "32"
+
+[node name="LevelIcon" type="TextureRect" parent="Camera2D/MenuBar/Info/GameInfo/LevelContainer/Level"]
+layout_mode = 2
+texture = ExtResource("8_7ftgb")
+expand_mode = 2
+
+[node name="TimeContainer" type="PanelContainer" parent="Camera2D/MenuBar/Info/GameInfo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_sgjmk")
+
+[node name="Time" type="HBoxContainer" parent="Camera2D/MenuBar/Info/GameInfo/TimeContainer"]
+layout_mode = 2
+
+[node name="Time" type="Label" parent="Camera2D/MenuBar/Info/GameInfo/TimeContainer/Time"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "12:30"
+
+[node name="TimeIcon" type="TextureRect" parent="Camera2D/MenuBar/Info/GameInfo/TimeContainer/Time"]
+layout_mode = 2
+texture = ExtResource("9_lpb8i")
+expand_mode = 2
+
+[node name="Controls" type="HBoxContainer" parent="Camera2D/MenuBar/Info"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Items" type="Button" parent="Camera2D/MenuBar/Info/Controls"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 12
+text = "Items"
+
+[node name="Team" type="Button" parent="Camera2D/MenuBar/Info/Controls"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 12
+text = "Team"
+
+[node name="Settings" type="Button" parent="Camera2D/MenuBar/Info/Controls"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 12
+text = "Settings"
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 visible = false
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("1_bkvdd")]
 process_mode = 3
+
+[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Items" to="Camera2D/MenuBar" method="_on_items_pressed"]
+[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Team" to="Camera2D/MenuBar" method="_on_team_pressed"]
+[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Settings" to="Camera2D/MenuBar" method="_on_settings_pressed"]
