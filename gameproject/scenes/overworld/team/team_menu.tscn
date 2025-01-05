@@ -1,0 +1,136 @@
+[gd_scene load_steps=8 format=3 uid="uid://dnnke485su8a5"]
+
+[ext_resource type="Script" path="res://scenes/overworld/team/team_menu.gd" id="1_d6qbb"]
+[ext_resource type="Shader" path="res://scenes/overworld/menu.gdshader" id="2_xdjwe"]
+[ext_resource type="Texture2D" uid="uid://cnnuw6fwsulon" path="res://imgs/quit_icon.png" id="3_88gxv"]
+[ext_resource type="Texture2D" uid="uid://12477ptjebh6" path="res://imgs/player.png" id="4_0t58w"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5rp5v"]
+shader = ExtResource("2_xdjwe")
+shader_parameter/gray_level = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_twlaw"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.452775, 0.254769, 0.854527, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f1bk3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="TeamMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d6qbb")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_5rp5v")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel Container" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_top = 0.1
+anchor_right = 0.85
+anchor_bottom = 0.9
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_twlaw")
+
+[node name="Close" type="TextureButton" parent="Panel Container"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 2
+texture_normal = ExtResource("3_88gxv")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel Container"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+
+[node name="Character" type="PanelContainer" parent="Panel Container/HBoxContainer"]
+custom_minimum_size = Vector2(96, 194)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_f1bk3")
+
+[node name="Sprite" type="TextureRect" parent="Panel Container/HBoxContainer/Character"]
+layout_mode = 2
+texture = ExtResource("4_0t58w")
+expand_mode = 3
+
+[node name="Character2" type="PanelContainer" parent="Panel Container/HBoxContainer"]
+custom_minimum_size = Vector2(96, 194)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_f1bk3")
+
+[node name="Sprite" type="TextureRect" parent="Panel Container/HBoxContainer/Character2"]
+layout_mode = 2
+texture = ExtResource("4_0t58w")
+expand_mode = 3
+flip_h = true
+
+[node name="Character3" type="PanelContainer" parent="Panel Container/HBoxContainer"]
+custom_minimum_size = Vector2(96, 194)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_f1bk3")
+
+[node name="Sprite" type="TextureRect" parent="Panel Container/HBoxContainer/Character3"]
+layout_mode = 2
+texture = ExtResource("4_0t58w")
+expand_mode = 3
+
+[node name="Character4" type="PanelContainer" parent="Panel Container/HBoxContainer"]
+custom_minimum_size = Vector2(96, 194)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_f1bk3")
+
+[node name="Sprite" type="TextureRect" parent="Panel Container/HBoxContainer/Character4"]
+layout_mode = 2
+texture = ExtResource("4_0t58w")
+expand_mode = 3
+
+[connection signal="pressed" from="Panel Container/Close" to="." method="_on_close_pressed"]

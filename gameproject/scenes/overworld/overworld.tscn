@@ -1,7 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://hhvnos2h8e6o"]
+[gd_scene load_steps=17 format=3 uid="uid://hhvnos2h8e6o"]
 
 [ext_resource type="Texture2D" uid="uid://bbr4xuk1m3n02" path="res://imgs/map.png" id="1_4dm7d"]
-[ext_resource type="PackedScene" uid="uid://bsy40uqn1b4gh" path="res://scenes/pause_menu/pause_menu.tscn" id="1_bkvdd"]
+[ext_resource type="PackedScene" uid="uid://bsy40uqn1b4gh" path="res://scenes/overworld/pause/pause_menu.tscn" id="1_bkvdd"]
 [ext_resource type="Script" path="res://scenes/overworld/overworld.gd" id="1_vif6w"]
 [ext_resource type="Script" path="res://scenes/overworld/camera_2d.gd" id="3_jjmku"]
 [ext_resource type="Script" path="res://scenes/overworld/menu_bar.gd" id="3_n567t"]
@@ -10,6 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://cqlnvarsqeias" path="res://imgs/overworld_icons/coin_icon_top_menu.png" id="7_un8em"]
 [ext_resource type="Texture2D" uid="uid://b2tgn71mejkg6" path="res://imgs/overworld_icons/question_mark_icon.png" id="8_7ftgb"]
 [ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="9_lpb8i"]
+[ext_resource type="Script" path="res://scenes/overworld/menu_layer.gd" id="10_77ouk"]
+[ext_resource type="PackedScene" uid="uid://dnnke485su8a5" path="res://scenes/overworld/team/team_menu.tscn" id="12_ot02u"]
+[ext_resource type="PackedScene" uid="uid://cey85v4ldsstb" path="res://scenes/overworld/items/items_menu.tscn" id="13_1g3oo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpnix"]
 bg_color = Color(0.294118, 0.294118, 0.294118, 0.709804)
@@ -219,12 +222,22 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 12
 text = "Settings"
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+script = ExtResource("10_77ouk")
+
+[node name="PauseMenu" parent="MenuLayer" instance=ExtResource("1_bkvdd")]
+process_mode = 3
 visible = false
 
-[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("1_bkvdd")]
+[node name="TeamMenu" parent="MenuLayer" instance=ExtResource("12_ot02u")]
 process_mode = 3
+visible = false
 
-[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Items" to="Camera2D/MenuBar" method="_on_items_pressed"]
-[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Team" to="Camera2D/MenuBar" method="_on_team_pressed"]
-[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Settings" to="Camera2D/MenuBar" method="_on_settings_pressed"]
+[node name="ItemsMenu" parent="MenuLayer" instance=ExtResource("13_1g3oo")]
+process_mode = 3
+visible = false
+
+[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Items" to="MenuLayer" method="_on_items_pressed"]
+[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Team" to="MenuLayer" method="_on_team_pressed"]
+[connection signal="pressed" from="Camera2D/MenuBar/Info/Controls/Settings" to="MenuLayer" method="_on_settings_pressed"]

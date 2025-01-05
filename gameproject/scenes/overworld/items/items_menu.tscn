@@ -1,0 +1,119 @@
+[gd_scene load_steps=7 format=3 uid="uid://cey85v4ldsstb"]
+
+[ext_resource type="Script" path="res://scenes/overworld/items/items_menu.gd" id="1_wqkn4"]
+[ext_resource type="Shader" path="res://scenes/overworld/menu.gdshader" id="2_84ve2"]
+[ext_resource type="Texture2D" uid="uid://cnnuw6fwsulon" path="res://imgs/quit_icon.png" id="3_b15mb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kskb7"]
+shader = ExtResource("2_84ve2")
+shader_parameter/gray_level = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3bb2l"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.474317, 0.400875, 0.338216, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yo7er"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="ItemsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wqkn4")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_kskb7")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel Container" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_top = 0.1
+anchor_right = 0.85
+anchor_bottom = 0.9
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3bb2l")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel Container"]
+layout_mode = 2
+
+[node name="Close" type="TextureButton" parent="Panel Container/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+texture_normal = ExtResource("3_b15mb")
+
+[node name="Items" type="VBoxContainer" parent="Panel Container/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="Panel" type="PanelContainer" parent="Panel Container/HBoxContainer/Items"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yo7er")
+
+[node name="Label3" type="Label" parent="Panel Container/HBoxContainer/Items/Panel"]
+layout_mode = 2
+text = "Item 3"
+vertical_alignment = 1
+
+[node name="Panel2" type="PanelContainer" parent="Panel Container/HBoxContainer/Items"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yo7er")
+
+[node name="Label3" type="Label" parent="Panel Container/HBoxContainer/Items/Panel2"]
+layout_mode = 2
+text = "Item 3"
+vertical_alignment = 1
+
+[node name="Panel3" type="PanelContainer" parent="Panel Container/HBoxContainer/Items"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yo7er")
+
+[node name="Label3" type="Label" parent="Panel Container/HBoxContainer/Items/Panel3"]
+layout_mode = 2
+text = "Item 3"
+vertical_alignment = 1
+
+[node name="Panel4" type="PanelContainer" parent="Panel Container/HBoxContainer/Items"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yo7er")
+
+[node name="Label3" type="Label" parent="Panel Container/HBoxContainer/Items/Panel4"]
+layout_mode = 2
+text = "Item 3"
+vertical_alignment = 1
+
+[connection signal="pressed" from="Panel Container/HBoxContainer/Close" to="." method="_on_close_pressed"]
