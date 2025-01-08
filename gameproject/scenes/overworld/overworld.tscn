@@ -102,10 +102,10 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
 
-[node name="Name" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer"]
+[node name="NameBox" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer/Name"]
+[node name="Name" type="Label" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer/NameBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 1
@@ -113,7 +113,7 @@ theme_override_font_sizes/font_size = 12
 text = "Jeremey"
 vertical_alignment = 1
 
-[node name="PlayerIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer/Name"]
+[node name="PlayerIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer/NameBox"]
 layout_mode = 2
 texture = ExtResource("5_4qf84")
 expand_mode = 2
@@ -124,16 +124,16 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
 
-[node name="Health" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/HealthContainer"]
+[node name="HealthBox" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/HealthContainer"]
 layout_mode = 2
 
-[node name="Health" type="Label" parent="TopMenu/TopMenu/Info/PlayerInfo/HealthContainer/Health"]
+[node name="Health" type="Label" parent="TopMenu/TopMenu/Info/PlayerInfo/HealthContainer/HealthBox"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_font_sizes/font_size = 12
 text = "33/78"
 
-[node name="HealthIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/HealthContainer/Health"]
+[node name="HealthIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/HealthContainer/HealthBox"]
 layout_mode = 2
 texture = ExtResource("6_crrf5")
 expand_mode = 2
@@ -143,19 +143,19 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
 
-[node name="Gold" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/GoldContainer"]
+[node name="GoldBox" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/GoldContainer"]
 layout_mode = 2
 
-[node name="GoldIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/GoldContainer/Gold"]
-layout_mode = 2
-texture = ExtResource("7_un8em")
-expand_mode = 2
-
-[node name="Gold" type="Label" parent="TopMenu/TopMenu/Info/PlayerInfo/GoldContainer/Gold"]
+[node name="Gold" type="Label" parent="TopMenu/TopMenu/Info/PlayerInfo/GoldContainer/GoldBox"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_font_sizes/font_size = 12
 text = "102"
+
+[node name="GoldIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/GoldContainer/GoldBox"]
+layout_mode = 2
+texture = ExtResource("7_un8em")
+expand_mode = 2
 
 [node name="GameInfo" type="HBoxContainer" parent="TopMenu/TopMenu/Info"]
 layout_mode = 2
@@ -167,19 +167,21 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_sgjmk")
 
-[node name="Level" type="HBoxContainer" parent="TopMenu/TopMenu/Info/GameInfo/LevelContainer"]
+[node name="LevelBox" type="HBoxContainer" parent="TopMenu/TopMenu/Info/GameInfo/LevelContainer"]
 layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
 
-[node name="Level" type="Label" parent="TopMenu/TopMenu/Info/GameInfo/LevelContainer/Level"]
+[node name="Level" type="Label" parent="TopMenu/TopMenu/Info/GameInfo/LevelContainer/LevelBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
-text = "32"
+text = "01"
 
-[node name="LevelIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/GameInfo/LevelContainer/Level"]
+[node name="LevelIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/GameInfo/LevelContainer/LevelBox"]
 layout_mode = 2
 texture = ExtResource("8_7ftgb")
-expand_mode = 2
+expand_mode = 3
 
 [node name="TimeContainer" type="PanelContainer" parent="TopMenu/TopMenu/Info/GameInfo"]
 layout_mode = 2
@@ -187,16 +189,16 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_sgjmk")
 
-[node name="Time" type="HBoxContainer" parent="TopMenu/TopMenu/Info/GameInfo/TimeContainer"]
+[node name="TimeBox" type="HBoxContainer" parent="TopMenu/TopMenu/Info/GameInfo/TimeContainer"]
 layout_mode = 2
 
-[node name="Time" type="Label" parent="TopMenu/TopMenu/Info/GameInfo/TimeContainer/Time"]
+[node name="Time" type="Label" parent="TopMenu/TopMenu/Info/GameInfo/TimeContainer/TimeBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
 text = "12:30"
 
-[node name="TimeIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/GameInfo/TimeContainer/Time"]
+[node name="TimeIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/GameInfo/TimeContainer/TimeBox"]
 layout_mode = 2
 texture = ExtResource("9_lpb8i")
 expand_mode = 2

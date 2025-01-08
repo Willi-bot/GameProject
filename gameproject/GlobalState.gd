@@ -2,6 +2,10 @@ extends Node
 
 @export var current_level: int = 1
 @export var elapsed_time: float = 0.0
+@export var gold: int = 42
+@export var playerName: String = "Jeremy"
+@export var currentHealth: int = 13
+@export var maxHealth: int = 78
 @export var run_in_progress: bool = false
 
 func _ready() -> void:
@@ -16,13 +20,17 @@ func save_state() -> void:
 	var save_data = {
 		"current_level": current_level,
 		"elapsed_time": elapsed_time,
+		"gold": gold,
+		"playerName": playerName,
+		"currentHealth": currentHealth,
+		"maxHealth": maxHealth,
 		"run_in_progress": run_in_progress
 	}
 	var file = FileAccess.open("user://save_game.json", FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(save_data))
 		file.close()
-		print("File saved succesfully", save_data)
+		print("File saved successfully", save_data)
 
 func load_state() -> void:
 	if FileAccess.file_exists("user://save_game.json"):
@@ -34,5 +42,9 @@ func load_state() -> void:
 			file.close()
 			current_level = save_data.get("current_level", 1)
 			elapsed_time = save_data.get("elapsed_time", 0.0)
+			gold = save_data.get("gold", 42)
+			playerName = save_data.get("playerName", "Jeremy")
+			currentHealth = save_data.get("currentHealth", 13)
+			maxHealth = save_data.get("maxHealth", 78)
 			run_in_progress = save_data.get("run_in_progress", false)
-			print("State loaded succesfully!", save_data)
+			print("State loaded successfully!", save_data)
