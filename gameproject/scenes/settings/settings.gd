@@ -22,27 +22,18 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var save_dict = {}
 	
-	if FileAccess.file_exists("user://savegame.save"):
-		var save_file = FileAccess.open("user://settings.cfg", FileAccess.READ)
-		var json_object = JSON.new()
-		var parse_err = json_object.parse(save_file.get_as_text())
-		save_dict = json_object.get_data()
-	else:
-		# Give standard settings
-		pass
-	
-	master_slider.value = save_dict["master_vol"]
-	music_slider.value = save_dict["music_vol"]
-	effect_slider.value = save_dict["effect_vol"]
-	
-	mute_checkbox.button_pressed = save_dict["muted"]
-	
-	for r in resolutions:
-		resolution_option_button.add_item(r)
+	if LoadSettings.save_dict != {}:
+		master_slider.value = LoadSettings.save_dict["master_vol"]
+		music_slider.value = LoadSettings.save_dict["music_vol"]
+		effect_slider.value = LoadSettings.save_dict["effect_vol"]
 		
-	resolution_option_button.select(save_dict["res"])
+		mute_checkbox.button_pressed = LoadSettings.save_dict["muted"]
+		
+		for r in resolutions:
+			resolution_option_button.add_item(r)
+			
+		resolution_option_button.select(LoadSettings.save_dict["res"])
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
