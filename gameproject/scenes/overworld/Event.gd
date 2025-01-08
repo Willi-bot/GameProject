@@ -2,8 +2,9 @@ extends Node2D
 
 @onready var button : TextureButton = $Button
 
-
-const margin = 5
+var color = Color.GRAY
+var width = 2
+var useAntialiasing = false
 
 var children: Array = []
 
@@ -29,12 +30,9 @@ func _draw():
 		var line = child.position - position
 		
 		var normal = line.normalized()
-		line -= margin * normal
-		var color = Color.GRAY
+		line -= normal
 		
-		#print(normal * margin, line)
-		
-		draw_line(normal * margin, line, color, 2, true)
+		draw_line(normal, line, Color.GRAY, width, useAntialiasing)
 
 
 func _on_button_pressed() -> void:

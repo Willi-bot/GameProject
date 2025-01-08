@@ -1,6 +1,7 @@
 extends Control
 
 @onready var mapTexture: TextureRect = $TextureRect
+@onready var camera: Camera2D = $Camera2D
 
 var events = {}
 var event_scene = preload("res://scenes/overworld/Event.tscn")

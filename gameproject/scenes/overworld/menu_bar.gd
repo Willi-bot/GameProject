@@ -1,11 +1,15 @@
 extends MenuBar
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+@onready var time_label: Label = $Info/GameInfo/TimeContainer/Time/Time
+@onready var level_label: Label = $Info/GameInfo/LevelContainer/Level/Level
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	GlobalState.elapsed_time += delta
+	update_elapsed_time_label()
+
+func update_elapsed_time_label() -> void:
+	var minutes: int = int(GlobalState.elapsed_time) / 60
+	var seconds: int = int(GlobalState.elapsed_time) % 60
+	var formatted_time = "%02d:%02d" % [minutes, seconds]
+	time_label.text = formatted_time
