@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://dnlfem8u3gk6f"]
+[gd_scene load_steps=4 format=3 uid="uid://dnlfem8u3gk6f"]
 
 [ext_resource type="Script" path="res://scenes/main_menu/main_menu.gd" id="1_66cqi"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="2_1p5wg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_du2qp"]
+bg_color = Color(0.50532, 0.651007, 0.425991, 1)
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,40 +15,52 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_66cqi")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="SettingsBackground" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -22.0
-offset_right = 20.0
-offset_bottom = 22.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_du2qp")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-layout_mode = 2
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.2
+anchor_right = 0.7
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_1p5wg")
 
-[node name="New Game" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="New Game" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_1p5wg")
 text = "New Game"
 
-[node name="Continue" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Continue" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_1p5wg")
 text = "Continue"
 
-[node name="Settings" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Settings" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_1p5wg")
 text = "Settings"
 
-[node name="Quit" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Quit" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_1p5wg")
 text = "Quit"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/New Game" to="." method="_on_new_game_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Continue" to="." method="_on_continue_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/New Game" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

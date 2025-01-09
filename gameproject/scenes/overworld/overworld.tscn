@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://hhvnos2h8e6o"]
+[gd_scene load_steps=18 format=3 uid="uid://hhvnos2h8e6o"]
 
 [ext_resource type="Texture2D" uid="uid://bbr4xuk1m3n02" path="res://imgs/map.png" id="1_4dm7d"]
 [ext_resource type="PackedScene" uid="uid://bsy40uqn1b4gh" path="res://scenes/overworld/pause/pause_menu.tscn" id="1_bkvdd"]
@@ -11,18 +11,16 @@
 [ext_resource type="Texture2D" uid="uid://b2tgn71mejkg6" path="res://imgs/overworld_icons/question_mark_icon.png" id="8_7ftgb"]
 [ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="9_lpb8i"]
 [ext_resource type="Script" path="res://scenes/overworld/menu_layer.gd" id="10_77ouk"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="10_m6pb5"]
 [ext_resource type="PackedScene" uid="uid://dnnke485su8a5" path="res://scenes/overworld/team/team_menu.tscn" id="12_ot02u"]
 [ext_resource type="PackedScene" uid="uid://cey85v4ldsstb" path="res://scenes/overworld/items/items_menu.tscn" id="13_1g3oo"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpnix"]
-bg_color = Color(0.294118, 0.294118, 0.294118, 0.709804)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qs3os"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ioep"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.238593, 0.273226, 0.252163, 1)
+bg_color = Color(0, 0.305944, 0.30655, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -38,6 +36,8 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="Theme" id="Theme_7keqo"]
 
 [node name="Overworld" type="Control"]
 layout_mode = 3
@@ -80,7 +80,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_gpnix")
+theme = ExtResource("10_m6pb5")
 
 [node name="Info" type="HBoxContainer" parent="TopMenu/TopMenu"]
 layout_mode = 1
@@ -98,12 +98,13 @@ theme_override_constants/separation = 6
 
 [node name="NameContainer" type="PanelContainer" parent="TopMenu/TopMenu/Info/PlayerInfo"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 6
 size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ioep")
 
 [node name="NameBox" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer"]
 layout_mode = 2
+theme = ExtResource("10_m6pb5")
 
 [node name="Name" type="Label" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer/NameBox"]
 layout_mode = 2
@@ -122,7 +123,7 @@ expand_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ioep")
 
 [node name="HealthBox" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/HealthContainer"]
 layout_mode = 2
@@ -141,7 +142,7 @@ expand_mode = 2
 [node name="GoldContainer" type="PanelContainer" parent="TopMenu/TopMenu/Info/PlayerInfo"]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_qs3os")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ioep")
 
 [node name="GoldBox" type="HBoxContainer" parent="TopMenu/TopMenu/Info/PlayerInfo/GoldContainer"]
 layout_mode = 2
@@ -206,22 +207,26 @@ expand_mode = 2
 [node name="Controls" type="HBoxContainer" parent="TopMenu/TopMenu/Info"]
 layout_mode = 2
 size_flags_horizontal = 10
+theme = SubResource("Theme_7keqo")
 
 [node name="Items" type="Button" parent="TopMenu/TopMenu/Info/Controls"]
 layout_mode = 2
 size_flags_vertical = 4
+theme = ExtResource("10_m6pb5")
 theme_override_font_sizes/font_size = 12
 text = "Items"
 
 [node name="Team" type="Button" parent="TopMenu/TopMenu/Info/Controls"]
 layout_mode = 2
 size_flags_vertical = 4
+theme = ExtResource("10_m6pb5")
 theme_override_font_sizes/font_size = 12
 text = "Team"
 
 [node name="Settings" type="Button" parent="TopMenu/TopMenu/Info/Controls"]
 layout_mode = 2
 size_flags_vertical = 4
+theme = ExtResource("10_m6pb5")
 theme_override_font_sizes/font_size = 12
 text = "Settings"
 

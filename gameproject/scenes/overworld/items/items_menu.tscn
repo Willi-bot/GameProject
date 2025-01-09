@@ -2,27 +2,12 @@
 
 [ext_resource type="Script" path="res://scenes/overworld/items/items_menu.gd" id="1_wqkn4"]
 [ext_resource type="Shader" path="res://scenes/overworld/menu.gdshader" id="2_84ve2"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="3_4i8s2"]
 [ext_resource type="Texture2D" uid="uid://cnnuw6fwsulon" path="res://imgs/quit_icon.png" id="3_b15mb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kskb7"]
 shader = ExtResource("2_84ve2")
 shader_parameter/gray_level = 1.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3bb2l"]
-content_margin_left = 12.0
-content_margin_top = 12.0
-content_margin_right = 12.0
-content_margin_bottom = 12.0
-bg_color = Color(0.474317, 0.400875, 0.338216, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yo7er"]
 content_margin_left = 4.0
@@ -65,7 +50,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_3bb2l")
+theme = ExtResource("3_4i8s2")
 
 [node name="HBoxContainer" type="VBoxContainer" parent="Panel Container"]
 layout_mode = 2

@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=7 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
+[ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://imgs/Background.png" id="2_ygs6r"]
 [ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="3_gv6ij"]
 
@@ -35,6 +36,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_7y84o")
 theme_override_styles/panel = SubResource("StyleBoxTexture_6e2ut")
 
 [node name="TargetIcon" type="TextureRect" parent="."]

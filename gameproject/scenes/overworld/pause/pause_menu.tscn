@@ -3,26 +3,11 @@
 [ext_resource type="Script" path="res://scenes/overworld/pause/pause_menu.gd" id="1_4nsvc"]
 [ext_resource type="Shader" path="res://scenes/overworld/menu.gdshader" id="1_18xl2"]
 [ext_resource type="Texture2D" uid="uid://cnnuw6fwsulon" path="res://imgs/quit_icon.png" id="3_tp2jb"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="3_v1csx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cov8m"]
 shader = ExtResource("1_18xl2")
 shader_parameter/gray_level = 0.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tn4jl"]
-content_margin_left = 12.0
-content_margin_top = 12.0
-content_margin_right = 12.0
-content_margin_bottom = 12.0
-bg_color = Color(0.26293, 0.131006, 0.00471501, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
 
 [sub_resource type="Animation" id="Animation_4dahd"]
 length = 0.001
@@ -117,7 +102,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_tn4jl")
+theme = ExtResource("3_v1csx")
 
 [node name="Close" type="TextureButton" parent="PanelContainer"]
 layout_mode = 2
