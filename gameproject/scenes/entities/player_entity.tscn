@@ -12,6 +12,7 @@ max_hp = 0
 current_hp = 0
 damage = 0
 agility = 0
+skills = Array[Resource]([])
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efpqj"]
 bg_color = Color(1, 1, 1, 0.329412)

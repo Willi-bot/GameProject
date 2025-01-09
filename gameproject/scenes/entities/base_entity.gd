@@ -13,6 +13,7 @@ enum EntityType {
 @export var current_hp : int
 @export var damage : int
 @export var agility : int
+@export var skills : Array[Resource] = []
 
 signal turn_ended
 signal health_changed

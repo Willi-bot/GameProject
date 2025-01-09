@@ -108,6 +108,16 @@ size_flags_vertical = 3
 theme = ExtResource("2_7y84o")
 text = "Start Negotiation"
 
+[node name="SkillMenu" type="CanvasLayer" parent="MenuBox/ButtonBox"]
+visible = false
+
+[node name="SkillBox" type="PanelContainer" parent="MenuBox/ButtonBox/SkillMenu"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_r6fn2")
+
+[node name="SkillContainer" type="GridContainer" parent="MenuBox/ButtonBox/SkillMenu/SkillBox"]
+layout_mode = 2
+columns = 4
+
 [node name="PanelContainer" type="PanelContainer" parent="MenuBox"]
 layout_mode = 2
 size_flags_horizontal = 3

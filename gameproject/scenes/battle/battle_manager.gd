@@ -9,6 +9,12 @@ extends Control
 
 @onready var info_text : Label = $MenuBox/PanelContainer/InfoText
 
+@onready var skill_menu : CanvasLayer = $MenuBox/ButtonBox/SkillMenu
+@onready var skill_box : PanelContainer = $MenuBox/ButtonBox/SkillMenu/SkillBox
+
+@onready var skill_resource : Resource = preload("res://scenes/entities/skill.gd")
+@onready var skill_button_resource : Resource = preload("res://scenes/battle/skill_button.gd")
+
 @onready var select_icon: TextureRect = $SelectIcon
 @onready var target_icon : TextureRect = $TargetIcon
 
@@ -72,6 +78,11 @@ func _ready() -> void:
 	
 	# select target cursor
 	adjust_select_icon(attack_button)
+	
+	skill_box.size = $MenuBox.size
+	skill_box.size.x = skill_box.size.x / 2.
+	skill_box.position = $MenuBox.position
+	
 	
 	current_turn = all_battlers[current_turn_idx]
 	_update_turn()
@@ -147,8 +158,42 @@ func _perform_attack() -> void:
 	
 	
 func _choose_skill() -> void:
-	print("Choosing a skill")
+	var list_of_skills = get_skills(current_turn)
 	
+	var i = 0
+	for skill in list_of_skills:
+		var new_button = SkillButton.new()
+		new_button.skill_resource = skill
+		new_button.text = skill.name
+		new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		new_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(enemy_battlers[selected_target]))
+		skill.turn_ended.connect(_next_turn)
+		
+		$MenuBox/ButtonBox/SkillMenu/SkillBox/SkillContainer.add_child(new_button)
+		i += 1
+		
+	while i < 8:
+		var invisible_button = Control.new()
+		invisible_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		invisible_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		$MenuBox/ButtonBox/SkillMenu/SkillBox/SkillContainer.add_child(invisible_button)
+		i += 1
+	
+	skill_menu.visible = true
+	
+	
+func get_skills(character) -> Array[Skill]:
+	var skill1 = skill_resource.new()
+	skill1.name = "Fire"
+	
+	var skill2 = skill_resource.new()
+	skill2.name = "Heal"
+	
+	var skill3 = skill_resource.new()
+	skill3.name = "Ball"
+	
+	return [skill1, skill2, skill3]
 	
 	
 func _choose_item() -> void:
@@ -192,6 +237,12 @@ func _update_turn() -> void:
 	else:
 		attack_button.hide()
 		select_icon.hide()
+		
+	# clear and hide skill menu
+	for n in $MenuBox/ButtonBox/SkillMenu/SkillBox/SkillContainer.get_children():
+		$MenuBox/ButtonBox/SkillMenu/SkillBox/SkillContainer.remove_child(n)
+		n.queue_free() 
+	skill_menu.visible = false
 		
 	current_turn.start_turn()
 
