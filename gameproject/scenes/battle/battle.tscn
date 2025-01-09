@@ -112,7 +112,6 @@ text = "Start Negotiation"
 visible = false
 
 [node name="SkillBox" type="PanelContainer" parent="MenuBox/ButtonBox/SkillMenu"]
-theme_override_styles/panel = SubResource("StyleBoxFlat_r6fn2")
 
 [node name="SkillContainer" type="GridContainer" parent="MenuBox/ButtonBox/SkillMenu/SkillBox"]
 layout_mode = 2
