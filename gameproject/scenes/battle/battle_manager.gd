@@ -1,5 +1,7 @@
 extends Control
 
+@onready var menu_box: HBoxContainer = $MenuBox
+@onready var button_box: HBoxContainer = $MenuBox/ButtonBox
 @onready var attack_button : Button = $MenuBox/ButtonBox/LeftSide/AttackButton
 @onready var skill_button : Button = $MenuBox/ButtonBox/RightSide/SkillButton
 @onready var item_button : Button = $MenuBox/ButtonBox/LeftSide/ItemButton
@@ -7,6 +9,7 @@ extends Control
 
 @onready var info_text : Label = $MenuBox/PanelContainer/InfoText
 
+@onready var select_icon: TextureRect = $SelectIcon
 @onready var target_icon : TextureRect = $TargetIcon
 
 var player_scene = preload("res://scenes/entities/player_entity.tscn")
@@ -61,13 +64,14 @@ func _ready() -> void:
 		e.target_enemy.connect(_choose_target)
 		
 	# position target cursor
-	var target_position = enemy_battlers[selected_target].position
 	var icon_scale = enemy_battlers[selected_target].scale
-	target_icon.scale = icon_scale
-	target_icon.position = target_position
+	target_icon.scale = enemy_battlers[selected_target].scale
+	target_icon.position =  enemy_battlers[selected_target].position
 	var y_offset = enemy_battlers[selected_target].get_node("CharacterSprite").texture_normal.get_height() / 2
 	target_icon.position.y -= (2 * y_offset / 1.3) * icon_scale.y
 	
+	# select target cursor
+	adjust_select_icon(attack_button)
 	
 	current_turn = all_battlers[current_turn_idx]
 	_update_turn()
@@ -184,8 +188,10 @@ func _next_turn() -> void:
 func _update_turn() -> void:
 	if current_turn.entity.type == BaseEntity.EntityType.PLAYER:
 		attack_button.show()
+		select_icon.show()
 	else:
 		attack_button.hide()
+		select_icon.hide()
 		
 	current_turn.start_turn()
 
@@ -194,8 +200,18 @@ func has_battle_ended() -> bool:
 	return false
 
 
+func adjust_select_icon(button: Button) -> void:
+		# Position selection cursor
+	select_icon.global_position = button.global_position
+	select_icon.z_index = 1000
+
+	select_icon.position.y += (select_icon.size.y * select_icon.scale.y) / 8
+	select_icon	.position.x -= (select_icon.size.x * select_icon.scale.x) / 4
+
+
 func _on_attack_button_mouse_entered() -> void:
 	info_text.text = "Attack the target"
+	adjust_select_icon(attack_button)
 
 
 func _on_attack_button_mouse_exited() -> void:
@@ -204,14 +220,16 @@ func _on_attack_button_mouse_exited() -> void:
 
 func _on_skill_button_mouse_entered() -> void:
 	info_text.text = "Use a Skill"
+	adjust_select_icon(skill_button)
 
 
 func _on_skill_button_mouse_exited() -> void:
 	info_text.text = "Choose your next action"
-	
+
 	
 func _on_item_button_mouse_entered() -> void:
 	info_text.text = "Use Item"
+	adjust_select_icon(item_button)
 
 
 func _on_item_button_mouse_exited() -> void:
@@ -220,6 +238,7 @@ func _on_item_button_mouse_exited() -> void:
 	
 func _on_neg_button_mouse_entered() -> void:
 	info_text.text = "Start Negotiation with a Monster"
+	adjust_select_icon(neg_button)
 
 
 func _on_neg_button_mouse_exited() -> void:

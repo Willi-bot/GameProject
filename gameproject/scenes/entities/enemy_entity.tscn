@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/entities/enemy_entity.gd" id="1_nhv1i"]
 [ext_resource type="Script" path="res://scenes/entities/base_entity.gd" id="2_7b6xd"]
+[ext_resource type="Texture2D" uid="uid://87tml07ye78n" path="res://imgs/enemy.png" id="3_3fv5r"]
 
 [sub_resource type="Resource" id="Resource_efdqj"]
 script = ExtResource("2_7b6xd")
@@ -11,8 +12,6 @@ max_hp = 0
 current_hp = 0
 damage = 0
 agility = 0
-
-[sub_resource type="ImageTexture" id="ImageTexture_xr0jc"]
 
 [node name="EnemyEntity" type="Node2D" groups=["EnemyEntity"]]
 scale = Vector2(0.5, 0.5)
@@ -31,7 +30,7 @@ offset_right = 96.0
 offset_bottom = 132.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = SubResource("ImageTexture_xr0jc")
+texture_normal = ExtResource("3_3fv5r")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)

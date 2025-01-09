@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=8 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://imgs/Background.png" id="2_ygs6r"]
 [ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="3_gv6ij"]
+[ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://imgs/select_cursor.png" id="4_70km2"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
 texture = ExtResource("2_ygs6r")
@@ -39,6 +40,14 @@ grow_vertical = 2
 theme = ExtResource("2_7y84o")
 theme_override_styles/panel = SubResource("StyleBoxTexture_6e2ut")
 
+[node name="SelectIcon" type="TextureRect" parent="."]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_70km2")
+stretch_mode = 3
+
 [node name="TargetIcon" type="TextureRect" parent="."]
 z_index = 1
 layout_mode = 0
@@ -65,6 +74,7 @@ grow_vertical = 0
 [node name="ButtonBox" type="HBoxContainer" parent="MenuBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 6
 
 [node name="LeftSide" type="VBoxContainer" parent="MenuBox/ButtonBox"]
 layout_mode = 2
@@ -73,11 +83,13 @@ size_flags_horizontal = 3
 [node name="AttackButton" type="Button" parent="MenuBox/ButtonBox/LeftSide"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("2_7y84o")
 text = "Attack"
 
 [node name="ItemButton" type="Button" parent="MenuBox/ButtonBox/LeftSide"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("2_7y84o")
 text = "Items"
 
 [node name="RightSide" type="VBoxContainer" parent="MenuBox/ButtonBox"]
@@ -87,11 +99,13 @@ size_flags_horizontal = 3
 [node name="SkillButton" type="Button" parent="MenuBox/ButtonBox/RightSide"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("2_7y84o")
 text = "Skills"
 
 [node name="NegButton" type="Button" parent="MenuBox/ButtonBox/RightSide"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("2_7y84o")
 text = "Start Negotiation"
 
 [node name="PanelContainer" type="PanelContainer" parent="MenuBox"]
@@ -102,6 +116,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_iom26")
 [node name="InfoText" type="Label" parent="MenuBox/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
+theme = ExtResource("2_7y84o")
 text = "Choose your next action"
 
 [connection signal="mouse_entered" from="MenuBox/ButtonBox/LeftSide/AttackButton" to="." method="_on_attack_button_mouse_entered"]
