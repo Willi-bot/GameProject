@@ -1,6 +1,6 @@
 extends Control
 
-@onready var continueBtn: Button = $MarginContainer/VBoxContainer/Continue
+@onready var continueBtn: Button = $PanelContainer/VBoxContainer/Continue
 
 
 # Called when the node enters the scene tree for the first time.
