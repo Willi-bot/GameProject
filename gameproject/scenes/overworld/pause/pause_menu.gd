@@ -16,10 +16,9 @@ func pause():
 	self.visible = true
 	get_tree().paused = true	
 
-
 	animation.play("blur")
 
-	
+
 func _on_resume_pressed() -> void:
 	resume()
 
@@ -40,4 +39,3 @@ func _on_close_pressed() -> void:
 func _on_main_menu_pressed() -> void:
 	resume()
 	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
-	

@@ -6,6 +6,15 @@ extends Control
 var events = {}
 var event_scene = preload("res://scenes/overworld/Event.tscn")
 
+var textures = {
+	"shop": preload("res://imgs/overworld_icons/coin.png"),
+	"battle": preload("res://imgs/overworld_icons/battle_icon.png"),
+	"suprise": preload("res://imgs/overworld_icons/question_mark_icon.png"),
+	"recovery": preload("res://imgs/overworld_icons/heart_icon.png")
+}
+
+var texture_keys = textures.keys()
+
 var map_root_position = Vector2(0, 0)
 
 var scale_factor = 80
@@ -17,9 +26,8 @@ const plane_width = 8 # Scaled up by 80: 1280 / by 65:  1040
 const node_count = plane_height * plane_width / 9
 const path_count = 6
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
-	
 	var generator = preload("res://scenes/overworld/MapGenerator.gd").new()
 	var map_data = generator.generate(plane_width, plane_height, node_count, path_count)
 	var nodes = map_data[0]
@@ -33,7 +41,10 @@ func _ready() -> void:
 	for k in nodes.keys():
 		var point = nodes[k]
 		var event = event_scene.instantiate()
-	
+		
+		var event_name = texture_keys[randi() % texture_keys.size()]
+		
+		event.set_event_type(event_name, textures[event_name])
 		
 		event.position = point * map_scale + map_root_position
 		
