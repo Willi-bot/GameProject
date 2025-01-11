@@ -11,6 +11,8 @@ enum EntityType {
 @export var type : EntityType
 @export var max_hp : int
 @export var current_hp : int
+@export var max_mp: int
+@export var current_mp: int
 @export var damage : int
 @export var agility : int
 @export var skills : Array[Resource] = []

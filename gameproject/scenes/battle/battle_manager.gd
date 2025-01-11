@@ -2,20 +2,21 @@ extends Control
 
 @onready var menu_box: HBoxContainer = $MenuBox
 @onready var button_box: HBoxContainer = $MenuBox/ButtonBox
-@onready var attack_button : Button = $MenuBox/ButtonBox/LeftSide/AttackButton
-@onready var skill_button : Button = $MenuBox/ButtonBox/RightSide/SkillButton
-@onready var item_button : Button = $MenuBox/ButtonBox/LeftSide/ItemButton
-@onready var neg_button : Button = $MenuBox/ButtonBox/RightSide/NegButton
+@onready var attack_button : Button = $MenuBox/ButtonPanel/ButtonBox/LeftSide/AttackButton
+@onready var skill_button : Button = $MenuBox/ButtonPanel/ButtonBox/RightSide/SkillButton
+@onready var item_button : Button = $MenuBox/ButtonPanel/ButtonBox/LeftSide/ItemButton
+@onready var neg_button : Button = $MenuBox/ButtonPanel/ButtonBox/RightSide/NegButton
 
 @onready var info_text : Label = $MenuBox/PanelContainer/InfoText
 
-@onready var skill_menu : CanvasLayer = $MenuBox/ButtonBox/SkillMenu
-@onready var skill_box : PanelContainer = $MenuBox/ButtonBox/SkillMenu/SkillBox
+@onready var skill_menu : CanvasLayer = $MenuBox/ButtonPanel/ButtonBox/SkillMenu
+@onready var skill_box : PanelContainer = $MenuBox/ButtonPanel/ButtonBox/SkillMenu/SkillBox
 
 @onready var skill_resource : Resource = preload("res://scenes/entities/skill.gd")
 @onready var skill_button_resource : Resource = preload("res://scenes/battle/skill_button.gd")
+@onready var skill_button_entity = preload("res://scenes/battle/skill_button.tscn")
 
-@onready var select_icon: TextureRect = $SelectIcon
+@onready var select_icon: TextureRect = $CanvasLayer/SelectIcon
 @onready var target_icon : TextureRect = $TargetIcon
 
 var player_scene = preload("res://scenes/entities/player_entity.tscn")
@@ -76,17 +77,16 @@ func _ready() -> void:
 	var y_offset = enemy_battlers[selected_target].get_node("CharacterSprite").texture_normal.get_height() / 2
 	target_icon.position.y -= (2 * y_offset / 1.3) * icon_scale.y
 	
-	# select target cursor
-	adjust_select_icon(attack_button)
 	
 	skill_box.size = $MenuBox.size
 	skill_box.size.x = skill_box.size.x / 2.
-	skill_box.position = $MenuBox.position
-	
+	skill_box.position.y = $MenuBox.position.y
+	skill_box.position.x = $MenuBox.position.x
 	
 	current_turn = all_battlers[current_turn_idx]
 	_update_turn()
-
+	
+	select_icon.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -97,11 +97,11 @@ func get_player_data() -> Array:
 	var player_data: Array = []
 	
 	# load dummy data -> replace with some global shit
-	player_data.append({"name": "Jeremiah", "max_hp": 200, "current_hp": 200, "damage": 60, 
+	player_data.append({"name": "Jeremiah", "max_hp": 200, "current_hp": 200, "max_mp": 5, "current_mp": 3, "damage": 60, 
 						"agility": 4, "sprite": "res://imgs/player.png"})
-	player_data.append({"name": "Baldwin", "max_hp": 350, "current_hp": 330, "damage": 30, 
+	player_data.append({"name": "Baldwin", "max_hp": 350, "current_hp": 330, "max_mp": 2, "current_mp": 2, "damage": 30, 
 						"agility": 1, "sprite": "res://imgs/player.png"})
-	player_data.append({"name": "Denise", "max_hp": 150, "current_hp": 100, "damage": 100, 
+	player_data.append({"name": "Denise", "max_hp": 150, "current_hp": 100, "max_mp": 3, "current_mp": 1, "damage": 100, 
 						"agility": 2, "sprite": "res://imgs/player.png"})
 	
 	return player_data
@@ -110,9 +110,9 @@ func get_player_data() -> Array:
 func get_enemy_data() -> Array:
 	var enemy_data: Array = []
 	
-	enemy_data.append({"name": "Gooner", "max_hp": 400, "current_hp": 400, "damage": 70, 
+	enemy_data.append({"name": "Gooner", "max_hp": 400, "current_hp": 400, "max_mp": 5, "current_mp": 3, "damage": 70, 
 					   "agility": 3, "sprite": "res://imgs/enemy.png"})
-	enemy_data.append({"name": "Gooner 2", "max_hp": 300, "current_hp": 300, "damage": 80, 
+	enemy_data.append({"name": "Gooner 2", "max_hp": 300, "current_hp": 300, "max_mp": 5, "current_mp": 3, "damage": 80, 
 					   "agility": 5, "sprite": "res://imgs/enemy.png"})
 	
 	return enemy_data
@@ -129,7 +129,9 @@ func add_char_to_battle(character, type, pos) -> Node2D:
 	instance.entity.name = character["name"]
 	instance.entity.type = type
 	instance.entity.max_hp = character["max_hp"]
+	instance.entity.max_mp = character["max_mp"]
 	instance.entity.current_hp = character["current_hp"]
+	instance.entity.current_mp = character["current_mp"]
 	instance.entity.damage = character["damage"]
 	instance.entity.agility = character["agility"]
 	
@@ -158,26 +160,29 @@ func _perform_attack() -> void:
 	
 	
 func _choose_skill() -> void:
+	select_icon.visible = false
 	var list_of_skills = get_skills(current_turn)
 	
 	var i = 0
 	for skill in list_of_skills:
-		var new_button = SkillButton.new()
+		var new_button = skill_button_entity.instantiate()
 		new_button.skill_resource = skill
 		new_button.text = skill.name
 		new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		new_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(enemy_battlers[selected_target]))
+		new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon))
+
 		skill.turn_ended.connect(_next_turn)
 		
-		$MenuBox/ButtonBox/SkillMenu/SkillBox/SkillContainer.add_child(new_button)
+		$MenuBox/ButtonPanel/ButtonBox/SkillMenu/SkillBox/SkillContainer.add_child(new_button)
 		i += 1
 		
 	while i < 8:
 		var invisible_button = Control.new()
 		invisible_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		invisible_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		$MenuBox/ButtonBox/SkillMenu/SkillBox/SkillContainer.add_child(invisible_button)
+		invisible_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		$MenuBox/ButtonPanel/ButtonBox/SkillMenu/SkillBox/SkillContainer.add_child(invisible_button)
 		i += 1
 	
 	skill_menu.visible = true
@@ -193,7 +198,7 @@ func get_skills(character) -> Array[Skill]:
 	var skill3 = skill_resource.new()
 	skill3.name = "Ball"
 	
-	return [skill1, skill2, skill3]
+	return [skill1, skill2, skill3, skill1, skill2]
 	
 	
 func _choose_item() -> void:
@@ -239,8 +244,8 @@ func _update_turn() -> void:
 		select_icon.hide()
 		
 	# clear and hide skill menu
-	for n in $MenuBox/ButtonBox/SkillMenu/SkillBox/SkillContainer.get_children():
-		$MenuBox/ButtonBox/SkillMenu/SkillBox/SkillContainer.remove_child(n)
+	for n in $MenuBox/ButtonPanel/ButtonBox/SkillMenu/SkillBox/SkillContainer.get_children():
+		$MenuBox/ButtonPanel/ButtonBox/SkillMenu/SkillBox/SkillContainer.remove_child(n)
 		n.queue_free() 
 	skill_menu.visible = false
 		
@@ -252,9 +257,8 @@ func has_battle_ended() -> bool:
 
 
 func adjust_select_icon(button: Button) -> void:
-		# Position selection cursor
+	select_icon.visible = true
 	select_icon.global_position = button.global_position
-	select_icon.z_index = 1000
 
 	select_icon.position.y += (select_icon.size.y * select_icon.scale.y) / 8
 	select_icon	.position.x -= (select_icon.size.x * select_icon.scale.x) / 4
