@@ -17,7 +17,6 @@ func _process(delta: float) -> void:
 
 func _on_new_game_pressed() -> void:
 	GlobalState.start_new_run()
-	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
 
 
 func _on_continue_pressed() -> void:
@@ -29,6 +28,5 @@ func _on_settings_pressed() -> void:
 
 
 func _on_quit_pressed() -> void:
-	GlobalState.save_state()
-	get_tree().quit()
+	GlobalState.quit_game()
 	

@@ -42,6 +42,10 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.154876, 0.154876, 0.154876, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [resource]
 Button/styles/hover = SubResource("StyleBoxFlat_r34f5")

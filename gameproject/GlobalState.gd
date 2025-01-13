@@ -12,9 +12,12 @@ func _ready() -> void:
 	load_state()
 
 func start_new_run() -> void:
+	get_tree().paused = false
 	current_level = 1
 	elapsed_time = 0.0
 	run_in_progress = true
+	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
+
 
 func save_state() -> void:
 	var save_data = {
@@ -48,3 +51,7 @@ func load_state() -> void:
 			maxHealth = save_data.get("maxHealth", 78)
 			run_in_progress = save_data.get("run_in_progress", false)
 			print("State loaded successfully!", save_data)
+
+func quit_game():
+	save_state()
+	get_tree().quit()

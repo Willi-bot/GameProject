@@ -12,6 +12,7 @@ extends Node2D
 @export var mana_empty_texture: Texture = preload("res://imgs/mana_orb_empty.png")
 
 func _ready() -> void:
+	print("Read called")
 	entity = entity.duplicate()
 	
 	entity.current_hp = entity.max_hp
@@ -23,7 +24,8 @@ func _ready() -> void:
 	_update_mana_indicator()
 	
 	entity_name.text = entity.name
-
+	
+	
 func _process(delta: float) -> void:
 	pass
 

@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=12 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://imgs/Background.png" id="2_ygs6r"]
 [ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="3_gv6ij"]
 [ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://imgs/select_cursor.png" id="4_70km2"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="6_qhg0e"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
 texture = ExtResource("2_ygs6r")
@@ -54,6 +55,9 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gdtqs"]
+bg_color = Color(0, 0, 0, 0.901961)
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -162,15 +166,160 @@ pivot_offset = Vector2(-16, -16)
 texture = ExtResource("3_gv6ij")
 stretch_mode = 2
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="SelectLayer" type="CanvasLayer" parent="."]
 
-[node name="SelectIcon" type="TextureRect" parent="CanvasLayer"]
+[node name="SelectIcon" type="TextureRect" parent="SelectLayer"]
+visible = false
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(0.5, 0.5)
 mouse_filter = 2
 texture = ExtResource("4_70km2")
 stretch_mode = 3
+
+[node name="VictoryScreen" type="CanvasLayer" parent="."]
+process_mode = 2
+visible = false
+
+[node name="SettingsBackground" type="Panel" parent="VictoryScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gdtqs")
+
+[node name="Panel Container" type="PanelContainer" parent="VictoryScreen"]
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.3
+anchor_right = 0.7
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_qhg0e")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="VictoryScreen/Panel Container"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="VictoryLabel" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 26
+text = "VICTORY ACHIEVED"
+
+[node name="BattleSummary" type="VBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Gold" type="HBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Gold:"
+
+[node name="Label2" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "1337"
+
+[node name="Gold2" type="HBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Experience:"
+
+[node name="Label2" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold2"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "12"
+
+[node name="Gold3" type="HBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Items found:"
+
+[node name="Label2" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold3"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "None"
+
+[node name="Gold4" type="HBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Creatures captured:"
+
+[node name="Label2" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold4"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "None"
+
+[node name="ContinueGame" type="Button" parent="VictoryScreen/Panel Container/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Continue"
+
+[node name="DefeatScreen" type="CanvasLayer" parent="."]
+process_mode = 2
+visible = false
+
+[node name="SettingsBackground" type="Panel" parent="DefeatScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gdtqs")
+
+[node name="Panel Container" type="PanelContainer" parent="DefeatScreen"]
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.4
+anchor_right = 0.7
+anchor_bottom = 0.6
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_qhg0e")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="DefeatScreen/Panel Container"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="VictoryLabel" type="Label" parent="DefeatScreen/Panel Container/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0.341176, 0.2, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 26
+text = "Defeated"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DefeatScreen/Panel Container/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 12
+
+[node name="QuitGame" type="Button" parent="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Quit Game"
+
+[node name="NewRun" type="Button" parent="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "New Run	"
 
 [connection signal="mouse_entered" from="MenuBox/ButtonPanel/ButtonBox/LeftSide/AttackButton" to="." method="_on_attack_button_mouse_entered"]
 [connection signal="mouse_exited" from="MenuBox/ButtonPanel/ButtonBox/LeftSide/AttackButton" to="." method="_on_attack_button_mouse_exited"]
@@ -181,3 +330,6 @@ stretch_mode = 3
 [connection signal="mouse_entered" from="MenuBox/ButtonPanel/ButtonBox/RightSide/NegButton" to="." method="_on_neg_button_mouse_entered"]
 [connection signal="mouse_exited" from="MenuBox/ButtonPanel/ButtonBox/RightSide/NegButton" to="." method="_on_neg_button_mouse_exited"]
 [connection signal="mouse_exited" from="MenuBox/PanelContainer/InfoText" to="." method="_on_info_text_mouse_exited"]
+[connection signal="pressed" from="VictoryScreen/Panel Container/HBoxContainer/ContinueGame" to="." method="_on_continue_game_pressed"]
+[connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
+[connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/NewRun" to="." method="_on_new_run_pressed"]

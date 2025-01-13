@@ -15,10 +15,13 @@ signal target_enemy(id: int)
 func _ready() -> void:
 	entity = entity.duplicate()
 	
-	entity.current_hp = entity.max_hp
 	entity.health_changed.connect(_update_health_bar)
 	
 	_update_health_bar()
+
+	
+func init() -> void:	
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -31,7 +34,6 @@ func start_turn() -> void:
 func _update_health_bar() -> void:
 	health_bar.max_value = entity.max_hp
 	health_bar.value = entity.current_hp
-
 
 func _on_character_sprite_pressed() -> void:
 	target_enemy.emit(list_id)
