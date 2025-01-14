@@ -2,7 +2,6 @@ extends Control
 
 @onready var menu_box = $MenuBox
 @onready var button_box = menu_box.get_node("ButtonPanel/ButtonBox")
-@onready var skill_container = button_box.get_node("SkillMenu/SkillBox/SkillContainer")
 
 @onready var attack_button = get_button("LeftSide/AttackButton")
 @onready var skill_button = get_button("RightSide/SkillButton")
@@ -57,7 +56,6 @@ func _ready() -> void:
 	_connect_entities(ally_battlers, _next_turn)
 	_connect_entities(enemy_battlers, _next_turn, _attack_random_ally, _choose_target)
 
-	_position_target_cursor()
 	_setup_box(skill_box)
 	_setup_box(target_menu_box)
 
