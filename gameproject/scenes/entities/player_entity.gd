@@ -15,7 +15,6 @@ func _ready() -> void:
 	print("Read called")
 	entity = entity.duplicate()
 	
-	entity.current_hp = entity.max_hp
 	entity.health_changed.connect(_update_health_indicator)
 	#entity.mana_changed.connect(_update_mana_indicator)
 	

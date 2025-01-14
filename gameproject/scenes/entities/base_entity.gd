@@ -16,6 +16,7 @@ enum EntityType {
 @export var damage : int
 @export var agility : int
 @export var skills : Array[Resource] = []
+@export var sprite: String
 
 signal turn_ended
 signal health_changed

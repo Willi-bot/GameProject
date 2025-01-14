@@ -18,19 +18,15 @@ func pause():
 
 	animation.play("blur")
 
-
 func _on_resume_pressed() -> void:
 	resume()
 
 func _on_restart_pressed() -> void:
-	resume()
-	get_tree().reload_current_scene()
+	GlobalState.start_new_run()
 
 
 func _on_quit_pressed() -> void:
-	GlobalState.save_state()
-	get_tree().quit()
-
+	GlobalState.quit_game()
 
 func _on_close_pressed() -> void:
 	resume()
