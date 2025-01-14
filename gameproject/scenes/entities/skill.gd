@@ -1,13 +1,13 @@
-extends Resource
+extends Node
 class_name Skill
 
 
-@export var name: String
+@export var skill_name: String
+@export var description: String
+
+var battle_manager
 
 signal turn_ended
 
-func start_attacking(enemy_target : Node2D) -> void:
-	print("doing alot of damage")
-	var damage = randi_range(20, 100)
-	enemy_target.entity.be_damaged(damage)
-	turn_ended.emit()
+func execute() -> void:
+	push_error("This method must be implemented in a subclass")

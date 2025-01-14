@@ -2,7 +2,7 @@ extends Control
 
 @onready var menu_box = $MenuBox
 @onready var button_box = menu_box.get_node("ButtonPanel/ButtonBox")
-@onready var skill_container = button_box.get_node("SkillMenu/SkillBox/SkillContainer")
+
 
 @onready var attack_button = get_button("LeftSide/AttackButton")
 @onready var skill_button = get_button("RightSide/SkillButton")
@@ -14,11 +14,14 @@ extends Control
 
 @onready var skill_menu : CanvasLayer = $MenuBox/ButtonPanel/ButtonBox/SkillMenu
 @onready var skill_box : PanelContainer = $MenuBox/ButtonPanel/ButtonBox/SkillMenu/SkillBox
+@onready var skill_container : GridContainer =  $MenuBox/ButtonPanel/ButtonBox/SkillMenu/SkillBox/SkillContainer
+@onready var target_menu : CanvasLayer = $MenuBox/ButtonPanel/ButtonBox/PlayerTargetMenu
+@onready var target_menu_box : PanelContainer = $MenuBox/ButtonPanel/ButtonBox/PlayerTargetMenu/TargetBox
+@onready var target_container : HBoxContainer = $MenuBox/ButtonPanel/ButtonBox/PlayerTargetMenu/TargetBox/TargetContainer
 
 @onready var skill_resource : Resource = preload("res://scenes/entities/skill.gd")
-@onready var skill_button_resource : Resource = preload("res://scenes/battle/skill_button.gd")
-@onready var skill_button_entity = preload("res://scenes/battle/skill_button.tscn")
-
+@onready var skill_button_resource : Resource = preload("res://scenes/battle/buttons/skill_button.gd")
+@onready var skill_button_entity = preload("res://scenes/battle/buttons/skill_button.tscn")
 @onready var select_icon: TextureRect = $SelectLayer/SelectIcon
 @onready var target_icon : TextureRect = $TargetIcon
 
@@ -39,6 +42,8 @@ var selected_target : int = 0
 
 var enemies_defeated = false
 
+signal target_chosen(index: int)
+
 func _ready() -> void:
 	_load_battle_entities(get_enemy_data(), BaseEntity.EntityType.ENEMY, Vector2(480, 120), -120, enemy_battlers)
 	_load_battle_entities(get_player_data(), BaseEntity.EntityType.PLAYER, Vector2(75, 215), 120, ally_battlers)
@@ -51,7 +56,8 @@ func _ready() -> void:
 	_connect_entities(enemy_battlers, _next_turn, _attack_random_ally, _choose_target)
 
 	_position_target_cursor()
-	_setup_skill_box()
+	_setup_box(skill_box)
+	_setup_box(target_menu_box)
 
 	current_turn = all_battlers[current_turn_idx]
 	_update_turn()
@@ -89,9 +95,10 @@ func _position_target_cursor():
 	target_icon.position.y -= (2 * y_offset / 1.3) * target.scale.y
 
 
-func _setup_skill_box():
-	skill_box.size = $MenuBox.size / 2
-	skill_box.position = $MenuBox.position
+func _setup_box(box : Container):
+	box.size = $MenuBox.size
+	box.size.x /= 2
+	box.position = $MenuBox.position
 
 
 
@@ -163,12 +170,13 @@ func _choose_skill() -> void:
 	var i = 0
 	for skill in list_of_skills:
 		var new_button = skill_button_entity.instantiate()
-		new_button.skill_resource = skill
-		new_button.text = skill.name
+		new_button.skill = skill
+		new_button.text = skill.skill_name
 		new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(enemy_battlers[selected_target]))
-		new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon))
+		new_button.pressed.connect(Callable(new_button, "_on_button_pressed"))
+		new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon, info_text))
+		new_button.mouse_exited.connect(Callable(new_button, "_on_mouse_exited").bind(info_text))
 
 		skill.turn_ended.connect(_next_turn)
 		
@@ -186,16 +194,19 @@ func _choose_skill() -> void:
 	
 	
 func get_skills(character) -> Array[Skill]:
-	var skill1 = skill_resource.new()
-	skill1.name = "Fire"
+	var skill_scene = load("res://scenes/entities/skills/Fire.tscn")
+	var skill_instance1 = skill_scene.instantiate()
+	skill_instance1.battle_manager = self
 	
-	var skill2 = skill_resource.new()
-	skill2.name = "Heal"
+	skill_scene = load("res://scenes/entities/skills/Heal.tscn")
+	var skill_instance2 = skill_scene.instantiate()
+	skill_instance2.battle_manager = self
 	
-	var skill3 = skill_resource.new()
-	skill3.name = "Ball"
+	skill_scene = load("res://scenes/entities/skills/Sweep.tscn")
+	var skill_instance3 = skill_scene.instantiate()
+	skill_instance3.battle_manager = self
 	
-	return [skill1, skill2, skill3, skill1, skill2]
+	return [skill_instance1, skill_instance2, skill_instance3]
 	
 	
 func _choose_item() -> void:
@@ -240,12 +251,21 @@ func _update_turn() -> void:
 		select_icon.hide()
 		
 	# clear and hide skill menu
-	for n in skill_container.get_children():
-		skill_container.remove_child(n)
-		n.queue_free() 
-	skill_menu.visible = false
+	clear_menu(skill_container)
+	skill_menu.hide()
+	
+	# clear and hide target menu
+	clear_menu(target_container)
+	target_menu.hide()
 		
 	current_turn.start_turn()
+	
+	
+func clear_menu(container) -> void:
+	for n in container.get_children():
+		container.remove_child(n)
+		n.queue_free()
+	target_menu.hide()
 
 func process_enemy_death(enemy):
 	var enemy_index = enemy_battlers.find(enemy)
@@ -302,7 +322,7 @@ func _on_skill_button_mouse_entered() -> void:
 func _on_skill_button_mouse_exited() -> void:
 	info_text.text = "Choose your next action"
 
-	
+
 func _on_item_button_mouse_entered() -> void:
 	info_text.text = "Use Item"
 	adjust_select_icon(item_button)
@@ -310,8 +330,8 @@ func _on_item_button_mouse_entered() -> void:
 
 func _on_item_button_mouse_exited() -> void:
 	info_text.text = "Choose your next action"
-	
-	
+
+
 func _on_neg_button_mouse_entered() -> void:
 	info_text.text = "Start Negotiation with a Monster"
 	adjust_select_icon(neg_button)
@@ -319,6 +339,40 @@ func _on_neg_button_mouse_entered() -> void:
 
 func _on_neg_button_mouse_exited() -> void:
 	info_text.text = "Choose your next action"
+
+
+func get_enemy_target() -> Node2D:
+	return enemy_battlers[selected_target]
+	
+
+func get_all_enemies() -> Array:
+	return enemy_battlers
+
+
+func get_player_target() -> Node2D:
+	for character in ally_battlers:
+		var target_button = Button.new()
+		target_button.text = character.entity.name
+		target_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		target_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		target_button.pressed.connect(Callable(self, "_chosen_player").bind(character))
+		target_button.mouse_entered.connect(Callable(self, "adjust_select_icon").bind(target_button))
+		
+		target_container.add_child(target_button)
+	
+	skill_menu.hide()
+	target_menu.show()
+	info_text.text = "Choose a player character"
+	
+	var target = await target_chosen
+	
+	info_text.text = "Choose your next action"
+	
+	return target
+
+
+func _chosen_player(character: Node2D) -> void:
+	target_chosen.emit(character)
 
 func _on_continue_game_pressed() -> void:
 	# TODO: Process battle results here

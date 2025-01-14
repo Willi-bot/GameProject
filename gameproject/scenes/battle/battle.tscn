@@ -145,6 +145,17 @@ theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 4
 columns = 4
 
+[node name="PlayerTargetMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel/ButtonBox"]
+visible = false
+
+[node name="TargetBox" type="PanelContainer" parent="MenuBox/ButtonPanel/ButtonBox/PlayerTargetMenu"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
+
+[node name="TargetContainer" type="HBoxContainer" parent="MenuBox/ButtonPanel/ButtonBox/PlayerTargetMenu/TargetBox"]
+layout_mode = 2
+
 [node name="PanelContainer" type="PanelContainer" parent="MenuBox"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -329,7 +340,6 @@ text = "New Run	"
 [connection signal="mouse_exited" from="MenuBox/ButtonPanel/ButtonBox/RightSide/SkillButton" to="." method="_on_skill_button_mouse_exited"]
 [connection signal="mouse_entered" from="MenuBox/ButtonPanel/ButtonBox/RightSide/NegButton" to="." method="_on_neg_button_mouse_entered"]
 [connection signal="mouse_exited" from="MenuBox/ButtonPanel/ButtonBox/RightSide/NegButton" to="." method="_on_neg_button_mouse_exited"]
-[connection signal="mouse_exited" from="MenuBox/PanelContainer/InfoText" to="." method="_on_info_text_mouse_exited"]
 [connection signal="pressed" from="VictoryScreen/Panel Container/HBoxContainer/ContinueGame" to="." method="_on_continue_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/NewRun" to="." method="_on_new_run_pressed"]

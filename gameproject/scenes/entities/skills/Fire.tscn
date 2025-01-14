@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c266edgrehk3"]
+
+[ext_resource type="Script" path="res://scenes/entities/skills/Fire.gd" id="1_0kp4h"]
+
+[node name="Fire" type="Node"]
+script = ExtResource("1_0kp4h")
+skill_name = "Fire"
+description = "Shoots fire at the target dealing 40 damage."

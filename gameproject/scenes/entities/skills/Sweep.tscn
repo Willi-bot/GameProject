@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://fxa6p1s347v1"]
+
+[ext_resource type="Script" path="res://scenes/entities/skills/Sweep.gd" id="1_1hrim"]
+
+[node name="Sweep" type="Node"]
+script = ExtResource("1_1hrim")
+skill_name = "Sweep"
+description = "Deals 80 damage to all enemies"
