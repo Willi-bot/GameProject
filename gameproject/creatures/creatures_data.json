@@ -1,0 +1,32 @@
+[
+	{
+		"name": "Meanion",
+		"max_hp": 400,
+		"current_hp": 400,
+		"max_mp": 5,
+		"damage": 70,
+		"agility": 3,
+		"skills": ["fireball", "thunderstorm"],
+		"sprite": "res://creatures/sprites/meanion.png"
+	},
+	{
+		"name": "Lonely shadow",
+		"max_hp": 300,
+		"current_hp": 300,
+		"max_mp": 5,
+		"damage": 80,
+		"agility": 5,
+		"skills": ["life_drain", "apocalypse"],
+		"sprite": "res://creatures/sprites/lonely_shadow.png"
+	},
+		{
+		"name": "Hazard",
+		"max_hp": 300,
+		"current_hp": 300,
+		"max_mp": 5,
+		"damage": 80,
+		"agility": 5,
+		"skills": ["whiplash"],
+		"sprite": "res://creatures/sprites/hazard.png"
+	}
+]
