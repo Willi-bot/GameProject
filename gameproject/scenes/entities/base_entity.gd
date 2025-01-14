@@ -29,3 +29,9 @@ func start_attacking(enemy_target : Node2D) -> void:
 func be_damaged(amount : int) -> void:
 	current_hp = max(0, current_hp - amount)
 	health_changed.emit()
+	
+	
+func heal(amount : int) -> void:
+	if current_hp < max_hp:
+		current_hp = min(current_hp + amount, max_hp)
+		health_changed.emit()
