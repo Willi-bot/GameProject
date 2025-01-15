@@ -177,6 +177,9 @@ func _choose_skill() -> void:
 		new_button.pressed.connect(Callable(new_button, "_on_button_pressed"))
 		new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon, info_text))
 		new_button.mouse_exited.connect(Callable(new_button, "_on_mouse_exited").bind(info_text))
+		
+		if current_turn.entity.current_mp < skill.mp_cost:
+			new_button.disabled = true
 
 		skill.turn_ended.connect(_next_turn)
 		
@@ -197,14 +200,17 @@ func get_skills(character) -> Array[Skill]:
 	var skill_scene = load("res://scenes/entities/skills/Fire.tscn")
 	var skill_instance1 = skill_scene.instantiate()
 	skill_instance1.battle_manager = self
+	skill_instance1.character = current_turn
 	
 	skill_scene = load("res://scenes/entities/skills/Heal.tscn")
 	var skill_instance2 = skill_scene.instantiate()
 	skill_instance2.battle_manager = self
+	skill_instance2.character = current_turn
 	
 	skill_scene = load("res://scenes/entities/skills/Sweep.tscn")
 	var skill_instance3 = skill_scene.instantiate()
 	skill_instance3.battle_manager = self
+	skill_instance3.character = current_turn
 	
 	return [skill_instance1, skill_instance2, skill_instance3]
 	
@@ -249,6 +255,9 @@ func _update_turn() -> void:
 	else:
 		attack_button.hide()
 		select_icon.hide()
+		
+	# update amount of mana
+	current_turn.entity.regen_mp()
 		
 	# clear and hide skill menu
 	clear_menu(skill_container)

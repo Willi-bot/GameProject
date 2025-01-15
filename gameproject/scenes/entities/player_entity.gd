@@ -17,7 +17,7 @@ func _ready() -> void:
 	
 	entity.current_hp = entity.max_hp
 	entity.health_changed.connect(_update_health_indicator)
-	#entity.mana_changed.connect(_update_mana_indicator)
+	entity.mp_changed.connect(_update_mana_indicator)
 	
 	_update_health_indicator()
 	_add_mana_orbs(entity.max_mp)

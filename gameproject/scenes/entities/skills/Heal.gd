@@ -13,6 +13,7 @@ func _process(delta: float) -> void:
 
 func execute() -> void:
 	print("Healing Player")
+	use_mp()
 	var target = await battle_manager.get_player_target()
 	target.entity.heal(40)
 	turn_ended.emit()

@@ -13,6 +13,7 @@ func _process(delta: float) -> void:
 
 func execute() -> void:
 	print("Sweeping all enemies")
+	use_mp()
 	var targets = battle_manager.get_all_enemies()
 	for target in targets:
 		target.entity.be_damaged(80)

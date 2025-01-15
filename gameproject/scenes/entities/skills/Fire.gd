@@ -13,6 +13,7 @@ func _process(delta: float) -> void:
 
 func execute() -> void:
 	print("Throwing Fireball")
+	use_mp()
 	var target = battle_manager.get_enemy_target()
 	target.entity.be_damaged(40)
 	turn_ended.emit()
