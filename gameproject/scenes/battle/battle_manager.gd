@@ -185,6 +185,7 @@ func _choose_skill() -> void:
 	for skill in current_turn.entity.skills:
 		var new_button = skill_button_entity.instantiate()
 		new_button.initialize(skill, self)
+		new_button.text = new_button.skill.skill_name
 		new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(current_turn))
