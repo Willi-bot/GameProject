@@ -3,7 +3,6 @@ extends Control
 @onready var menu_box = $MenuBox
 @onready var button_box = menu_box.get_node("ButtonPanel/ButtonBox")
 
-
 @onready var attack_button = get_button("LeftSide/AttackButton")
 @onready var skill_button = get_button("RightSide/SkillButton")
 @onready var item_button = get_button("LeftSide/ItemButton")
@@ -23,7 +22,6 @@ extends Control
 @onready var skill_button_resource : Resource = preload("res://scenes/battle/buttons/skill_button.gd")
 @onready var skill_button_entity = preload("res://scenes/battle/buttons/skill_button.tscn")
 @onready var select_icon: TextureRect = $SelectLayer/SelectIcon
-@onready var target_icon : TextureRect = $TargetIcon
 
 @onready var victory_screen: CanvasLayer = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
@@ -38,16 +36,19 @@ var enemy_battlers = []
 
 var current_turn : Node2D
 var current_turn_idx : int
-var selected_target : int = 0
+var selected_target : Node2D 
 
 var enemies_defeated = false
 
 signal target_chosen(index: int)
 
 func _ready() -> void:
-	_load_battle_entities(get_enemy_data(), BaseEntity.EntityType.ENEMY, Vector2(480, 120), -120, enemy_battlers)
-	_load_battle_entities(get_player_data(), BaseEntity.EntityType.PLAYER, Vector2(75, 215), 120, ally_battlers)
+	var enemy_data = load_enemy_data()
+	_spawn_enemies(enemy_data, Vector2(480, 120), -120)
 	
+	var ally_data = get_player_data()
+	_spawn_allies(ally_data, Vector2(75, 215), 120)
+
 	all_battlers = ally_battlers + enemy_battlers
 	all_battlers.sort_custom(func(a, b): return a.entity.agility > b.entity.agility)
 
@@ -55,20 +56,36 @@ func _ready() -> void:
 	_connect_entities(ally_battlers, _next_turn)
 	_connect_entities(enemy_battlers, _next_turn, _attack_random_ally, _choose_target)
 
-	_position_target_cursor()
 	_setup_box(skill_box)
 	_setup_box(target_menu_box)
 
 	current_turn = all_battlers[current_turn_idx]
 	_update_turn()
+	
+	_choose_target(enemy_battlers[0])
 
+func _spawn_enemies(data, start_pos, offset_x):
+	var index = 0
+	var enemy = null
+	for enemy_data in data:
+		enemy_data['list_id'] = index
+		index += 1
+		enemy = _add_enemy_to_battle(enemy_data, start_pos)
 
-func _load_battle_entities(data, entity_type, start_pos, offset_x, target_list):
-	var char_pos = start_pos
-	for character_data in data:
-		var character = _add_entity_to_battle(character_data, entity_type, char_pos)
-		char_pos.x += offset_x
-		target_list.append(character)
+		add_child(enemy)
+
+		start_pos.x += offset_x
+		enemy_battlers.append(enemy)
+		
+func _spawn_allies(data, start_pos, offset_x):
+	var ally = null
+	for entity_data in data:
+		ally = _add_ally_to_battle(entity_data, start_pos)
+		
+		add_child(ally)
+		
+		start_pos.x += offset_x
+		ally_battlers.append(ally)
 
 
 func _connect_buttons():
@@ -87,82 +104,85 @@ func _connect_entities(entities, turn_end_callback, damage_callback=null, target
 			entity.target_enemy.connect(target_callback)
 
 
-func _position_target_cursor():
-	var target = enemy_battlers[selected_target]
-	target_icon.scale = target.scale
-	target_icon.position = target.position
-	var y_offset = target.get_node("CharacterSprite").texture_normal.get_height() / 2
-	target_icon.position.y -= (2 * y_offset / 1.3) * target.scale.y
-
-
 func _setup_box(box : Container):
 	box.size = $MenuBox.size
 	box.size.x /= 2
 	box.position = $MenuBox.position
 
 
-
 func get_button(name: String) -> Button:
 	return button_box.get_node(name)
-		
-		
+
+
 func get_player_data() -> Array:
 	var player_data: Array = []
+	var data = null
 	
-	# load dummy data -> replace with some global shit
-	player_data.append({"name": "Jeremiah", "max_hp": 1000, "current_hp": 1000, "max_mp": 5, "current_mp": 3, "damage": 60, 
-						"agility": 4, "sprite": "res://imgs/player.png"})
-	player_data.append({"name": "Baldwin", "max_hp": 120, "current_hp": 100, "max_mp": 2, "current_mp": 2, "damage": 30, 
-						"agility": 1, "sprite": "res://imgs/player.png"})
-	player_data.append({"name": "Denise", "max_hp": 100, "current_hp": 30, "max_mp": 3, "current_mp": 1, "damage": 100, 
-						"agility": 2, "sprite": "res://imgs/player.png"})
+	player_data.append({
+		"name": GlobalState.player_name,
+		"max_hp": GlobalState.max_hp,
+		"current_hp": GlobalState.current_hp,
+		"max_mp": GlobalState.max_mp,
+		"current_mp": GlobalState.current_mp,
+		"damage": GlobalState.damage,
+		"agility": GlobalState.agility,
+		"sprite": "res://imgs/player.png"
+	})
 	
+	for member in GlobalState.team:
+		data = {}
+		for key in member.keys():
+			data[key] = member[key]
+		player_data.append(data)
+
+	print("Sucesfully loaded player_data", player_data)
+
 	return player_data
 
+func load_enemy_data() -> Array:
+	var file = FileAccess.open("res://creatures/creatures_data.json", FileAccess.READ)
+	var json = JSON.new()
+	var result = json.parse(file.get_as_text())
+	var enemy_data = json.get_data()
 
-func get_enemy_data() -> Array:
-	var enemy_data: Array = []
-	
-	enemy_data.append({"name": "Gooner", "max_hp": 400, "current_hp": 400, "max_mp": 5, "current_mp": 3, "damage": 70, 
-					   "agility": 3, "sprite": "res://imgs/enemy.png"})
-	enemy_data.append({"name": "Gooner 2", "max_hp": 300, "current_hp": 300, "max_mp": 5, "current_mp": 3, "damage": 80, 
-					   "agility": 5, "sprite": "res://imgs/enemy.png"})
-	
 	return enemy_data
 
 
-func _add_entity_to_battle(character, type, pos) -> Node2D:
-	var instance = null
-	var sprite = null
-	
-	if type == BaseEntity.EntityType.PLAYER:
-		instance = player_scene.instantiate()
-		sprite = instance.get_node("CharacterSprite")
-		sprite.texture = load(character["sprite"])
-	else:
-		instance = enemy_scene.instantiate()
-		sprite = instance.get_node("CharacterSprite")
-		sprite.texture_normal = load(character["sprite"])
-	
+func _add_enemy_to_battle(character, pos) -> Node2D:
+	var instance = enemy_scene.instantiate()
+	var sprite = instance.get_node("CharacterSprite")
+	sprite.texture_normal = load(character["sprite"])
+
 	for key in character.keys():
 		instance.entity.set(key, character[key])
-		instance.entity.type = type
-
+	
+	instance.entity.type = BaseEntity.EntityType.ENEMY
 	instance.position = pos
 	
-	add_child(instance)
+	return instance
+
+func _add_ally_to_battle(character, pos) -> Node2D:
+	var instance = player_scene.instantiate()
+	var sprite = instance.get_node("CharacterSprite")
+	sprite.texture = load(character["sprite"])
+
+	for key in character.keys():
+		instance.entity.set(key, character[key])
+
+	instance.entity.type = BaseEntity.EntityType.PLAYER
+	instance.position = pos
 	
 	return instance
 
 
 func _attack_enemy() -> void:
-	var target = enemy_battlers[selected_target]
+	var target = selected_target
 	current_turn.entity.start_attacking(target)
 	
 	if(target.entity.current_hp == 0):
 		process_enemy_death(target)
-	
-	
+		
+		
 func _choose_skill() -> void:
 	select_icon.visible = false
 	var list_of_skills = get_skills(current_turn)
@@ -219,16 +239,11 @@ func _choose_item() -> void:
 	print("Choosing an item")
 	
 	
-func _choose_target(target: int) -> void:
+func _choose_target(target: Node2D) -> void:
+	if selected_target:
+		selected_target.target_icon.hide()
 	selected_target = target
-	
-	# position target cursor
-	var target_position = enemy_battlers[selected_target].position
-	var icon_scale = enemy_battlers[selected_target].scale
-	target_icon.scale = icon_scale
-	target_icon.position = target_position
-	var y_offset = enemy_battlers[selected_target].get_node("CharacterSprite").texture_normal.get_height() / 2
-	target_icon.position.y -= (2 * y_offset / 1.3) * icon_scale.y
+	selected_target.target_icon.show()
 	
 	
 func _choose_neg_target() -> void:
@@ -284,12 +299,12 @@ func process_enemy_death(enemy):
 	remove_child(enemy)
 	
 	if(enemy_battlers.size() == 0):
-		target_icon.hide()
 		victory_screen.show()
 		get_tree().paused = true
 		return
 		
-	_choose_target(enemy_index - 1)
+	_choose_target(enemy_battlers[enemy_index - 1])
+	
 	
 func process_ally_death(ally):
 	var ally_index = ally_battlers.find(ally)
@@ -384,12 +399,9 @@ func _chosen_player(character: Node2D) -> void:
 	target_chosen.emit(character)
 
 func _on_continue_game_pressed() -> void:
-	# TODO: Process battle results here
-	GlobalState.current_level += 1
-	
+	GlobalState.overwrite_stats(ally_battlers)
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
-
 
 func _on_quit_game_pressed() -> void:
 	GlobalState.quit_game()

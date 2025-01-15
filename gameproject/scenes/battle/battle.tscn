@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=11 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://imgs/Background.png" id="2_ygs6r"]
-[ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="3_gv6ij"]
 [ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://imgs/select_cursor.png" id="4_70km2"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="6_qhg0e"]
 
@@ -166,16 +165,6 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme = ExtResource("2_7y84o")
 text = "Choose your next action"
-
-[node name="TargetIcon" type="TextureRect" parent="."]
-z_index = 1
-layout_mode = 0
-offset_right = 32.0
-offset_bottom = 32.0
-scale = Vector2(1.5, 1.5)
-pivot_offset = Vector2(-16, -16)
-texture = ExtResource("3_gv6ij")
-stretch_mode = 2
 
 [node name="SelectLayer" type="CanvasLayer" parent="."]
 

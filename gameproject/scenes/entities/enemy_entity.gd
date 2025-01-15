@@ -5,8 +5,7 @@ extends Node2D
 
 @onready var health_bar: ProgressBar = $HealthBar
 @onready var sprite: TextureButton = $CharacterSprite
-
-@export var list_id: int
+@onready var target_icon: TextureRect = $TargetIcon
 
 signal deal_damage
 signal target_enemy(id: int)
@@ -27,7 +26,6 @@ func init() -> void:
 func _process(delta: float) -> void:
 	pass
 
-
 func start_turn() -> void:
 	deal_damage.emit()
 
@@ -36,4 +34,4 @@ func _update_health_bar() -> void:
 	health_bar.value = entity.current_hp
 
 func _on_character_sprite_pressed() -> void:
-	target_enemy.emit(list_id)
+	target_enemy.emit(self)
