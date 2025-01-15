@@ -36,7 +36,7 @@ var default_state = {
 			"current_mp": 5,
 			"damage": 80,
 			"agility": 5,
-			"skills": ["whiplash"],
+			"skills": ["Sweep"],
 			"sprite": "res://creatures/sprites/hazard.png"
 		},
 		{
@@ -47,7 +47,7 @@ var default_state = {
 			"current_mp": 5,
 			"damage": 80,
 			"agility": 5,
-			"skills": ["whiplash"],
+			"skills": ["Heal"],
 			"sprite": "res://creatures/sprites/meanion.png"
 		}
 	]

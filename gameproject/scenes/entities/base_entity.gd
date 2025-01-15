@@ -16,12 +16,13 @@ enum EntityType {
 @export var mp_regen_rate: int = 1
 @export var damage : int
 @export var agility : int
-@export var skills : Array[Resource] = []
+@export var skills : Array = []
 @export var sprite: String
 
 signal turn_ended
 signal health_changed
 signal mp_changed
+signal death
 
 func start_attacking(enemy_target : Node2D) -> void:
 	enemy_target.entity.be_damaged(damage)
@@ -31,6 +32,10 @@ func start_attacking(enemy_target : Node2D) -> void:
 func be_damaged(amount : int) -> void:
 	current_hp = max(0, current_hp - amount)
 	health_changed.emit()
+	
+	if current_hp == 0:
+		print("Entity has died")
+		death.emit()
 	
 	
 func heal(amount : int) -> void:

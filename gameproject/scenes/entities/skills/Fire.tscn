@@ -5,5 +5,4 @@
 [node name="Fire" type="Node"]
 script = ExtResource("1_0kp4h")
 skill_name = "Fire"
-description = "Shoots fire at the target dealing 40 damage. (Cost: 1 MP)"
 mp_cost = 1

@@ -44,17 +44,17 @@ signal target_chosen(index: int)
 
 func _ready() -> void:
 	var enemy_data = load_enemy_data()
-	_spawn_enemies(enemy_data, Vector2(480, 120), -120)
+	_spawn_entities(enemy_data, Vector2(480, 120), -120, BaseEntity.EntityType.ENEMY)
 	
 	var ally_data = get_player_data()
-	_spawn_allies(ally_data, Vector2(75, 215), 120)
+	_spawn_entities(ally_data, Vector2(75, 215), 120, BaseEntity.EntityType.PLAYER)
 
 	all_battlers = ally_battlers + enemy_battlers
 	all_battlers.sort_custom(func(a, b): return a.entity.agility > b.entity.agility)
 
 	_connect_buttons()
-	_connect_entities(ally_battlers, _next_turn)
-	_connect_entities(enemy_battlers, _next_turn, _attack_random_ally, _choose_target)
+	_connect_ally_callbacks(ally_battlers)
+	_connect_enemy_callbacks(enemy_battlers)
 
 	_setup_box(skill_box)
 	_setup_box(target_menu_box)
@@ -64,29 +64,21 @@ func _ready() -> void:
 	
 	_choose_target(enemy_battlers[0])
 
-func _spawn_enemies(data, start_pos, offset_x):
+func _spawn_entities(data, start_pos, offset_x, type):
 	var index = 0
-	var enemy = null
-	for enemy_data in data:
-		enemy_data['list_id'] = index
-		index += 1
-		enemy = _add_enemy_to_battle(enemy_data, start_pos)
-
-		add_child(enemy)
-
-		start_pos.x += offset_x
-		enemy_battlers.append(enemy)
-		
-func _spawn_allies(data, start_pos, offset_x):
-	var ally = null
+	var entity = null
+	
 	for entity_data in data:
-		ally = _add_ally_to_battle(entity_data, start_pos)
+		if type == BaseEntity.EntityType.PLAYER:
+			entity = _add_ally_to_battle(entity_data, start_pos)
+			ally_battlers.append(entity)
+		else:
+			entity = _add_enemy_to_battle(entity_data, start_pos)
+			enemy_battlers.append(entity)
 		
-		add_child(ally)
-		
-		start_pos.x += offset_x
-		ally_battlers.append(ally)
+		add_child(entity)
 
+		start_pos.x += offset_x
 
 func _connect_buttons():
 	attack_button.pressed.connect(_attack_enemy)
@@ -95,14 +87,17 @@ func _connect_buttons():
 	neg_button.pressed.connect(_choose_neg_target)
 
 
-func _connect_entities(entities, turn_end_callback, damage_callback=null, target_callback=null):
-	for entity in entities:
-		entity.entity.turn_ended.connect(turn_end_callback)
-		if damage_callback:
-			entity.deal_damage.connect(damage_callback)
-		if target_callback:
-			entity.target_enemy.connect(target_callback)
+func _connect_ally_callbacks(allies):
+	for ally in allies:
+		ally.entity.turn_ended.connect(_next_turn)
+		ally.entity.death.connect(process_ally_death.bind(ally))
 
+func _connect_enemy_callbacks(enemies):
+	for enemy in enemies:
+		enemy.entity.turn_ended.connect(_next_turn)
+		enemy.deal_damage.connect(_attack_random_ally)
+		enemy.target_enemy.connect(_choose_target)
+		enemy.entity.death.connect(process_enemy_death.bind(enemy))
 
 func _setup_box(box : Container):
 	box.size = $MenuBox.size
@@ -126,7 +121,8 @@ func get_player_data() -> Array:
 		"current_mp": GlobalState.current_mp,
 		"damage": GlobalState.damage,
 		"agility": GlobalState.agility,
-		"sprite": "res://imgs/player.png"
+		"sprite": "res://imgs/player.png",
+		"skills": ["Fire"]
 	})
 	
 	for member in GlobalState.team:
@@ -135,9 +131,8 @@ func get_player_data() -> Array:
 			data[key] = member[key]
 		player_data.append(data)
 
-	print("Sucesfully loaded player_data", player_data)
-
 	return player_data
+
 
 func load_enemy_data() -> Array:
 	var file = FileAccess.open("res://creatures/creatures_data.json", FileAccess.READ)
@@ -178,30 +173,27 @@ func _add_ally_to_battle(character, pos) -> Node2D:
 func _attack_enemy() -> void:
 	var target = selected_target
 	current_turn.entity.start_attacking(target)
-	
-	if(target.entity.current_hp == 0):
-		process_enemy_death(target)
 		
 		
 func _choose_skill() -> void:
 	select_icon.visible = false
-	var list_of_skills = get_skills(current_turn)
 	
 	var i = 0
-	for skill in list_of_skills:
+	print("CURRENTLY AVAILABLE SKILLS", current_turn.entity.skills)
+	
+	for skill in current_turn.entity.skills:
 		var new_button = skill_button_entity.instantiate()
-		new_button.skill = skill
-		new_button.text = skill.skill_name
+		new_button.initialize(skill, self)
 		new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		new_button.pressed.connect(Callable(new_button, "_on_button_pressed"))
 		new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon, info_text))
 		new_button.mouse_exited.connect(Callable(new_button, "_on_mouse_exited").bind(info_text))
 		
-		if current_turn.entity.current_mp < skill.mp_cost:
+		if current_turn.entity.current_mp < new_button.skill.mp_cost:
 			new_button.disabled = true
 
-		skill.turn_ended.connect(_next_turn)
+		new_button.skill.turn_ended.connect(_next_turn)
 		
 		skill_container.add_child(new_button)
 		i += 1
@@ -214,25 +206,6 @@ func _choose_skill() -> void:
 		i += 1
 	
 	skill_menu.visible = true
-	
-	
-func get_skills(character) -> Array[Skill]:
-	var skill_scene = load("res://scenes/entities/skills/Fire.tscn")
-	var skill_instance1 = skill_scene.instantiate()
-	skill_instance1.battle_manager = self
-	skill_instance1.character = current_turn
-	
-	skill_scene = load("res://scenes/entities/skills/Heal.tscn")
-	var skill_instance2 = skill_scene.instantiate()
-	skill_instance2.battle_manager = self
-	skill_instance2.character = current_turn
-	
-	skill_scene = load("res://scenes/entities/skills/Sweep.tscn")
-	var skill_instance3 = skill_scene.instantiate()
-	skill_instance3.battle_manager = self
-	skill_instance3.character = current_turn
-	
-	return [skill_instance1, skill_instance2, skill_instance3]
 	
 	
 func _choose_item() -> void:
@@ -253,9 +226,6 @@ func _choose_neg_target() -> void:
 func _attack_random_ally() -> void:
 	var ally = ally_battlers[randi_range(0, ally_battlers.size() - 1)]
 	current_turn.entity.start_attacking(ally)
-	
-	if ally.entity.current_hp == 0:
-		process_ally_death(ally)
 	
 	
 func _next_turn() -> void:
@@ -291,9 +261,8 @@ func clear_menu(container) -> void:
 		n.queue_free()
 	target_menu.hide()
 
+
 func process_enemy_death(enemy):
-	var enemy_index = enemy_battlers.find(enemy)
-	
 	enemy_battlers.erase(enemy)
 	all_battlers.erase(enemy)
 	remove_child(enemy)
@@ -303,17 +272,15 @@ func process_enemy_death(enemy):
 		get_tree().paused = true
 		return
 		
-	_choose_target(enemy_battlers[enemy_index - 1])
+	_choose_target(enemy_battlers[0])
 	
 	
 func process_ally_death(ally):
 	var ally_index = ally_battlers.find(ally)
-	
-	var entity_index = all_battlers.find(ally)
-	all_battlers.remove_at(entity_index)
+
+	all_battlers.erase(ally)
 	
 	if(ally_index == 0):
-		print("Player has died, game ended")
 		get_tree().paused = true
 		defeat_screen.show()
 	
@@ -365,14 +332,6 @@ func _on_neg_button_mouse_exited() -> void:
 	info_text.text = "Choose your next action"
 
 
-func get_enemy_target() -> Node2D:
-	return enemy_battlers[selected_target]
-	
-
-func get_all_enemies() -> Array:
-	return enemy_battlers
-
-
 func get_player_target() -> Node2D:
 	for character in ally_battlers:
 		var target_button = Button.new()
@@ -398,10 +357,12 @@ func get_player_target() -> Node2D:
 func _chosen_player(character: Node2D) -> void:
 	target_chosen.emit(character)
 
+
 func _on_continue_game_pressed() -> void:
 	GlobalState.overwrite_stats(ally_battlers)
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
+
 
 func _on_quit_game_pressed() -> void:
 	GlobalState.quit_game()
