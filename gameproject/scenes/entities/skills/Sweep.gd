@@ -11,9 +11,9 @@ func _process(delta: float) -> void:
 	pass
 
 
-func execute() -> void:
+func execute(character: Node2D) -> void:
 	print("Sweeping all enemies")
-	use_mp()
+	character.entity.use_mp(mp_cost)
 	var targets = battle_manager.get_all_enemies()
 	for target in targets:
 		target.entity.be_damaged(80)

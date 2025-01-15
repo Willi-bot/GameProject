@@ -125,6 +125,7 @@ func get_player_data() -> Array:
 		"max_mp": GlobalState.max_mp,
 		"current_mp": GlobalState.current_mp,
 		"damage": GlobalState.damage,
+		"intelligence": GlobalState.intelligence,
 		"agility": GlobalState.agility,
 		"sprite": "res://imgs/player.png"
 	})
@@ -194,7 +195,7 @@ func _choose_skill() -> void:
 		new_button.text = skill.skill_name
 		new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		new_button.pressed.connect(Callable(new_button, "_on_button_pressed"))
+		new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(current_turn))
 		new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon, info_text))
 		new_button.mouse_exited.connect(Callable(new_button, "_on_mouse_exited").bind(info_text))
 		
@@ -220,17 +221,14 @@ func get_skills(character) -> Array[Skill]:
 	var skill_scene = load("res://scenes/entities/skills/Fire.tscn")
 	var skill_instance1 = skill_scene.instantiate()
 	skill_instance1.battle_manager = self
-	skill_instance1.character = current_turn
 	
 	skill_scene = load("res://scenes/entities/skills/Heal.tscn")
 	var skill_instance2 = skill_scene.instantiate()
 	skill_instance2.battle_manager = self
-	skill_instance2.character = current_turn
 	
 	skill_scene = load("res://scenes/entities/skills/Sweep.tscn")
 	var skill_instance3 = skill_scene.instantiate()
 	skill_instance3.battle_manager = self
-	skill_instance3.character = current_turn
 	
 	return [skill_instance1, skill_instance2, skill_instance3]
 	
@@ -259,6 +257,8 @@ func _attack_random_ally() -> void:
 	
 	
 func _next_turn() -> void:
+	if current_turn.entity.type == BaseEntity.EntityType.PLAYER:
+		current_turn.set_inactive()
 	current_turn_idx = (current_turn_idx + 1) % all_battlers.size()
 	current_turn = all_battlers[current_turn_idx]
 	_update_turn()
@@ -267,6 +267,7 @@ func _next_turn() -> void:
 func _update_turn() -> void:
 	if current_turn.entity.type == BaseEntity.EntityType.PLAYER:
 		attack_button.show()
+		current_turn.set_active()
 	else:
 		attack_button.hide()
 		select_icon.hide()
@@ -366,7 +367,7 @@ func _on_neg_button_mouse_exited() -> void:
 
 
 func get_enemy_target() -> Node2D:
-	return enemy_battlers[selected_target]
+	return selected_target
 	
 
 func get_all_enemies() -> Array:
@@ -393,6 +394,10 @@ func get_player_target() -> Node2D:
 	info_text.text = "Choose your next action"
 	
 	return target
+	
+	
+func get_all_allies() -> Array:
+	return ally_battlers
 
 
 func _chosen_player(character: Node2D) -> void:

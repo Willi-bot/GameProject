@@ -62,3 +62,11 @@ func get_hp_color(current_hp: float, max_hp: float) -> Color:
 	var green_intensity = health_percentage
 	
 	return Color(red_intensity, green_intensity, 0.3)
+	
+	
+func set_active() -> void:
+	sprite.position.y -= 40
+	
+	
+func set_inactive() -> void:
+	sprite.position.y += 40

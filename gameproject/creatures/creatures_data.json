@@ -5,6 +5,7 @@
 		"current_hp": 400,
 		"max_mp": 5,
 		"damage": 70,
+		"intelligence": 10,
 		"agility": 3,
 		"skills": ["fireball", "thunderstorm"],
 		"sprite": "res://creatures/sprites/meanion.png"
@@ -15,6 +16,7 @@
 		"current_hp": 300,
 		"max_mp": 5,
 		"damage": 80,
+		"intelligence": 80,
 		"agility": 5,
 		"skills": ["life_drain", "apocalypse"],
 		"sprite": "res://creatures/sprites/lonely_shadow.png"
@@ -25,6 +27,7 @@
 		"current_hp": 300,
 		"max_mp": 5,
 		"damage": 80,
+		"intelligence": 60,
 		"agility": 5,
 		"skills": ["whiplash"],
 		"sprite": "res://creatures/sprites/hazard.png"

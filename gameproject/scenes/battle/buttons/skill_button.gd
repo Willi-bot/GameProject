@@ -15,11 +15,11 @@ func _process(delta: float) -> void:
 	pass
 
 
-func _on_button_pressed():
+func _on_button_pressed(character: Node2D):
 	# Execute logic based on the associated resource
 	if skill:
 		print("Executing move:", skill.name)
-		skill.execute()
+		skill.execute(character)
 
 
 func _on_mouse_entered(select_icon: TextureRect, info_text: Label) -> void:

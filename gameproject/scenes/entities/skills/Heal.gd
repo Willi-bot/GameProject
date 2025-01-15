@@ -11,9 +11,10 @@ func _process(delta: float) -> void:
 	pass
 
 
-func execute() -> void:
+func execute(character: Node2D) -> void:
 	print("Healing Player")
-	use_mp()
+	character.entity.use_mp(mp_cost)
 	var target = await battle_manager.get_player_target()
-	target.entity.heal(40)
+	var heal_amount = character.entity.intelligence * 2
+	target.entity.heal(heal_amount)
 	turn_ended.emit()

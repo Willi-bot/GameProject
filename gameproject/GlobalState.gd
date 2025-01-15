@@ -11,6 +11,7 @@ extends Node
 @export var max_mp: int
 @export var agility: int
 @export var damage: int
+@export var intelligence: int
 
 @export var team = []
 
@@ -23,9 +24,10 @@ var default_state = {
 	"max_hp": 1200,
 	"current_hp": 1200,
 	"max_mp": 5,
-	"current_mp": 3,
+	"current_mp": 5,
 	"agility": 3,
 	"damage": 120,
+	"intelligence": 90,
 	"run_in_progress": false,
 	"team": [
 		{
@@ -35,6 +37,7 @@ var default_state = {
 			"max_mp": 5,
 			"current_mp": 5,
 			"damage": 80,
+			"intelligence": 50,
 			"agility": 5,
 			"skills": ["whiplash"],
 			"sprite": "res://creatures/sprites/hazard.png"
@@ -46,6 +49,7 @@ var default_state = {
 			"max_mp": 5,
 			"current_mp": 5,
 			"damage": 80,
+			"intelligence": 10,
 			"agility": 5,
 			"skills": ["whiplash"],
 			"sprite": "res://creatures/sprites/meanion.png"
@@ -98,6 +102,7 @@ func overwrite_stats(ally_entities: Array) -> void:
 	current_mp = player["current_mp"]	
 	damage = player["damage"]
 	agility = player["agility"]
+	intelligence = player["intelligence"]
 	
 	team = []
 	
@@ -112,7 +117,8 @@ func overwrite_stats(ally_entities: Array) -> void:
 			"damage": team_entity["damage"],
 			"agility": team_entity["agility"],
 			"sprite": team_entity["sprite"],
-			"skills": team_entity["skills"]
+			"skills": team_entity["skills"],
+			"intelligence": team_entity["intelligence"]
 		})
 		
 	save_state()

@@ -11,9 +11,10 @@ func _process(delta: float) -> void:
 	pass
 
 
-func execute() -> void:
+func execute(character: Node2D) -> void:
 	print("Throwing Fireball")
-	use_mp()
+	character.entity.use_mp(mp_cost)
 	var target = battle_manager.get_enemy_target()
-	target.entity.be_damaged(40)
+	var damage = character.entity.intelligence * 2
+	target.entity.be_damaged(damage)
 	turn_ended.emit()

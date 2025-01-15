@@ -9,14 +9,19 @@ enum EntityType {
 
 @export var name: String = ""
 @export var type : EntityType
+
 @export var max_hp : int
 @export var current_hp : int
+
 @export var max_mp: int
 @export var current_mp: int
 @export var mp_regen_rate: int = 1
+
 @export var damage : int
+@export var intelligence : int
 @export var agility : int
 @export var skills : Array[Resource] = []
+
 @export var sprite: String
 
 signal turn_ended
@@ -37,13 +42,13 @@ func heal(amount : int) -> void:
 	if current_hp < max_hp:
 		current_hp = min(current_hp + amount, max_hp)
 		health_changed.emit()
-		
-		
+
+
 func use_mp(amount : int) -> void:
 	current_mp = current_mp - amount
 	mp_changed.emit()
-	
-	
+
+
 func regen_mp() -> void:
 	current_mp = min(max_mp, current_mp + mp_regen_rate)
 	mp_changed.emit()
