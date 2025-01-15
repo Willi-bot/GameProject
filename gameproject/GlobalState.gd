@@ -39,7 +39,7 @@ var default_state = {
 			"damage": 80,
 			"intelligence": 50,
 			"agility": 5,
-			"skills": ["whiplash"],
+			"skills": ["Sweep"],
 			"sprite": "res://creatures/sprites/hazard.png"
 		},
 		{
@@ -51,7 +51,7 @@ var default_state = {
 			"damage": 80,
 			"intelligence": 10,
 			"agility": 5,
-			"skills": ["whiplash"],
+			"skills": ["Heal"],
 			"sprite": "res://creatures/sprites/meanion.png"
 		}
 	]

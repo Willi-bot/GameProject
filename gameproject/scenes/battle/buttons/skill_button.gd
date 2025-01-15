@@ -5,20 +5,13 @@ class_name SkillButton
 @export var skill: Skill
 
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
+func initialize(skill_name: String, battle_manager) -> void:
+	var path = "res://scenes/entities/skills/" + skill_name + ".tscn"
+	skill = load(path).instantiate()
+	skill.battle_manager = battle_manager
 
 func _on_button_pressed(character: Node2D):
-	# Execute logic based on the associated resource
 	if skill:
-		print("Executing move:", skill.name)
 		skill.execute(character)
 
 
