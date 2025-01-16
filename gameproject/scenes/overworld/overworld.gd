@@ -38,11 +38,18 @@ func _ready() -> void:
 	map_root_position.x += (scale_diff * plane_width / 2)
 	map_root_position.y += (scale_diff * plane_height / 2)
 	
+	var current_node = 0
+	
 	for k in nodes.keys():
 		var point = nodes[k]
 		var event = event_scene.instantiate()
 		
-		var event_name = texture_keys[randi() % texture_keys.size()]
+		var event_name = null
+		
+		if current_node % 2 == 1 or current_node == nodes.size() - 1:
+			event_name = "battle"
+		else:
+			event_name = texture_keys[randi() % texture_keys.size()]
 		
 		event.set_event_type(event_name, textures[event_name])
 		
@@ -50,6 +57,8 @@ func _ready() -> void:
 		
 		add_child(event)
 		events[k] = event
+		
+		current_node += 1
 	
 	for path in paths:
 		for i in range(path.size() - 1):

@@ -1,14 +1,8 @@
 extends Resource
 class_name BaseEntity
 
-
-enum EntityType {
-	PLAYER,
-	ENEMY
-}
-
 @export var name: String = ""
-@export var type : EntityType
+@export var type : int
 
 @export var max_hp : int
 @export var current_hp : int
@@ -30,6 +24,7 @@ signal death
 
 func start_attacking(enemy_target : Node2D) -> void:
 	enemy_target.entity.be_damaged(damage)
+	
 	turn_ended.emit()
 	
 

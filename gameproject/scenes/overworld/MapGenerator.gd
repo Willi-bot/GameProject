@@ -2,11 +2,11 @@ extends Node
 
 
 func generate(plane_width, plane_height, node_count, path_count):
-	# make sure that we are not going to generate the same map every time
 	randomize()
 	
-	# step 1: generating points on a grid randomly
+
 	var points = []
+	
 	# Starting Point
 	points.append(Vector2(plane_width / 2, 0))
 	# End Point
@@ -18,8 +18,10 @@ func generate(plane_width, plane_height, node_count, path_count):
 			var point = Vector2(randi() % plane_width, randi() % plane_height)
 			
 			var dist_from_center = (point - center).length_squared()
+			
 			# only accept points insode of a circle
 			var in_circle = dist_from_center <= plane_width * plane_height / 4
+			
 			if not points.has(point) and in_circle:
 				points.append(point)
 				break

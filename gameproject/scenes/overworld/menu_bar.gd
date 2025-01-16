@@ -24,7 +24,7 @@ func update_level_label() -> void:
 	level_label.text = "%02d" % [GlobalState.current_level]
 
 func set_player_name() -> void:
-	player_name.text = GlobalState.player_name
+	player_name.text = GlobalState.player.name
 
 func update_health_label() -> void:
-	health_label.text = str(GlobalState.current_hp).pad_zeros(2) + "/" + str(GlobalState.max_hp).pad_zeros(2)
+	health_label.text = str(GlobalState.player.current_hp).pad_zeros(2) + "/" + str(GlobalState.player.max_hp).pad_zeros(2)

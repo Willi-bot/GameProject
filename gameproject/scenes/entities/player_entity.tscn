@@ -43,7 +43,7 @@ scale = Vector2(0.5, 0.5)
 script = ExtResource("1_xpavd")
 entity = SubResource("Resource_4c661")
 
-[node name="CharacterSprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="."]
 texture = ExtResource("3_v2alm")
 
 [node name="Container" type="PanelContainer" parent="."]

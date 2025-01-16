@@ -5,14 +5,13 @@ extends Node2D
 @onready var health_bar: ProgressBar = $Container/Info/HealthBar
 @onready var current_health: Label = $Container/Info/HealthBar/CurrentHP
 @onready var entity_name: Label = $Container/Info/Name
-@onready var sprite: Sprite2D = $CharacterSprite
+@onready var sprite: Sprite2D = $Sprite
 
 @onready var mana_container: Node = $Container/Info/ManaBar
 @export var mana_texture: Texture = preload("res://imgs/mana_orb.png")
 @export var mana_empty_texture: Texture = preload("res://imgs/mana_orb_empty.png")
 
 func _ready() -> void:
-	print("Read called")
 	entity = entity.duplicate()
 	
 	entity.health_changed.connect(_update_health_indicator)

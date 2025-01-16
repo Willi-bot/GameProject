@@ -84,7 +84,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = -66.0
+offset_top = -80.0
 offset_right = -10.0
 offset_bottom = -10.0
 grow_horizontal = 2
@@ -121,6 +121,7 @@ size_flags_horizontal = 3
 
 [node name="SkillButton" type="Button" parent="MenuBox/ButtonPanel/ButtonBox/RightSide"]
 layout_mode = 2
+size_flags_vertical = 8
 theme = ExtResource("2_7y84o")
 text = "Skills"
 
@@ -178,7 +179,7 @@ texture = ExtResource("4_70km2")
 stretch_mode = 3
 
 [node name="VictoryScreen" type="CanvasLayer" parent="."]
-process_mode = 2
+process_mode = 3
 visible = false
 
 [node name="SettingsBackground" type="Panel" parent="VictoryScreen"]
@@ -274,7 +275,7 @@ size_flags_horizontal = 4
 text = "Continue"
 
 [node name="DefeatScreen" type="CanvasLayer" parent="."]
-process_mode = 2
+process_mode = 3
 visible = false
 
 [node name="SettingsBackground" type="Panel" parent="DefeatScreen"]

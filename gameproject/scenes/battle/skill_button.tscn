@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://hgydmpybkuml"]
+[gd_scene format=3 uid="uid://cfj6balji55rt"]
 
 [node name="SkillButton" type="Button"]
 anchors_preset = 15
@@ -7,4 +7,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 12
-text = "bleed"
+text = "Flavor Text"
