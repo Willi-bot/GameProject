@@ -2,6 +2,8 @@ extends Control
 
 @onready var mapTexture: TextureRect = $TextureRect
 @onready var camera: Camera2D = $Camera2D
+@onready var topMenu: CanvasLayer = $TopMenu
+@onready var menus: CanvasLayer = $MenuLayer
 
 var events = {}
 var event_scene = preload("res://scenes/overworld/Event.tscn")
@@ -12,6 +14,8 @@ var textures = {
 	"suprise": preload("res://imgs/overworld_icons/question_mark_icon.png"),
 	"recovery": preload("res://imgs/overworld_icons/heart_icon.png")
 }
+
+var active_scene
 
 var texture_keys = textures.keys()
 
@@ -28,6 +32,25 @@ const path_count = 6
 
 
 func _ready() -> void:
+	create_map()
+	set_visibility(false)
+
+func reset():
+	for event in events.values():
+		if event:
+			event.queue_free()
+	events.clear()
+	
+	create_map()
+
+func set_visibility(isVisible: bool):
+	for child in get_children():
+		child.visible = isVisible	
+	camera.enabled = isVisible	
+	set_process_input(isVisible)
+	#menus.set_process_input(isVisible)
+	
+func create_map():			
 	var nodes = GlobalState.map_data[0]
 	var paths = GlobalState.map_data[1]
 	
@@ -44,18 +67,17 @@ func _ready() -> void:
 		var event_name = node["event"]
 		
 		var point = Vector2(position[0], position[1])
-		
 		var event = event_scene.instantiate()
 		
 		event.set_event_type(event_name, textures[event_name])
-		
 		event.position = point * map_scale + map_root_position
 		
 		event.id = str(k)
+		events[str(k)] = event
 		
 		add_child(event)
 		
-		events[str(k)] = event
+		event.connect("buttonPressed", eventPressed)
 		
 		current_node += 1
 	
@@ -64,4 +86,9 @@ func _ready() -> void:
 			var index1 = str(path[i])
 			var index2 = str(path[i + 1])
 			
-			events[index1].add_child_event(events[index2])
+			events[index1].add_child_event(events[index2])			
+			
+func eventPressed(target: String):
+	set_visibility(false)
+	active_scene = load(target).instantiate()
+	add_child(active_scene)

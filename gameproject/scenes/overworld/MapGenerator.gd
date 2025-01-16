@@ -83,6 +83,5 @@ func generate(plane_width, plane_height, node_count, path_count):
 			else:
 				nodes[id] = {"position": [point.x, point.y], "event": "recovery" if randi() % 2 == 0 else "battle"}
 				
-	print(nodes)
-	
+
 	return [nodes, paths]

@@ -87,7 +87,10 @@ func start_new_run() -> void:
 
 	get_tree().paused = false
 	run_in_progress = true
-	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
+	
+	Overworld.reset()
+	Overworld.set_visibility(true)
+	
 
 func save_state() -> void:
 	var save_data = {}
@@ -138,6 +141,10 @@ func overwrite_state(allies: Array):
 
 		newTeam.append(entity)
 	team = newTeam
+
+func game_over():
+	if FileAccess.file_exists("user://save_game.json"):
+		DirAccess.remove_absolute("res://save_game.json")
 
 func quit_game() -> void:
 	save_state()

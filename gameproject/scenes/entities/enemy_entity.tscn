@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2v7h066l6yr7"]
+[gd_scene load_steps=8 format=3 uid="uid://b2v7h066l6yr7"]
 
 [ext_resource type="Script" path="res://scenes/entities/enemy_entity.gd" id="1_nhv1i"]
 [ext_resource type="Script" path="res://scenes/entities/base_entity.gd" id="2_7b6xd"]
 [ext_resource type="Texture2D" uid="uid://daxks0gv1u1nt" path="res://creatures/sprites/meanion.png" id="3_gtup3"]
 [ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="3_vrd0d"]
+[ext_resource type="Shader" path="res://shaders/outline.gdshader" id="4_fdfjd"]
 
 [sub_resource type="Resource" id="Resource_efdqj"]
 script = ExtResource("2_7b6xd")
@@ -19,6 +20,14 @@ intelligence = 0
 agility = 0
 skills = []
 sprite = ""
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_23uiq"]
+shader = ExtResource("4_fdfjd")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = true
 
 [node name="EnemyEntity" type="Node2D" groups=["EnemyEntity"]]
 scale = Vector2(0.5, 0.5)
@@ -44,6 +53,7 @@ offset_right = 100.0
 offset_bottom = -130.0
 
 [node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_23uiq")
 texture = ExtResource("3_gtup3")
 
 [node name="Sprite" type="Button" parent="Sprite"]

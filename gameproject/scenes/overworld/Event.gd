@@ -13,6 +13,8 @@ var children: Array[Node2D] = []
 var button_texture: Texture
 var target_scene: String = "res://scenes/"
 
+signal buttonPressed(targetScene: String)
+
 func _ready() -> void:
 	button.texture_normal = button_texture
 	button.material = button.material.duplicate()
@@ -36,15 +38,14 @@ func _draw() -> void:
 		line -= normal
 		draw_line(normal, line, color, width)
 
-
-func _on_button_pressed() -> void:
-	GlobalState.current_node = id
-	get_tree().change_scene_to_file(target_scene)
-
-
 func _on_button_mouse_entered() -> void:
 	button.material.set_shader_parameter("width", 4)
 
 
 func _on_button_mouse_exited() -> void:
 	button.material.set_shader_parameter("width", 0)
+
+
+func _on_button_pressed() -> void:
+	buttonPressed.emit(target_scene)
+	print("HELLO :D")

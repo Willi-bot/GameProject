@@ -196,6 +196,7 @@ func _choose_neg_target() -> void:
 	
 	
 func _attack_random_ally() -> void:
+	await get_tree().create_timer(1).timeout 
 	var ally = ally_battlers[randi_range(0, ally_battlers.size() - 1)]
 	current_turn.entity.start_attacking(ally)
 	
@@ -203,23 +204,25 @@ func _attack_random_ally() -> void:
 func _next_turn() -> void:
 	if game_over:
 		return
-	
-	if current_turn.entity.type != Entity.Type.ENEMY:
-		current_turn.set_inactive()
+
+	current_turn.set_inactive()
 	current_turn_idx = (current_turn_idx + 1) % battlers.size()
 	current_turn = battlers[current_turn_idx]
 	_update_turn()
 	
 	
 func _update_turn() -> void:
-	if current_turn.entity.type == Entity.Type.ENEMY:
-		menu_box.hide()
-	else:
-		menu_box.show()
-		current_turn.set_active()
+	current_turn.set_active()
+	
+	var type = current_turn.entity.type
+	var isPlayer = type == Entity.Type.PLAYER
+	var isAlly = isPlayer or type == Entity.Type.ALLY
+	
+	menu_box.visible = isAlly
+	select_icon.visible = false
 
-	item_button.visible = current_turn.entity.type == Entity.Type.PLAYER
-	neg_button.visible = current_turn.entity.type == Entity.Type.PLAYER
+	item_button.visible = isPlayer
+	neg_button.visible = isPlayer
 	
 	current_turn.entity.regen_mp()
 		
@@ -340,12 +343,17 @@ func _chosen_player(character: Node2D) -> void:
 func _on_continue_game_pressed() -> void:
 	GlobalState.overwrite_state(ally_battlers)
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
+	Overworld.set_visibility(true)
+	get_parent().remove_child(self)
 
 
 func _on_quit_game_pressed() -> void:
-	GlobalState.quit_game()
+	GlobalState.game_over()
+	get_tree().quit()
 
 
 func _on_new_run_pressed() -> void:
 	GlobalState.start_new_run()
+	get_tree().paused = false
+	Overworld.set_visibility(true)
+	get_parent().remove_child(self)

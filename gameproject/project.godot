@@ -19,7 +19,7 @@ config/icon="res://icon.svg"
 
 GlobalState="*res://GlobalState.gd"
 LoadSettings="*res://LoadSettings.gd"
-GlobalPause="*res://scenes/global_pause_menu/global_pause.tscn"
+Overworld="*res://scenes/overworld/overworld.tscn"
 
 [display]
 

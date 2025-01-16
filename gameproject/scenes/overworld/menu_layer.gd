@@ -19,11 +19,13 @@ func resume():
 	print("Resuming the game")
 	get_tree().paused = false
 	currentMenu.resume()
+	visible = false
 
 func pause():
 	print("Pausing the game")
 	get_tree().paused = true
 	currentMenu.pause()
+	visible = true
 
 func switch_menu(menu_key: String):
 	if menus.has(menu_key):
@@ -37,7 +39,7 @@ func switch_menu(menu_key: String):
 		else:
 			pause()
 
-func _process(delta: float):
+func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("Escape"):
 		switch_menu("Pause")
 		return

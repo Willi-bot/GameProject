@@ -15,6 +15,6 @@ func execute(character: Node2D) -> void:
 	print("Sweeping all enemies")
 	character.entity.use_mp(mp_cost)
 	for target in battle_manager.enemy_battlers:
-		target.entity.be_damaged(80)
+		target.entity.be_damaged(220)
 	turn_ended.emit()
 	
