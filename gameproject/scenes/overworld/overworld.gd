@@ -28,41 +28,40 @@ const path_count = 6
 
 
 func _ready() -> void:
-	var generator = preload("res://scenes/overworld/MapGenerator.gd").new()
-	var map_data = generator.generate(plane_width, plane_height, node_count, path_count)
-	var nodes = map_data[0]
-	var paths = map_data[1]
+	var nodes = GlobalState.map_data[0]
+	var paths = GlobalState.map_data[1]
 	
 	map_root_position = mapTexture.position
 	
 	map_root_position.x += (scale_diff * plane_width / 2)
 	map_root_position.y += (scale_diff * plane_height / 2)
 	
-	var current_node = 0
+	var current_node = 1
 	
 	for k in nodes.keys():
-		var point = nodes[k]
+		var node = nodes[k]
+		var position = node["position"]
+		var event_name = node["event"]
+		
+		var point = Vector2(position[0], position[1])
+		
 		var event = event_scene.instantiate()
-		
-		var event_name = null
-		
-		if current_node % 2 == 1 or current_node == nodes.size() - 1:
-			event_name = "battle"
-		else:
-			event_name = texture_keys[randi() % texture_keys.size()]
 		
 		event.set_event_type(event_name, textures[event_name])
 		
 		event.position = point * map_scale + map_root_position
 		
+		event.id = str(k)
+		
 		add_child(event)
-		events[k] = event
+		
+		events[str(k)] = event
 		
 		current_node += 1
 	
 	for path in paths:
 		for i in range(path.size() - 1):
-			var index1 = path[i]
-			var index2 = path[i + 1]
+			var index1 = str(path[i])
+			var index2 = str(path[i + 1])
 			
 			events[index1].add_child_event(events[index2])

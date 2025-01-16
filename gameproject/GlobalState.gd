@@ -1,16 +1,24 @@
 extends Node
 
+# MAP
+@export var map_data: Array
+@export var current_node: int
+
 # MISC
 @export var current_level: int
 @export var run_in_progress: bool
 @export var elapsed_time: float
 @export var gold: int
-
 # PLAYER
 @export var player = {}
 
 # PLAYER TEAM
 @export var team : Array
+
+const plane_height = 16 # Scaled up by 80: 2000 / by 65: 1625
+const plane_width = 8 # Scaled up by 80: 1280 / by 65:  1040
+const node_count = plane_height * plane_width / 9
+const path_count = 6
 
 var default_player = {
 	"name": "Humprey",
@@ -63,6 +71,9 @@ func start_new_run() -> void:
 	elapsed_time = 0.0
 	gold = 0
 	
+	var generator = preload("res://scenes/overworld/MapGenerator.gd").new()
+	map_data = generator.generate(plane_width, plane_height, node_count, path_count)
+	
 	for key in default_player.keys():
 		player[key] = default_player[key]
 	
@@ -86,6 +97,7 @@ func save_state() -> void:
 	save_data["elapsed_time"] = elapsed_time
 	save_data["gold"] = current_level
 	save_data["current_level"] = current_level
+	save_data["map_data"] = map_data
 	
 	var file = FileAccess.open("user://save_game.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify(save_data))
@@ -105,7 +117,8 @@ func load_state() -> void:
 		elapsed_time = save_data["elapsed_time"]
 		gold = save_data["gold"]
 		current_level = save_data["current_level"]
-
+		map_data = save_data["map_data"]
+	
 		file.close()
 		
 		run_in_progress = true

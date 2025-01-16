@@ -3,8 +3,10 @@ extends Node2D
 @onready var button: TextureButton = $Button
 
 var color: Color = Color.GRAY
+
 var width: int = 2
-var use_antialiasing: bool = false
+
+var id: int
 
 var children: Array[Node2D] = []
 
@@ -13,6 +15,8 @@ var target_scene: String = "res://scenes/"
 
 func _ready() -> void:
 	button.texture_normal = button_texture
+	button.material = button.material.duplicate()
+
 
 func set_event_type(event_name: String, texture: Texture) -> void:
 	button_texture = texture
@@ -24,13 +28,23 @@ func add_child_event(child: Node2D) -> void:
 		children.append(child)
 		queue_redraw()
 
+
 func _draw() -> void:
 	for child in children:
 		var line = child.position - position
 		var normal = line.normalized()
 		line -= normal
-		draw_line(normal, line, color, width, use_antialiasing)
+		draw_line(normal, line, color, width)
+
 
 func _on_button_pressed() -> void:
-	print("Button pressed: ", target_scene)
+	GlobalState.current_node = id
 	get_tree().change_scene_to_file(target_scene)
+
+
+func _on_button_mouse_entered() -> void:
+	button.material.set_shader_parameter("width", 4)
+
+
+func _on_button_mouse_exited() -> void:
+	button.material.set_shader_parameter("width", 0)

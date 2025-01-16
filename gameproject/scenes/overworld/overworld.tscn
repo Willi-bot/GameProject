@@ -5,10 +5,10 @@
 [ext_resource type="Script" path="res://scenes/overworld/overworld.gd" id="1_vif6w"]
 [ext_resource type="Script" path="res://scenes/overworld/camera_2d.gd" id="3_jjmku"]
 [ext_resource type="Script" path="res://scenes/overworld/menu_bar.gd" id="3_n567t"]
-[ext_resource type="Texture2D" uid="uid://bqo7kqo71nbre" path="res://imgs/overworld_icons/battle_icon_top_menu.png" id="5_4qf84"]
-[ext_resource type="Texture2D" uid="uid://c05p73gg1mvcw" path="res://imgs/overworld_icons/hear_icon_top_menu.png" id="6_crrf5"]
-[ext_resource type="Texture2D" uid="uid://cqlnvarsqeias" path="res://imgs/overworld_icons/coin_icon_top_menu.png" id="7_un8em"]
+[ext_resource type="Texture2D" uid="uid://dkqrprenvjvdd" path="res://imgs/overworld_icons/battle_icon.png" id="6_lxbli"]
+[ext_resource type="Texture2D" uid="uid://hmvu8uptgkg6" path="res://imgs/overworld_icons/heart_icon.png" id="7_c1tb4"]
 [ext_resource type="Texture2D" uid="uid://b2tgn71mejkg6" path="res://imgs/overworld_icons/question_mark_icon.png" id="8_7ftgb"]
+[ext_resource type="Texture2D" uid="uid://cxqs6rnw10f0g" path="res://imgs/overworld_icons/coin_icon.png" id="8_8w8om"]
 [ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://imgs/target_icon.png" id="9_lpb8i"]
 [ext_resource type="Script" path="res://scenes/overworld/menu_layer.gd" id="10_77ouk"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="10_m6pb5"]
@@ -116,7 +116,7 @@ vertical_alignment = 1
 
 [node name="PlayerIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/NameContainer/NameBox"]
 layout_mode = 2
-texture = ExtResource("5_4qf84")
+texture = ExtResource("6_lxbli")
 expand_mode = 2
 
 [node name="HealthContainer" type="PanelContainer" parent="TopMenu/TopMenu/Info/PlayerInfo"]
@@ -136,7 +136,7 @@ text = "33/78"
 
 [node name="HealthIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/HealthContainer/HealthBox"]
 layout_mode = 2
-texture = ExtResource("6_crrf5")
+texture = ExtResource("7_c1tb4")
 expand_mode = 2
 
 [node name="GoldContainer" type="PanelContainer" parent="TopMenu/TopMenu/Info/PlayerInfo"]
@@ -155,7 +155,7 @@ text = "102"
 
 [node name="GoldIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/PlayerInfo/GoldContainer/GoldBox"]
 layout_mode = 2
-texture = ExtResource("7_un8em")
+texture = ExtResource("8_8w8om")
 expand_mode = 2
 
 [node name="GameInfo" type="HBoxContainer" parent="TopMenu/TopMenu/Info"]

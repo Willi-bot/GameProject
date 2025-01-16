@@ -6,6 +6,13 @@ func generate(plane_width, plane_height, node_count, path_count):
 	
 
 	var points = []
+	var events = {}
+	
+	points.append(Vector2(plane_width / 2, 0))
+	events[0] = "battle"
+	
+	points.append(Vector2(plane_width / 2, plane_height))
+	events[1] = "battle"
 	
 	# Starting Point
 	points.append(Vector2(plane_width / 2, 0))
@@ -64,8 +71,18 @@ func generate(plane_width, plane_height, node_count, path_count):
 			astar.set_point_disabled(id)
 		
 	var nodes = {}
+	
+	print(paths)
+	
 	for path in paths:
 		for id in path:
-			nodes[id] = points[id]
+			var point = points[id]
+			
+			if id in events:
+				nodes[id] = {"position": [point.x, point.y], "event": events[id]}
+			else:
+				nodes[id] = {"position": [point.x, point.y], "event": "recovery" if randi() % 2 == 0 else "battle"}
+				
+	print(nodes)
 	
 	return [nodes, paths]
