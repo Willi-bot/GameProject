@@ -16,37 +16,36 @@ func _ready():
 	currentMenu = pauseMenu
 
 func resume():
-	print("Resuming the game")
 	get_tree().paused = false
 	currentMenu.resume()
 	visible = false
 
 func pause():
-	print("Pausing the game")
 	get_tree().paused = true
 	currentMenu.pause()
 	visible = true
 
 func switch_menu(menu_key: String):
-	if menus.has(menu_key):
-		var new_menu = menus[menu_key]
-		if currentMenu != new_menu:
-			currentMenu.resume()
-			currentMenu = new_menu
-			currentMenu._ready()
-		if get_tree().paused:
-			resume()
-		else:
-			pause()
+	var new_menu = menus[menu_key]
+	if currentMenu != new_menu:
+		currentMenu.resume()
+		currentMenu = new_menu
+		currentMenu._ready()
+	if get_tree().paused:
+		resume()
+	else:
+		pause()
 
 func _input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("Escape"):
+	if event.is_action("Escape") and event.is_pressed():
 		switch_menu("Pause")
 		return
-	if Input.is_action_just_pressed("Team"):
+		
+	if event.is_action("Team") and event.is_pressed():
 		switch_menu("Team")
 		return
-	if Input.is_action_just_pressed("Items"):
+		
+	if event.is_action("Items") and event.is_pressed():
 		switch_menu("Items")
 		return
 		

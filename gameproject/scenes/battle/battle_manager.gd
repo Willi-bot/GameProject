@@ -343,8 +343,7 @@ func _chosen_player(character: Node2D) -> void:
 func _on_continue_game_pressed() -> void:
 	GlobalState.overwrite_state(ally_battlers)
 	get_tree().paused = false
-	Overworld.set_visibility(true)
-	get_parent().remove_child(self)
+	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
 
 
 func _on_quit_game_pressed() -> void:
@@ -355,5 +354,4 @@ func _on_quit_game_pressed() -> void:
 func _on_new_run_pressed() -> void:
 	GlobalState.start_new_run()
 	get_tree().paused = false
-	Overworld.set_visibility(true)
-	get_parent().remove_child(self)
+	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")

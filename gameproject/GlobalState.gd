@@ -1,9 +1,5 @@
 extends Node
 
-# MAP
-@export var map_data: Array
-@export var current_node: int
-
 # MISC
 @export var current_level: int
 @export var run_in_progress: bool
@@ -17,8 +13,8 @@ extends Node
 
 const plane_height = 16 # Scaled up by 80: 2000 / by 65: 1625
 const plane_width = 8 # Scaled up by 80: 1280 / by 65:  1040
-const node_count = plane_height * plane_width / 9
-const path_count = 6
+const node_count = 20
+const path_count = 4
 
 var default_player = {
 	"name": "Humprey",
@@ -71,9 +67,6 @@ func start_new_run() -> void:
 	elapsed_time = 0.0
 	gold = 0
 	
-	var generator = preload("res://scenes/overworld/MapGenerator.gd").new()
-	map_data = generator.generate(plane_width, plane_height, node_count, path_count)
-	
 	for key in default_player.keys():
 		player[key] = default_player[key]
 	
@@ -87,10 +80,7 @@ func start_new_run() -> void:
 
 	get_tree().paused = false
 	run_in_progress = true
-	
-	Overworld.reset()
-	Overworld.set_visibility(true)
-	
+
 
 func save_state() -> void:
 	var save_data = {}
@@ -100,7 +90,6 @@ func save_state() -> void:
 	save_data["elapsed_time"] = elapsed_time
 	save_data["gold"] = current_level
 	save_data["current_level"] = current_level
-	save_data["map_data"] = map_data
 	
 	var file = FileAccess.open("user://save_game.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify(save_data))
@@ -111,7 +100,7 @@ func load_state() -> void:
 	if FileAccess.file_exists("user://save_game.json"):
 		var file = FileAccess.open("user://save_game.json", FileAccess.READ)
 		var json = JSON.new()
-		var result = json.parse(file.get_as_text())
+		json.parse(file.get_as_text())
 		var save_data = json.get_data()
 		
 		player = save_data["player"]
@@ -120,7 +109,6 @@ func load_state() -> void:
 		elapsed_time = save_data["elapsed_time"]
 		gold = save_data["gold"]
 		current_level = save_data["current_level"]
-		map_data = save_data["map_data"]
 	
 		file.close()
 		
@@ -145,6 +133,7 @@ func overwrite_state(allies: Array):
 func game_over():
 	if FileAccess.file_exists("user://save_game.json"):
 		DirAccess.remove_absolute("res://save_game.json")
+
 
 func quit_game() -> void:
 	save_state()

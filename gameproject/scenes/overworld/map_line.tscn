@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://yb54vb3tr2vx"]
+
+[ext_resource type="Texture2D" uid="uid://dolwh570nvqow" path="res://imgs/overworld_icons/line.png" id="1_dn1jf"]
+
+[node name="MapLine" type="Line2D"]
+texture_repeat = 2
+width = 16.0
+texture = ExtResource("1_dn1jf")
+texture_mode = 1

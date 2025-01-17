@@ -23,7 +23,7 @@ func _on_resume_pressed() -> void:
 
 func _on_restart_pressed() -> void:
 	GlobalState.start_new_run()
-
+	resume()
 
 func _on_quit_pressed() -> void:
 	GlobalState.quit_game()
@@ -33,5 +33,5 @@ func _on_close_pressed() -> void:
 
 
 func _on_main_menu_pressed() -> void:
-	resume()
 	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
+	resume()
