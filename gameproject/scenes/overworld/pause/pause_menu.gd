@@ -33,5 +33,5 @@ func _on_close_pressed() -> void:
 
 
 func _on_main_menu_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
 	resume()
+	GlobalState._change_view(GlobalState.MAIN_MENU)

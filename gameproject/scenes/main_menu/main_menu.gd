@@ -8,11 +8,12 @@ func _ready() -> void:
 
 func _on_new_game_pressed() -> void:
 	GlobalState.start_new_run()
-	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
+	get_parent().remove_child(self)
 
 
 func _on_continue_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/overworld/overworld.tscn")
+	GlobalState.start_new_run()
+	get_parent().remove_child(self)
 
 
 func _on_settings_pressed() -> void:

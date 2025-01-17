@@ -1,5 +1,15 @@
 extends Node
 
+var current_view: Control
+
+# SCENES
+const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
+const CAMPFIRE_SCENE := preload("res://scenes/recovery/recovery.tscn")
+const SHOP_SCENE := preload("res://scenes/shop/shop.tscn")
+const TREASURE_SCENE := preload("res://scenes/suprise/suprise.tscn")
+
+@export var MAIN_MENU := preload("res://scenes/main_menu/main_menu.tscn")
+
 # MISC
 @export var current_level: int
 @export var run_in_progress: bool
@@ -11,10 +21,7 @@ extends Node
 # PLAYER TEAM
 @export var team : Array
 
-const plane_height = 16 # Scaled up by 80: 2000 / by 65: 1625
-const plane_width = 8 # Scaled up by 80: 1280 / by 65:  1040
-const node_count = 20
-const path_count = 4
+@export var overworld: Overworld
 
 var default_player = {
 	"name": "Humprey",
@@ -61,8 +68,45 @@ var default_team = [
 
 func _ready() -> void:
 	load_state()
+	
+	var overworld_scene = preload("res://scenes/overworld/overworld.tscn")
+	
+	overworld = overworld_scene.instantiate()
+	
+	overworld.map_exited.connect(enter_scene)
+	
+	add_child(overworld)
+	
+	overworld.hide_map()
+
+
+func _change_view(scene: PackedScene):
+	
+	if current_view:
+		remove_child(current_view)
+		
+	get_tree().paused = false
+	var new_view = scene.instantiate()
+	add_child(new_view)	
+	
+	current_view = new_view
+	overworld.hide_map()
+
+	return new_view
+
+
+func _show_map() -> void:
+	if current_view:
+		remove_child(current_view)
+		
+	overworld.show_map()
+	overworld.unlock_next_rooms()
+
 
 func start_new_run() -> void:
+	if overworld:
+		overworld.reset()
+	
 	current_level =	1
 	elapsed_time = 0.0
 	gold = 0
@@ -80,7 +124,9 @@ func start_new_run() -> void:
 
 	get_tree().paused = false
 	run_in_progress = true
-
+	
+	overworld.generate_new_map()
+	overworld.show_map()
 
 func save_state() -> void:
 	var save_data = {}
@@ -114,6 +160,7 @@ func load_state() -> void:
 		
 		run_in_progress = true
 
+
 func overwrite_state(allies: Array):
 	var keys = player.keys()
 	
@@ -130,6 +177,7 @@ func overwrite_state(allies: Array):
 		newTeam.append(entity)
 	team = newTeam
 
+
 func game_over():
 	if FileAccess.file_exists("user://save_game.json"):
 		DirAccess.remove_absolute("res://save_game.json")
@@ -138,3 +186,18 @@ func game_over():
 func quit_game() -> void:
 	save_state()
 	get_tree().quit()
+
+
+func enter_scene(type: Room.Type) -> void:
+	print("We enter the scene: ", type)
+	match type:
+		Room.Type.MONSTER:
+			_change_view(BATTLE_SCENE)
+		Room.Type.TREASURE:
+			_change_view(TREASURE_SCENE)
+		Room.Type.CAMPFIRE:
+			_change_view(CAMPFIRE_SCENE)	
+		Room.Type.SHOP:
+			_change_view(SHOP_SCENE)
+		Room.Type.BOSS:
+			_change_view(BATTLE_SCENE)	

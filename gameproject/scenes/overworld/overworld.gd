@@ -1,3 +1,4 @@
+class_name Overworld
 extends Node2D
 
 @onready var mapTexture: TextureRect = $TextureRect
@@ -17,15 +18,21 @@ var map_data: Array[Array]
 var floors_climbed: int
 var last_room: Room
 
+signal map_exited(type: Room.Type)
 
-func _ready() -> void:
-	generate_new_map()
-	unlock_floor(0)
+func reset():
+	for child in lines.get_children():
+		lines.remove_child(child)
+	
+	for child in rooms.get_children():
+		rooms.remove_child(child)
+
 
 func generate_new_map() -> void:
 	floors_climbed = 0
 	map_data = map_generator.generate_map()
 	create_map()
+	unlock_floor(0)
 
 
 func create_map():			
@@ -58,11 +65,13 @@ func unlock_next_rooms() -> void:
 
 func show_map() -> void:
 	show()
+	topMenu.show()
 	camera.enabled = true
 
 
 func hide_map() -> void:
 	hide()
+	topMenu.hide()
 	camera.enabled = false			
 			
 
@@ -89,8 +98,6 @@ func _connect_lines(room: Room) -> void:
 
 			
 func _on_map_room_selected(room: Room):
-	print("This event got emmited")
-	
 	for map_room: MapRoom in rooms.get_children():
 		if map_room.room.row == room.row:
 			map_room.available = false
@@ -98,12 +105,6 @@ func _on_map_room_selected(room: Room):
 	last_room = room
 	floors_climbed += 1
 
-	
-	var file = "res://scenes/battle/battle.tscn" if room.type == Room.Type.MONSTER else "res://scenes/recovery/recovery.tscn"
-	
-	
-	# TODO MAKE MAP PERSISTENT
-	unlock_next_rooms()
-	
-	get_tree().change_scene_to_file(file)
-	
+	print("Room was selected")
+
+	map_exited.emit(room.type)
