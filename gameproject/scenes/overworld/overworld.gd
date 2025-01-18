@@ -28,6 +28,7 @@ func reset():
 		rooms.remove_child(child)
 
 func generate_new_map() -> void:
+	camera.position = Vector2.ZERO
 	floors_climbed = 0
 	map_data = map_generator.generate_map()
 	create_map()
@@ -57,8 +58,9 @@ func unlock_floor(which_floor: int = floors_climbed) -> void:
 
 func unlock_next_rooms() -> void:
 	for map_room: MapRoom in rooms.get_children():
-		if last_room.next_rooms.has(map_room.room):
-			map_room.available = true			
+		for next in last_room.next_rooms:
+			if next.row == map_room.room.row and next.column == map_room.room.column:
+				map_room.available = true			
 
 
 func show_map() -> void:
@@ -82,11 +84,9 @@ func _spawn_room(room: Room) -> void:
 	_connect_lines(room)
 	
 	if room.selected:
-		print("MARKING ROOMS AS SELECTED")
 		new_map_room.mark_selected()
 	
 	if room.row < floors_climbed:
-		print("MARKING ROOMS AS INACTIVE")
 		new_map_room.mark_inactive()
 
 
@@ -120,6 +120,7 @@ func serialize_map() -> Dictionary:
 		for room in floor:
 			serialized_floor.append(room.serialize())
 		serialized_map.append(serialized_floor)
+	
 	return {
 		"map_data": serialized_map,
 		"floors_climbed": floors_climbed,
@@ -130,7 +131,7 @@ func serialize_map() -> Dictionary:
 func deserialize_map(data: Dictionary) -> void:
 	floors_climbed = data.get("floors_climbed", 0)
 	last_room = null
-	if data["last_room"]:
+	if data["last_room"]:		
 		last_room = Room.new()
 		last_room.deserialize(data["last_room"])
 	

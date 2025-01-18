@@ -6,7 +6,7 @@ const Y_DIST := 90
 const PLACEMENT_RANDOMNESS := 12
 const FLOORS := 11
 const MAP_WIDTH := 7
-const PATHS := 7
+const PATHS := 5
 
 const MONSTER_ROOM_WEIGHT := 7.0
 const SHOP_ROOM_WEIGHT := 2.5
@@ -144,7 +144,7 @@ func _setup_room_types() -> void:
 		
 	for room: Room in map_data[8]:
 		if room.next_rooms.size() > 0:
-			room.type = Room.Type.TREASURE			
+			room.type = Room.Type.SUPRISE			
 
 	for room: Room in map_data[6]:
 		if room.next_rooms.size() > 0:

@@ -8,7 +8,7 @@ const OVERWORLD_SCENE := preload("res://scenes/overworld/overworld.tscn")
 const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
 const CAMPFIRE_SCENE := preload("res://scenes/recovery/recovery.tscn")
 const SHOP_SCENE := preload("res://scenes/shop/shop.tscn")
-const TREASURE_SCENE := preload("res://scenes/suprise/suprise.tscn")
+const SUPRISE_SCENE := preload("res://scenes/suprise/suprise.tscn")
 
 @export var MAIN_MENU := preload("res://scenes/main_menu/main_menu.tscn")
 
@@ -107,6 +107,9 @@ func _show_map() -> void:
 
 
 func start_new_run() -> void:
+	if current_view:
+		remove_child(current_view)
+	
 	current_level =	1
 	elapsed_time = 0.0
 	gold = 0
@@ -211,12 +214,11 @@ func quit_game() -> void:
 
 
 func enter_scene(type: Room.Type) -> void:
-	print("We enter the scene: ", type)
 	match type:
 		Room.Type.MONSTER:
 			_change_view(BATTLE_SCENE)
-		Room.Type.TREASURE:
-			_change_view(TREASURE_SCENE)
+		Room.Type.SUPRISE:
+			_change_view(SUPRISE_SCENE)
 		Room.Type.CAMPFIRE:
 			_change_view(CAMPFIRE_SCENE)	
 		Room.Type.SHOP:

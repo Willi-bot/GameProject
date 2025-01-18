@@ -6,7 +6,7 @@ signal selected(room: Room)
 const ICONS := {
 	Room.Type.NOT_ASSIGNED: [null, Vector2.ONE],
 	Room.Type.MONSTER: [preload("res://imgs/overworld_icons/battle_icon.png"), Vector2.ONE],
-	Room.Type.TREASURE: [preload("res://imgs/overworld_icons/coin_icon.png"), Vector2.ONE],
+	Room.Type.SUPRISE: [preload("res://imgs/overworld_icons/question_mark_icon.png"), Vector2.ONE],
 	Room.Type.CAMPFIRE: [preload("res://imgs/overworld_icons/heart_icon.png"), Vector2.ONE],
 	Room.Type.SHOP: [preload("res://imgs/overworld_icons/coin_icon.png"), Vector2.ONE],
 	Room.Type.BOSS: [preload("res://imgs/overworld_icons/hard_battle_icon.png"), Vector2(3, 3)],
@@ -30,8 +30,10 @@ func set_available(new_value: bool) -> void:
 	animation_player.play("RESET")
 
 func mark_selected():
+	var random_rotation = randf() * 360
+	line_2d.rotation = random_rotation
 	line_2d.show()
-
+	
 func mark_inactive():
 	var shader = load("res://shaders/sprite_grayscale.gdshader")
 	

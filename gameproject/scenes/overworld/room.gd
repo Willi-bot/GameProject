@@ -1,7 +1,7 @@
 class_name Room
 extends Resource
 
-enum Type { NOT_ASSIGNED, MONSTER, TREASURE, CAMPFIRE, SHOP, BOSS }
+enum Type { NOT_ASSIGNED, MONSTER, SUPRISE, CAMPFIRE, SHOP, BOSS }
 
 @export var type: Type
 @export var row: int
@@ -41,7 +41,6 @@ func deserialize(data: Dictionary) -> void:
 	selected = data.get("selected", false)
 	available = data.get("available", false)
 
-	next_rooms.clear()
 	for room_data in data.get("next_rooms", []):
 		var room = Room.new()
 		room.deserialize(room_data)

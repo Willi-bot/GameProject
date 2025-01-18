@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjuir0eoeho5h"]
+[gd_scene load_steps=3 format=3 uid="uid://bjuir0eoeho5h"]
+
+[ext_resource type="Script" path="res://scenes/shop/shop.gd" id="1_wyabi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1qd3f"]
 bg_color = Color(0.718767, 0.583896, 0.165181, 1)
@@ -10,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_wyabi")
 
 [node name="ShopBackground" type="Panel" parent="."]
 layout_mode = 1
@@ -20,17 +23,19 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_1qd3f")
 
-[node name="Label" type="Label" parent="ShopBackground"]
+[node name="Label" type="Button" parent="ShopBackground"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -67.0
-offset_top = -11.5
-offset_right = 67.0
-offset_bottom = 11.5
+offset_left = -71.0
+offset_top = -15.5
+offset_right = 71.0
+offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "This is the shop :)"
+
+[connection signal="pressed" from="ShopBackground/Label" to="." method="_on_label_pressed"]

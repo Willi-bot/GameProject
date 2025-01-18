@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bladok1e78ewl"]
+[gd_scene load_steps=3 format=3 uid="uid://bladok1e78ewl"]
+
+[ext_resource type="Script" path="res://scenes/suprise/suprise.gd" id="1_co13d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3r2i"]
 bg_color = Color(0.485016, 0.571248, 0.939887, 1)
@@ -10,8 +12,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_co13d")
 
-[node name="ShopBackground" type="Panel" parent="."]
+[node name="SupriseBackground" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,17 +23,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_y3r2i")
 
-[node name="Label" type="Label" parent="ShopBackground"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -67.0
-offset_top = -11.5
-offset_right = 67.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "This is the suprise room :)"
+[node name="Button" type="Button" parent="SupriseBackground"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[connection signal="pressed" from="SupriseBackground/Button" to="." method="_on_button_pressed"]

@@ -33,7 +33,6 @@ func be_damaged(amount : int) -> void:
 	health_changed.emit()
 	
 	if current_hp == 0:
-		print("Entity has died")
 		death.emit()
 	
 	

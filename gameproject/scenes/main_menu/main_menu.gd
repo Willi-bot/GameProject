@@ -6,6 +6,7 @@ func _ready() -> void:
 	if GlobalState.run_in_progress == false:
 		continueBtn.visible = false
 
+
 func _on_new_game_pressed() -> void:
 	GlobalState.start_new_run()
 	get_parent().remove_child(self)
