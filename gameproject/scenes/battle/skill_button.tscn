@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cfj6balji55rt"]
+[gd_scene format=3 uid="uid://e8kf8wlyi67l"]
 
 [node name="SkillButton" type="Button"]
 anchors_preset = 15

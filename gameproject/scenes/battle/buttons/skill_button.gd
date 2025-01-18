@@ -6,7 +6,7 @@ class_name SkillButton
 
 
 func initialize(skill_name: String, battle_manager) -> void:
-	var path = "res://scenes/entities/skills/" + skill_name + ".tscn"
+	var path = "res://scenes/entities/asset/skills/" + skill_name + ".tscn"
 	skill = load(path).instantiate()
 	skill.battle_manager = battle_manager
 

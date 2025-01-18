@@ -145,6 +145,20 @@ theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 4
 columns = 4
 
+[node name="ItemMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel/ButtonBox"]
+visible = false
+
+[node name="ItemBox" type="PanelContainer" parent="MenuBox/ButtonPanel/ButtonBox/ItemMenu"]
+offset_right = 16.0
+offset_bottom = 16.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
+
+[node name="ItemContainer" type="GridContainer" parent="MenuBox/ButtonPanel/ButtonBox/ItemMenu/ItemBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 4
+columns = 4
+
 [node name="PlayerTargetMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel/ButtonBox"]
 visible = false
 

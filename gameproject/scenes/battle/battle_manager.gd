@@ -14,13 +14,16 @@ extends Control
 @onready var skill_menu : CanvasLayer = button_box.get_node("SkillMenu")
 @onready var skill_box : PanelContainer = button_box.get_node("SkillMenu/SkillBox")
 @onready var skill_container : GridContainer =  button_box.get_node("SkillMenu/SkillBox/SkillContainer")
+@onready var item_menu : CanvasLayer = button_box.get_node("ItemMenu")
+@onready var item_box : PanelContainer = button_box.get_node("ItemMenu/ItemBox")
+@onready var item_container : GridContainer =  button_box.get_node("ItemMenu/ItemBox/ItemContainer")
 @onready var target_menu : CanvasLayer = button_box.get_node("PlayerTargetMenu")
 @onready var target_menu_box : PanelContainer = button_box.get_node("PlayerTargetMenu/TargetBox")
 @onready var target_container : HBoxContainer = button_box.get_node("PlayerTargetMenu/TargetBox/TargetContainer")
 
-@onready var skill_resource : Resource = preload("res://scenes/entities/skill.gd")
-@onready var skill_button_resource : Resource = preload("res://scenes/battle/buttons/skill_button.gd")
-@onready var skill_button_entity = preload("res://scenes/battle/buttons/skill_button.tscn")
+@onready var skill_resource : Resource = preload("res://scenes/entities/asset/skill.gd")
+@onready var item_resource : Resource = preload("res://scenes/entities/asset/item.gd")
+@onready var asset_button_entity = preload("res://scenes/battle/buttons/asset_button.tscn")
 @onready var select_icon: TextureRect = $SelectLayer/SelectIcon
 
 @onready var victory_screen: CanvasLayer = $VictoryScreen
@@ -50,6 +53,8 @@ func _ready() -> void:
 	
 	var team = [GlobalState.player] + GlobalState.team
 	_spawn_entities(team, Vector2(75, 215), 120)
+	for entity in ally_battlers:
+		entity.show_backsprite()
 
 	battlers = ally_battlers + enemy_battlers
 	battlers.sort_custom(func(a, b): return a.entity.agility > b.entity.agility)
@@ -59,6 +64,7 @@ func _ready() -> void:
 	_connect_enemy_callbacks(enemy_battlers)
 
 	_setup_box(skill_box)
+	_setup_box(item_box)
 	_setup_box(target_menu_box)
 
 	current_turn = battlers[current_turn_idx]
@@ -130,6 +136,9 @@ func _add_entity_to_battle(character, pos) -> Node2D:
 		instance = enemy_scene.instantiate()
 	else:
 		instance = player_scene.instantiate()
+		
+		var back_sprite = instance.get_node("BackSprite")
+		back_sprite.texture = load(character["sprite"].replace(".png", "_back.png"))
 	
 	var sprite = instance.get_node("Sprite")
 	sprite.texture = load(character["sprite"])
@@ -153,19 +162,10 @@ func _choose_skill() -> void:
 	var i = 0
 	
 	for skill in current_turn.entity.skills:
-		var new_button = skill_button_entity.instantiate()
-		new_button.initialize(skill, self)
-		new_button.text = new_button.skill.skill_name
-		new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(current_turn))
-		new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon, info_text))
-		new_button.mouse_exited.connect(Callable(new_button, "_on_mouse_exited").bind(info_text))
+		var new_button = _create_asset_button("skill", skill)
 		
-		if current_turn.entity.current_mp < new_button.skill.mp_cost:
+		if current_turn.entity.current_mp < new_button.asset.mp_cost:
 			new_button.disabled = true
-
-		new_button.skill.turn_ended.connect(_next_turn)
 		
 		skill_container.add_child(new_button)
 		i += 1
@@ -181,7 +181,47 @@ func _choose_skill() -> void:
 	
 	
 func _choose_item() -> void:
-	print("Choosing an item")
+	select_icon.visible = false
+	
+	var i = 0
+	for item in GlobalState.inventory.keys():
+		var count = GlobalState.inventory[item]
+		var new_button = _create_asset_button("item", item)
+		new_button.asset.count = count
+		new_button.text += " (%sx)" % count
+		new_button.asset.use_item.connect(_update_item_count.bind(item))
+		
+		item_container.add_child(new_button)
+		i += 1
+		
+	while i < 8:
+		var invisible_button = Control.new()
+		invisible_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		invisible_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		skill_container.add_child(invisible_button)
+		i += 1
+	
+	item_menu.visible = true
+	
+	
+func _create_asset_button(asset_type, asset) -> Button:
+	var new_button = asset_button_entity.instantiate()
+	new_button.initialize(asset_type, asset, self)
+	new_button.text = new_button.asset.asset_name
+	new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(current_turn))
+	new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon, info_text))
+	new_button.mouse_exited.connect(Callable(new_button, "_on_mouse_exited").bind(info_text))
+	new_button.asset.turn_ended.connect(_next_turn)
+	
+	return new_button
+	
+	
+func _update_item_count(item) -> void:
+	GlobalState.inventory[item] -= 1
+	if GlobalState.inventory[item] == 0:
+		GlobalState.inventory.erase(item)
 	
 	
 func _choose_target(target: Node2D) -> void:
@@ -228,6 +268,9 @@ func _update_turn() -> void:
 		
 	clear_menu(skill_container)
 	skill_menu.hide()
+	
+	clear_menu(item_container)
+	item_menu.hide()
 	
 	clear_menu(target_container)
 	target_menu.hide()

@@ -21,7 +21,10 @@ const SUPRISE_SCENE := preload("res://scenes/suprise/suprise.tscn")
 @export var player = {}
 
 # PLAYER TEAM
-@export var team : Array
+@export var team: Array
+
+# INVENTORY
+@export var inventory: Dictionary
 
 @export var overworld: Overworld
 
@@ -68,12 +71,14 @@ var default_team = [
 		}
 ]
 
+var default_inventory = {"SmallElixier": 3}
+
 var map_data = null
 
 func _ready() -> void:
-	var succesfull = load_state()
+	var successful = load_state()
 	
-	if succesfull:
+	if successful:
 		overworld = OVERWORLD_SCENE.instantiate()
 		
 		overworld.map_exited.connect(enter_scene)
@@ -114,15 +119,15 @@ func start_new_run() -> void:
 	elapsed_time = 0.0
 	gold = 0
 	
-	for key in default_player.keys():
-		player[key] = default_player[key]
+	player = default_player.duplicate(true)
+		
+	inventory = default_inventory.duplicate(true)
 	
 	team = []
 	
 	for member in default_team:
 		var team_member = {}
-		for key in member.keys():
-			team_member[key] = member[key]
+		team_member = member.duplicate(true)
 		team.append(team_member)
 
 	get_tree().paused = false
