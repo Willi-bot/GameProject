@@ -48,25 +48,30 @@ func create_map():
 	visuals.position.x = (get_viewport_rect().size.x - map_width_pixels) / 2
 	visuals.position.y = mapTexture.position.y / 2 + 650
 
+
 func unlock_floor(which_floor: int = floors_climbed) -> void:
 	for map_room: MapRoom in rooms.get_children():
 		if map_room.room.row == which_floor:
 			map_room.available = true
+
 
 func unlock_next_rooms() -> void:
 	for map_room: MapRoom in rooms.get_children():
 		if last_room.next_rooms.has(map_room.room):
 			map_room.available = true			
 
+
 func show_map() -> void:
 	show()
 	topMenu.show()
 	camera.enabled = true
 
+
 func hide_map() -> void:
 	hide()
 	topMenu.hide()
 	camera.enabled = false			
+
 
 func _spawn_room(room: Room) -> void:
 	var new_map_room := MAP_ROOM.instantiate() as MapRoom
@@ -76,8 +81,14 @@ func _spawn_room(room: Room) -> void:
 	new_map_room.available = room.available
 	_connect_lines(room)
 	
-	if room.selected and room.row < floors_climbed:
-		print("We've already passed this room")
+	if room.selected:
+		print("MARKING ROOMS AS SELECTED")
+		new_map_room.mark_selected()
+	
+	if room.row < floors_climbed:
+		print("MARKING ROOMS AS INACTIVE")
+		new_map_room.mark_inactive()
+
 
 func _connect_lines(room: Room) -> void:
 	if room.next_rooms.is_empty():
@@ -89,10 +100,12 @@ func _connect_lines(room: Room) -> void:
 		new_map_line.add_point(next.position)
 		lines.add_child(new_map_line)	
 
+
 func _on_map_room_selected(room: Room):
 	for map_room: MapRoom in rooms.get_children():
 		if map_room.room.row == room.row:
 			map_room.available = false
+			map_room.mark_inactive()
  	
 	last_room = room
 	floors_climbed += 1

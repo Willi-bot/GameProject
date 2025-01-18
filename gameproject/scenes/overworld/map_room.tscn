@@ -35,7 +35,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0.0666667, 0.833333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(0.75, 0.75)]
+"values": [Vector2(0.5, 0.5), Vector2(0.6, 0.6)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_25j3i"]
@@ -55,7 +55,16 @@ scale = Vector2(0.5, 0.5)
 [node name="Sprite2D" type="Sprite2D" parent="Visuals"]
 texture = ExtResource("2_1bv51")
 
+[node name="Line2D" type="Line2D" parent="Visuals"]
+visible = false
+position = Vector2(-3.97456, 3.97456)
+scale = Vector2(0.588934, 0.708851)
+points = PackedVector2Array(-39.4808, -23.8474, -40.4924, -1.43051e-06, -28.1043, 15.8983, -5.35113, 27.8219, 17.402, 23.8474, 40.4924, 16.8212, 51.5317, -3.97456, 45.8434, -27.8219, 33.7437, -39.2494, 6.74874, -44.8564, -26.995, -39.2494)
+closed = true
+default_color = Color(1, 0.23, 0.23, 1)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_lhk6m")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

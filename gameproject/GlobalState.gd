@@ -107,13 +107,6 @@ func _show_map() -> void:
 
 
 func start_new_run() -> void:
-	if overworld:
-		overworld.reset()
-	else:
-		overworld = OVERWORLD_SCENE.instantiate()
-		overworld.map_exited.connect(enter_scene)
-		add_child(overworld)
-		
 	current_level =	1
 	elapsed_time = 0.0
 	gold = 0
@@ -131,6 +124,13 @@ func start_new_run() -> void:
 
 	get_tree().paused = false
 	run_in_progress = true
+	
+	if overworld:
+		overworld.reset()
+	else:
+		overworld = OVERWORLD_SCENE.instantiate()
+		overworld.map_exited.connect(enter_scene)
+		add_child(overworld)
 	
 	overworld.generate_new_map()
 	overworld.show_map()
