@@ -12,7 +12,7 @@ func _on_new_game_pressed() -> void:
 
 
 func _on_continue_pressed() -> void:
-	GlobalState.start_new_run()
+	GlobalState.continue_run()
 	get_parent().remove_child(self)
 
 

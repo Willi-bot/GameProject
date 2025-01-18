@@ -20,6 +20,7 @@ var room: Room: set = set_room
 
 func set_available(new_value: bool) -> void:
 	available = new_value
+	room.available = new_value
 	
 	if available:
 		animation_player.play("highlight")

@@ -2,6 +2,8 @@ extends Node
 
 var current_view: Control
 
+const OVERWORLD_SCENE := preload("res://scenes/overworld/overworld.tscn")
+
 # SCENES
 const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
 const CAMPFIRE_SCENE := preload("res://scenes/recovery/recovery.tscn")
@@ -66,18 +68,19 @@ var default_team = [
 		}
 ]
 
+var map_data = null
+
 func _ready() -> void:
-	load_state()
+	var succesfull = load_state()
 	
-	var overworld_scene = preload("res://scenes/overworld/overworld.tscn")
-	
-	overworld = overworld_scene.instantiate()
-	
-	overworld.map_exited.connect(enter_scene)
-	
-	add_child(overworld)
-	
-	overworld.hide_map()
+	if succesfull:
+		overworld = OVERWORLD_SCENE.instantiate()
+		
+		overworld.map_exited.connect(enter_scene)
+		
+		add_child(overworld)
+		
+		overworld.hide_map()
 
 
 func _change_view(scene: PackedScene):
@@ -106,7 +109,11 @@ func _show_map() -> void:
 func start_new_run() -> void:
 	if overworld:
 		overworld.reset()
-	
+	else:
+		overworld = OVERWORLD_SCENE.instantiate()
+		overworld.map_exited.connect(enter_scene)
+		add_child(overworld)
+		
 	current_level =	1
 	elapsed_time = 0.0
 	gold = 0
@@ -128,6 +135,12 @@ func start_new_run() -> void:
 	overworld.generate_new_map()
 	overworld.show_map()
 
+
+func continue_run():
+	overworld.deserialize_map(map_data)
+	overworld.show_map()
+	
+
 func save_state() -> void:
 	var save_data = {}
 	save_data["player"] = player
@@ -137,12 +150,15 @@ func save_state() -> void:
 	save_data["gold"] = current_level
 	save_data["current_level"] = current_level
 	
+	save_data["map_data"] = overworld.serialize_map()
+	
 	var file = FileAccess.open("user://save_game.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify(save_data))
 	file.close()
-	print("Succesfully saved state", save_data)
+	print("Succesfully saved state!")
 
-func load_state() -> void:
+
+func load_state() -> bool:
 	if FileAccess.file_exists("user://save_game.json"):
 		var file = FileAccess.open("user://save_game.json", FileAccess.READ)
 		var json = JSON.new()
@@ -155,11 +171,17 @@ func load_state() -> void:
 		elapsed_time = save_data["elapsed_time"]
 		gold = save_data["gold"]
 		current_level = save_data["current_level"]
-	
+		map_data = save_data["map_data"]
+
 		file.close()
 		
 		run_in_progress = true
-
+		
+		return true
+	
+	return false
+		
+		
 
 func overwrite_state(allies: Array):
 	var keys = player.keys()
