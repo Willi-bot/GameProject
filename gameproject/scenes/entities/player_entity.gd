@@ -6,6 +6,7 @@ extends Node2D
 @onready var current_health: Label = $Container/Info/HealthBar/CurrentHP
 @onready var entity_name: Label = $Container/Info/Name
 @onready var sprite: Sprite2D = $Sprite
+@onready var back_sprite: Sprite2D = $BackSprite
 
 @onready var mana_container: Node = $Container/Info/ManaBar
 @export var mana_texture: Texture = preload("res://imgs/mana_orb.png")
@@ -69,3 +70,8 @@ func set_active() -> void:
 	
 func set_inactive() -> void:
 	sprite.position.y += 40
+	
+	
+func show_backsprite() -> void:
+	sprite.hide()
+	back_sprite.show()
