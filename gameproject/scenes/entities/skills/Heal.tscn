@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://du6un3b23vqnp"]
-
-[ext_resource type="Script" path="res://scenes/entities/skills/Heal.gd" id="1_2bp10"]
-
-[node name="Heal" type="Node"]
-script = ExtResource("1_2bp10")
-skill_name = "Heal"
-description = "Heals 40 HP to Target Character. (Cost: 2 MP))"
-mp_cost = 2

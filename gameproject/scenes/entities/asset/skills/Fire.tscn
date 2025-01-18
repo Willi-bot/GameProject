@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c266edgrehk3"]
+
+[ext_resource type="Script" path="res://scenes/entities/asset/skills/Fire.gd" id="1_0kp4h"]
+
+[node name="Fire" type="Node"]
+script = ExtResource("1_0kp4h")
+mp_cost = 1
+asset_name = "Fire"
+description = "Throws a Fire ball at the enemy. (Cost: 1 MP)"

@@ -1,10 +1,9 @@
 extends Node
-class_name Skill
+class_name Asset
 
 
-@export var skill_name: String
+@export var asset_name: String
 @export var description: String
-@export var mp_cost: int
 
 var battle_manager
 

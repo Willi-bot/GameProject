@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxsts8owl0k53"]
+
+[ext_resource type="Script" path="res://scenes/battle/buttons/asset_button.gd" id="1_e8rar"]
+
+[node name="AssetButton" type="Button"]
+script = ExtResource("1_e8rar")
