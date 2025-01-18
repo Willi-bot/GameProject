@@ -15,10 +15,11 @@ func _to_string() -> String:
 	return "%s (%s)" % [column, Type.keys()[type][0]]
 
 
-func serialize() -> Dictionary:
+func serialize(store_direct_child: bool) -> Dictionary:
 	var serialized_next_rooms = []
-	for room in next_rooms:
-		serialized_next_rooms.append(room.serialize())
+	if store_direct_child:
+		for room in next_rooms:
+			serialized_next_rooms.append(room.serialize(false))
 	
 	return {
 		"type": type,

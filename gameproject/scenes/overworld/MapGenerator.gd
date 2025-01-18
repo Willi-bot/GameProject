@@ -8,14 +8,16 @@ const FLOORS := 11
 const MAP_WIDTH := 7
 const PATHS := 5
 
-const MONSTER_ROOM_WEIGHT := 7.0
+const MONSTER_ROOM_WEIGHT := 4.0
 const SHOP_ROOM_WEIGHT := 2.5
 const CAMPFIRE_ROOM_WEIGHT := 4.0
+const SUPRISE_ROOM_WEIGHT := 2.5
 
 var random_room_type_weights = {
 	Room.Type.MONSTER: 0.0,
 	Room.Type.CAMPFIRE: 0.0,
 	Room.Type.SHOP: 0.0,
+	Room.Type.SUPRISE: 0.0
 }
 
 var random_room_type_total_weight := 0
@@ -132,8 +134,9 @@ func _setup_random_room_weights() -> void:
 	random_room_type_weights[Room.Type.MONSTER] = MONSTER_ROOM_WEIGHT
 	random_room_type_weights[Room.Type.CAMPFIRE] = MONSTER_ROOM_WEIGHT + CAMPFIRE_ROOM_WEIGHT
 	random_room_type_weights[Room.Type.SHOP] = MONSTER_ROOM_WEIGHT + CAMPFIRE_ROOM_WEIGHT + SHOP_ROOM_WEIGHT
+	random_room_type_weights[Room.Type.SUPRISE] = MONSTER_ROOM_WEIGHT + CAMPFIRE_ROOM_WEIGHT + SHOP_ROOM_WEIGHT + SUPRISE_ROOM_WEIGHT
 	
-	random_room_type_total_weight = random_room_type_weights[Room.Type.SHOP]	
+	random_room_type_total_weight = random_room_type_weights[Room.Type.SUPRISE]	
 
 
 func _setup_room_types() -> void:

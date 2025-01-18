@@ -117,14 +117,14 @@ func serialize_map() -> Dictionary:
 	var serialized_map = []
 	for floor in map_data:
 		var serialized_floor = []
-		for room in floor:
-			serialized_floor.append(room.serialize())
+		for room: Room in floor:
+			serialized_floor.append(room.serialize(true))
 		serialized_map.append(serialized_floor)
 	
 	return {
 		"map_data": serialized_map,
 		"floors_climbed": floors_climbed,
-		"last_room": last_room.serialize() if last_room else null
+		"last_room": last_room.serialize(true) if last_room else null
 	}
 
 
