@@ -6,12 +6,14 @@ extends MenuBar
 @onready var health_label: Label = $Info/PlayerInfo/HealthContainer/HealthBox/Health
 
 func _ready() -> void:
+	update()
+
+func update():
 	update_level_label()
 	set_player_name()
 	update_health_label()
 	
 func _process(delta: float) -> void:
-	GlobalState.elapsed_time += delta
 	update_elapsed_time_label()
 
 func update_elapsed_time_label() -> void:

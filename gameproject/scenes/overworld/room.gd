@@ -15,16 +15,21 @@ func _to_string() -> String:
 	return "%s (%s)" % [column, Type.keys()[type][0]]
 
 
-func serialize(store_direct_child: bool) -> Dictionary:
+# We only need the position for corretly placing the lines and uniquely identifying the room
+func serialize_next_room(room: Room):
+	return {
+		"position": [room.position.x, room.position.y]
+	}
+
+func serialize() -> Dictionary:
 	var serialized_next_rooms = []
-	if store_direct_child:
-		for room in next_rooms:
-			serialized_next_rooms.append(room.serialize(false))
-	
+
+	for room in next_rooms:
+		serialized_next_rooms.append(serialize_next_room(room))
+
 	return {
 		"type": type,
-		"row": row,
-		"column": column,
+		"grid_pos": [row, column],
 		"position": [position.x, position.y],
 		"next_rooms": serialized_next_rooms,
 		"selected": selected,
@@ -34,8 +39,10 @@ func serialize(store_direct_child: bool) -> Dictionary:
 
 func deserialize(data: Dictionary) -> void:
 	type = data.get("type", Type.NOT_ASSIGNED)
-	row = data.get("row", 0)
-	column = data.get("column", 0)
+	
+	var grid_pos = data.get("grid_pos", [0, 0])
+	row = grid_pos[0]
+	column = grid_pos[1]
 
 	var mapPosition = data["position"]
 	position = Vector2(mapPosition[0], mapPosition[1])

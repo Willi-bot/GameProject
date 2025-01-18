@@ -1,9 +1,9 @@
 class_name Overworld
 extends Node2D
 
-@onready var mapTexture: TextureRect = $TextureRect
+@onready var map_texture: TextureRect = $TextureRect
 @onready var camera: Camera2D = $Camera2D
-@onready var topMenu: CanvasLayer = $TopMenu
+@onready var top_menu: MenuBar = $TopMenu/TopMenu
 @onready var menus: CanvasLayer = $MenuLayer
 
 const MAP_ROOM = preload("res://scenes/overworld/map_room.tscn")
@@ -47,7 +47,7 @@ func create_map():
 	var map_height_pixels := MapGenerator.Y_DIST * (MapGenerator.FLOORS - 1)
 
 	visuals.position.x = (get_viewport_rect().size.x - map_width_pixels) / 2
-	visuals.position.y = mapTexture.position.y / 2 + 650
+	visuals.position.y = map_texture.position.y / 2 + 650
 
 
 func unlock_floor(which_floor: int = floors_climbed) -> void:
@@ -59,19 +59,22 @@ func unlock_floor(which_floor: int = floors_climbed) -> void:
 func unlock_next_rooms() -> void:
 	for map_room: MapRoom in rooms.get_children():
 		for next in last_room.next_rooms:
-			if next.row == map_room.room.row and next.column == map_room.room.column:
+			if next.position == map_room.room.position:
 				map_room.available = true			
 
 
 func show_map() -> void:
 	show()
-	topMenu.show()
+	top_menu.show()
+	top_menu.update()
+	top_menu.set_process(true)
 	camera.enabled = true
 
 
 func hide_map() -> void:
 	hide()
-	topMenu.hide()
+	top_menu.hide()
+	top_menu.set_process(false)
 	camera.enabled = false			
 
 
@@ -118,13 +121,13 @@ func serialize_map() -> Dictionary:
 	for floor in map_data:
 		var serialized_floor = []
 		for room: Room in floor:
-			serialized_floor.append(room.serialize(true))
+			serialized_floor.append(room.serialize())
 		serialized_map.append(serialized_floor)
 	
 	return {
 		"map_data": serialized_map,
 		"floors_climbed": floors_climbed,
-		"last_room": last_room.serialize(true) if last_room else null
+		"last_room": last_room.serialize() if last_room else null
 	}
 
 

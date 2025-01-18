@@ -75,6 +75,10 @@ var default_inventory = {"SmallElixier": 3}
 
 var map_data = null
 
+func _process(delta: float) -> void:
+	elapsed_time += delta
+
+
 func _ready() -> void:
 	var successful = load_state()
 	
@@ -104,6 +108,7 @@ func _change_view(scene: PackedScene):
 
 
 func _show_map() -> void:
+	overworld.top_menu
 	if current_view:
 		remove_child(current_view)
 		

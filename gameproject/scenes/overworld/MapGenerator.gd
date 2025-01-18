@@ -48,7 +48,9 @@ func _generate_initial_grid() -> Array[Array]:
 		
 		for j in MAP_WIDTH:
 			var current_room := Room.new()
-			var offset := Vector2(randf(), randf() * PLACEMENT_RANDOMNESS)
+			var offset_x = randi_range(0, PLACEMENT_RANDOMNESS)
+			var offset_y = randi_range(0, PLACEMENT_RANDOMNESS)
+			var offset := Vector2(offset_x, offset_y)
 			current_room.position = Vector2(j * X_DIST, i * -Y_DIST) + offset
 			current_room.row = i
 			current_room.column = j
