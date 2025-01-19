@@ -11,10 +11,7 @@ signal deal_damage
 signal target_enemy(id: int)
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	entity = entity.duplicate()
-	
 	sprite.material = sprite.material.duplicate()
 	
 	entity.health_changed.connect(_update_health_bar)

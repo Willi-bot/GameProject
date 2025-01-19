@@ -24,6 +24,7 @@ func pause():
 	get_tree().paused = true
 	currentMenu.pause()
 	visible = true
+	currentMenu.show()
 
 func switch_menu(menu_key: String):
 	var new_menu = menus[menu_key]

@@ -4,24 +4,32 @@ var current_view: Control
 
 const OVERWORLD_SCENE := preload("res://scenes/overworld/overworld.tscn")
 
+
+const BASE_ENTITY: Resource = preload("res://scenes/entities/base_entity.gd")
+const PLAYER_SCENE: PackedScene = preload("res://scenes/entities/player_entity.tscn")
+const ENEMY_SCENE: PackedScene = preload("res://scenes/entities/enemy_entity.tscn")
+
 # SCENES
 const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
 const CAMPFIRE_SCENE := preload("res://scenes/recovery/recovery.tscn")
 const SHOP_SCENE := preload("res://scenes/shop/shop.tscn")
 const SUPRISE_SCENE := preload("res://scenes/suprise/suprise.tscn")
 
-@export var MAIN_MENU := preload("res://scenes/main_menu/main_menu.tscn")
+const MAIN_MENU := preload("res://scenes/main_menu/main_menu.tscn")
 
 # MISC
 @export var current_level: int
 @export var run_in_progress: bool
 @export var elapsed_time: float
 @export var gold: int
+
 # PLAYER
-@export var player = {}
+var player_data: Dictionary = {}
+@export var player: PlayerEntity
 
 # PLAYER TEAM
-@export var team: Array
+var team_data: Array = []
+@export var team: Array[PlayerEntity]
 
 # INVENTORY
 @export var inventory: Dictionary
@@ -80,9 +88,12 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
+	print("Ready called")
 	var successful = load_state()
 	
 	if successful:
+		instantiate_team_entities(player_data, team_data)
+		
 		overworld = OVERWORLD_SCENE.instantiate()
 		
 		overworld.map_exited.connect(enter_scene)
@@ -91,9 +102,10 @@ func _ready() -> void:
 		
 		overworld.hide_map()
 
+	_change_view(MAIN_MENU)
+
 
 func _change_view(scene: PackedScene):
-	
 	if current_view:
 		remove_child(current_view)
 		
@@ -108,6 +120,7 @@ func _change_view(scene: PackedScene):
 
 
 func _show_map() -> void:
+	get_tree().paused = false
 	overworld.top_menu
 	if current_view:
 		remove_child(current_view)
@@ -120,21 +133,18 @@ func start_new_run() -> void:
 	if current_view:
 		remove_child(current_view)
 	
+	player = null
+	team = []
+	
 	current_level =	1
 	elapsed_time = 0.0
 	gold = 0
 	
-	player = default_player.duplicate(true)
-		
-	inventory = default_inventory.duplicate(true)
+	inventory = default_inventory
 	
-	team = []
+	instantiate_team_entities(default_player, default_team)
 	
-	for member in default_team:
-		var team_member = {}
-		team_member = member.duplicate(true)
-		team.append(team_member)
-
+	
 	get_tree().paused = false
 	run_in_progress = true
 	
@@ -150,14 +160,21 @@ func start_new_run() -> void:
 
 
 func continue_run():
+	if current_view:
+		remove_child(current_view)
 	overworld.deserialize_map(map_data)
 	overworld.show_map()
 	
 
 func save_state() -> void:
 	var save_data = {}
-	save_data["player"] = player
-	save_data["team"] = team
+	save_data["player"] = deserialize_ally(player_data)
+	
+	var team_data = []
+	for team_member in team:
+		team_data.append(deserialize_ally(team_member))
+	
+	save_data["team"] = team_data
 	
 	save_data["elapsed_time"] = elapsed_time
 	save_data["gold"] = current_level
@@ -168,7 +185,13 @@ func save_state() -> void:
 	var file = FileAccess.open("user://save_game.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify(save_data))
 	file.close()
-	print("Succesfully saved state!")
+
+
+func deserialize_ally(ally):
+	var stats = {}
+	for key in player_data.keys():
+		stats[key] = ally.entity[key]
+	return stats
 
 
 func load_state() -> bool:
@@ -178,8 +201,8 @@ func load_state() -> bool:
 		json.parse(file.get_as_text())
 		var save_data = json.get_data()
 		
-		player = save_data["player"]
-		team = save_data["team"]
+		player_data = save_data["player"]
+		team_data = save_data["team"]
 
 		elapsed_time = save_data["elapsed_time"]
 		gold = save_data["gold"]
@@ -193,29 +216,39 @@ func load_state() -> bool:
 		return true
 	
 	return false
-		
-		
 
-func overwrite_state(allies: Array):
-	var keys = player.keys()
+		
+func instantiate_team_entities(player_data, team_data):
+	player = instantiate_ally(player_data)
 	
-	var newPlayer = allies.pop_front()
-	for key in keys:
-		player[key] = newPlayer.entity[key]
-		
-	var newTeam = []
-	for newMember in allies:
-		var entity = {}
-		for key in player.keys():
-			entity[key] = newMember.entity[key]
+	for member_data in team_data:
+		var member = instantiate_ally(member_data)
+		team.append(member)
+	
+	
+func instantiate_ally(data):
+	var instance = PLAYER_SCENE.instantiate()	
+	instance.entity = BASE_ENTITY.new()
+	
+	var back_sprite = instance.get_node("BackSprite")
+	back_sprite.texture = load(data["sprite"].replace(".png", "_back.png"))
+	
+	var sprite = instance.get_node("Sprite")
 
-		newTeam.append(entity)
-	team = newTeam
+	instance.entity.texture = load(data["sprite"])
+	
+	sprite.texture = instance.entity.texture 
+
+	for key in data.keys():
+		instance.entity.set(key, data[key])
+			
+	return instance	
 
 
 func game_over():
 	if FileAccess.file_exists("user://save_game.json"):
 		DirAccess.remove_absolute("res://save_game.json")
+	get_tree().quit()
 
 
 func quit_game() -> void:

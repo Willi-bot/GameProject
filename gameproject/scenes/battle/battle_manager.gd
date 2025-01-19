@@ -29,8 +29,6 @@ extends Control
 @onready var victory_screen: CanvasLayer = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
 
-
-var player_scene = preload("res://scenes/entities/player_entity.tscn")
 var enemy_scene = preload("res://scenes/entities/enemy_entity.tscn")
 
 var battlers = []
@@ -49,12 +47,9 @@ func _ready() -> void:
 	game_over = false
 	
 	var enemy_data = load_enemy_data()
-	_spawn_entities(enemy_data, Vector2(480, 120), -120)
+	_spawn_enemies(enemy_data, Vector2(480, 120), -120)
 	
-	var team = [GlobalState.player] + GlobalState.team
-	_spawn_entities(team, Vector2(75, 215), 120)
-	for entity in ally_battlers:
-		entity.show_backsprite()
+	_add_allies(Vector2(75, 215), 120)
 
 	battlers = ally_battlers + enemy_battlers
 	battlers.sort_custom(func(a, b): return a.entity.agility > b.entity.agility)
@@ -72,19 +67,28 @@ func _ready() -> void:
 	
 	_choose_target(enemy_battlers[0])
 
-func _spawn_entities(data, start_pos, offset_x):
+
+func _spawn_enemies(data, start_pos, offset_x):
 	var index = 0
 	var entity = null
 	
 	for entity_data in data:
-		entity = _add_entity_to_battle(entity_data, start_pos)
-		
-		if entity_data["type"] == Entity.Type.ENEMY:
-			enemy_battlers.append(entity)
-		else:
-			ally_battlers.append(entity)
-			
+		entity = _add_enemy_to_battle(entity_data, start_pos)
+		enemy_battlers.append(entity)
 		add_child(entity)
+		start_pos.x += offset_x
+
+
+func _add_allies(start_pos, offset_x):
+	print("Adding allies to the battle", Global.player, Global.team)
+	
+	for ally in [Global.player] + Global.team as Array[PlayerEntity]:
+		ally.position = start_pos
+		add_child(ally)
+		print(ally.sprite, ally.back_sprite, start_pos, ally.entity)
+		ally.back_sprite.visible = true
+		ally.sprite.visible = false
+		ally_battlers.append(ally)
 		start_pos.x += offset_x
 
 
@@ -129,23 +133,16 @@ func load_enemy_data() -> Array:
 	return json.get_data()
 
 
-func _add_entity_to_battle(character, pos) -> Node2D:
-	var instance = null
-	
-	if character["type"] == Entity.Type.ENEMY:
-		instance = enemy_scene.instantiate()
-	else:
-		instance = player_scene.instantiate()
-		
-		var back_sprite = instance.get_node("BackSprite")
-		back_sprite.texture = load(character["sprite"].replace(".png", "_back.png"))
+func _add_enemy_to_battle(data, pos) -> Node2D:	
+	var instance = Global.ENEMY_SCENE.instantiate()	
+	instance.entity = Global.BASE_ENTITY.new()
 	
 	var sprite = instance.get_node("Sprite")
-	sprite.texture = load(character["sprite"])
+	sprite.texture = load(data["sprite"])
 
-	for key in character.keys():
-		instance.entity.set(key, character[key])
-		
+	for key in data.keys():
+		instance.entity.set(key, data[key])
+			
 	instance.position = pos
 	
 	return instance
@@ -184,8 +181,8 @@ func _choose_item() -> void:
 	select_icon.visible = false
 	
 	var i = 0
-	for item in GlobalState.inventory.keys():
-		var count = GlobalState.inventory[item]
+	for item in Global.inventory.keys():
+		var count = Global.inventory[item]
 		var new_button = _create_asset_button("item", item)
 		new_button.asset.count = count
 		new_button.text += " (%sx)" % count
@@ -219,9 +216,9 @@ func _create_asset_button(asset_type, asset) -> Button:
 	
 	
 func _update_item_count(item) -> void:
-	GlobalState.inventory[item] -= 1
-	if GlobalState.inventory[item] == 0:
-		GlobalState.inventory.erase(item)
+	Global.inventory[item] -= 1
+	if Global.inventory[item] == 0:
+		Global.inventory.erase(item)
 	
 	
 func _choose_target(target: Node2D) -> void:
@@ -383,16 +380,20 @@ func _chosen_player(character: Node2D) -> void:
 	target_chosen.emit(character)
 
 
+func restore_nodes():
+	for ally in ally_battlers:
+		remove_child(ally)
+
+
 func _on_continue_game_pressed() -> void:
-	GlobalState.overwrite_state(ally_battlers)
-	get_tree().paused = false
-	GlobalState._show_map()
+	restore_nodes()
+	Global._show_map()
 
 
 func _on_quit_game_pressed() -> void:
-	GlobalState.game_over()
-	get_tree().quit()
+	restore_nodes()
+	Global.game_over()
 
 
 func _on_new_run_pressed() -> void:
-	GlobalState.start_new_run()
+	Global.start_new_run()

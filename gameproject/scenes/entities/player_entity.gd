@@ -1,3 +1,4 @@
+class_name PlayerEntity
 extends Node2D
 
 @export var entity: BaseEntity
@@ -13,8 +14,6 @@ extends Node2D
 @export var mana_empty_texture: Texture = preload("res://imgs/mana_orb_empty.png")
 
 func _ready() -> void:
-	entity = entity.duplicate()
-	
 	entity.health_changed.connect(_update_health_indicator)
 	entity.mp_changed.connect(_update_mana_indicator)
 	
@@ -70,8 +69,3 @@ func set_active() -> void:
 	
 func set_inactive() -> void:
 	sprite.position.y += 40
-	
-	
-func show_backsprite() -> void:
-	sprite.hide()
-	back_sprite.show()

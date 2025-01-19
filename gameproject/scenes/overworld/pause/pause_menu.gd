@@ -22,11 +22,11 @@ func _on_resume_pressed() -> void:
 	resume()
 
 func _on_restart_pressed() -> void:
-	GlobalState.start_new_run()
+	Global.start_new_run()
 	resume()
 
 func _on_quit_pressed() -> void:
-	GlobalState.quit_game()
+	Global.quit_game()
 
 func _on_close_pressed() -> void:
 	resume()
@@ -34,4 +34,4 @@ func _on_close_pressed() -> void:
 
 func _on_main_menu_pressed() -> void:
 	resume()
-	GlobalState._change_view(GlobalState.MAIN_MENU)
+	Global._change_view(Global.MAIN_MENU)

@@ -17,16 +17,18 @@ func _process(delta: float) -> void:
 	update_elapsed_time_label()
 
 func update_elapsed_time_label() -> void:
-	var minutes: int = int(GlobalState.elapsed_time) / 60
-	var seconds: int = int(GlobalState.elapsed_time) % 60
+	var minutes: int = int(Global.elapsed_time) / 60
+	var seconds: int = int(Global.elapsed_time) % 60
 	var formatted_time = "%02d:%02d" % [minutes, seconds]
 	time_label.text = formatted_time
 
 func update_level_label() -> void:
-	level_label.text = "%02d" % [GlobalState.current_level]
+	level_label.text = "%02d" % [Global.current_level]
 
 func set_player_name() -> void:
-	player_name.text = GlobalState.player.name
+	player_name.text = Global.player.entity.name
 
 func update_health_label() -> void:
-	health_label.text = str(GlobalState.player.current_hp).pad_zeros(2) + "/" + str(GlobalState.player.max_hp).pad_zeros(2)
+	var entity = Global.player.entity
+	
+	health_label.text = str(entity.current_hp).pad_zeros(2) + "/" + str(entity.max_hp).pad_zeros(2)

@@ -3,18 +3,16 @@ extends Control
 @onready var continueBtn: Button = $PanelContainer/VBoxContainer/Continue
 
 func _ready() -> void:
-	if GlobalState.run_in_progress == false:
+	if Global.run_in_progress == false:
 		continueBtn.visible = false
 
 
 func _on_new_game_pressed() -> void:
-	GlobalState.start_new_run()
-	get_parent().remove_child(self)
+	Global.start_new_run()
 
 
 func _on_continue_pressed() -> void:
-	GlobalState.continue_run()
-	get_parent().remove_child(self)
+	Global.continue_run()
 
 
 func _on_settings_pressed() -> void:
@@ -22,5 +20,5 @@ func _on_settings_pressed() -> void:
 
 
 func _on_quit_pressed() -> void:
-	GlobalState.quit_game()
+	Global.quit_game()
 	

@@ -17,6 +17,8 @@ class_name BaseEntity
 @export var skills : Array = []
 @export var sprite: String
 
+@export var texture: Texture
+
 signal turn_ended
 signal health_changed
 signal mp_changed

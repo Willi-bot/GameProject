@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bxpubv3qnx3eu"]
+[gd_scene load_steps=7 format=3 uid="uid://bxpubv3qnx3eu"]
 
 [ext_resource type="Script" path="res://scenes/entities/player_entity.gd" id="1_xpavd"]
 [ext_resource type="Script" path="res://scenes/entities/base_entity.gd" id="2_lmvf7"]
@@ -18,8 +18,6 @@ intelligence = 0
 agility = 0
 skills = []
 sprite = ""
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0a5o2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efpqj"]
 content_margin_left = 8.0
@@ -49,7 +47,6 @@ entity = SubResource("Resource_4c661")
 texture = ExtResource("3_v2alm")
 
 [node name="BackSprite" type="Sprite2D" parent="."]
-texture = SubResource("CompressedTexture2D_0a5o2")
 
 [node name="Container" type="PanelContainer" parent="."]
 anchors_preset = 5
