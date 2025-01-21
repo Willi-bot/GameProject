@@ -21,15 +21,15 @@ extends Control
 @onready var target_menu_box : PanelContainer = button_box.get_node("PlayerTargetMenu/TargetBox")
 @onready var target_container : HBoxContainer = button_box.get_node("PlayerTargetMenu/TargetBox/TargetContainer")
 
-@onready var skill_resource : Resource = preload("res://scenes/entities/asset/skill.gd")
-@onready var item_resource : Resource = preload("res://scenes/entities/asset/item.gd")
+@onready var skill_resource : Resource = preload("res://assets/skill.gd")
+@onready var item_resource : Resource = preload("res://assets/item.gd")
 @onready var asset_button_entity = preload("res://scenes/battle/buttons/asset_button.tscn")
 @onready var select_icon: TextureRect = $SelectLayer/SelectIcon
 
 @onready var victory_screen: CanvasLayer = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
 
-var enemy_scene = preload("res://scenes/entities/enemy_entity.tscn")
+var enemy_scene = preload("res://entities/enemy/enemy.tscn")
 
 var battlers = []
 var ally_battlers = []
@@ -47,9 +47,10 @@ func _ready() -> void:
 	game_over = false
 	
 	var enemy_data = load_enemy_data()
-	_spawn_enemies(enemy_data, Vector2(480, 120), -120)
+	_spawn_entity_nodes(enemy_data, Vector2(480, 120), -120)
 	
-	_add_allies(Vector2(75, 215), 120)
+	var ally_data = [Global.player] + Global.team
+	_spawn_entity_nodes(ally_data, Vector2(75, 215), 120)
 
 	battlers = ally_battlers + enemy_battlers
 	battlers.sort_custom(func(a, b): return a.entity.agility > b.entity.agility)
@@ -68,27 +69,18 @@ func _ready() -> void:
 	_choose_target(enemy_battlers[0])
 
 
-func _spawn_enemies(data, start_pos, offset_x):
+func _spawn_entity_nodes(entities, start_pos, offset_x):
 	var index = 0
-	var entity = null
+	var scene_node = null
 	
-	for entity_data in data:
-		entity = _add_enemy_to_battle(entity_data, start_pos)
-		enemy_battlers.append(entity)
-		add_child(entity)
-		start_pos.x += offset_x
-
-
-func _add_allies(start_pos, offset_x):
-	print("Adding allies to the battle", Global.player, Global.team)
-	
-	for ally in [Global.player] + Global.team as Array[PlayerEntity]:
-		ally.position = start_pos
-		add_child(ally)
-		print(ally.sprite, ally.back_sprite, start_pos, ally.entity)
-		ally.back_sprite.visible = true
-		ally.sprite.visible = false
-		ally_battlers.append(ally)
+	for entity in entities:
+		scene_node = _add_entity_to_battle(entity, start_pos)
+		
+		if entity.type == BaseEntity.Type.ENEMY:
+			enemy_battlers.append(scene_node)
+		else:
+			ally_battlers.append(scene_node)
+		add_child(scene_node)
 		start_pos.x += offset_x
 
 
@@ -123,26 +115,32 @@ func get_button(name: String) -> Button:
 	return button_box.get_node(name)
 
 
-func load_enemy_data() -> Array:
-	var file = FileAccess.open("res://creatures/creatures_data.json", FileAccess.READ)
+func load_enemy_data() -> Array[BaseEntity]:
+	var file = FileAccess.open("res://entities/entity_data.json", FileAccess.READ)
 	var json = JSON.new()
-	var result = json.parse(file.get_as_text())
+	json.parse(file.get_as_text())
+	
+	var enemies = [] as Array[BaseEntity]
+
+	for creature in json.get_data():
+		var instance = Global.BASE_ENTITY.new() as BaseEntity
+		instance.deserialize(creature)
+		enemies.append(instance)
 	
 	# TODO: Add logic for dynamically loading enemies based on level
 	
-	return json.get_data()
+	return enemies
 
 
-func _add_enemy_to_battle(data, pos) -> Node2D:	
-	var instance = Global.ENEMY_SCENE.instantiate()	
-	instance.entity = Global.BASE_ENTITY.new()
+func _add_entity_to_battle(entity: BaseEntity, pos) -> Node2D:	
+	var isAlly = entity.type != BaseEntity.Type.ENEMY
+	var scene = Global.PLAYER_SCENE if isAlly else Global.ENEMY_SCENE
+	var instance = scene.instantiate()
+	instance.entity = entity
 	
 	var sprite = instance.get_node("Sprite")
-	sprite.texture = load(data["sprite"])
-
-	for key in data.keys():
-		instance.entity.set(key, data[key])
-			
+	sprite.texture = entity.back_texture if isAlly else entity.front_texture
+	
 	instance.position = pos
 	
 	return instance
@@ -159,7 +157,7 @@ func _choose_skill() -> void:
 	var i = 0
 	
 	for skill in current_turn.entity.skills:
-		var new_button = _create_asset_button("skill", skill)
+		var new_button = _create_asset_button(skill)
 		
 		if current_turn.entity.current_mp < new_button.asset.mp_cost:
 			new_button.disabled = true
@@ -181,9 +179,9 @@ func _choose_item() -> void:
 	select_icon.visible = false
 	
 	var i = 0
-	for item in Global.inventory.keys():
-		var count = Global.inventory[item]
-		var new_button = _create_asset_button("item", item)
+	for item in Global.inventory:
+		var count = item.count
+		var new_button = _create_asset_button(item)
 		new_button.asset.count = count
 		new_button.text += " (%sx)" % count
 		new_button.asset.use_item.connect(_update_item_count.bind(item))
@@ -201,10 +199,11 @@ func _choose_item() -> void:
 	item_menu.visible = true
 	
 	
-func _create_asset_button(asset_type, asset) -> Button:
-	var new_button = asset_button_entity.instantiate()
-	new_button.initialize(asset_type, asset, self)
-	new_button.text = new_button.asset.asset_name
+func _create_asset_button(asset: Asset) -> Button:
+	var new_button = asset_button_entity.instantiate() as AssetButton
+	new_button.initialize(asset, self)
+	
+	new_button.text = new_button.asset.name
 	new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(current_turn))
@@ -216,8 +215,8 @@ func _create_asset_button(asset_type, asset) -> Button:
 	
 	
 func _update_item_count(item) -> void:
-	Global.inventory[item] -= 1
-	if Global.inventory[item] == 0:
+	item.count -= 1
+	if item.count == 0:
 		Global.inventory.erase(item)
 	
 	
@@ -252,8 +251,8 @@ func _update_turn() -> void:
 	current_turn.set_active()
 	
 	var type = current_turn.entity.type
-	var isPlayer = type == Entity.Type.PLAYER
-	var isAlly = isPlayer or type == Entity.Type.ALLY
+	var isPlayer = type == BaseEntity.Type.PLAYER
+	var isAlly = isPlayer or type == BaseEntity.Type.ALLY
 	
 	menu_box.visible = isAlly
 	select_icon.visible = false
@@ -298,7 +297,7 @@ func process_enemy_death(enemy):
 	
 	
 func process_ally_death(ally):	
-	if(ally.entity.type == Entity.Type.PLAYER):
+	if(ally.entity.type == BaseEntity.Type.PLAYER):
 		game_over = true
 		defeat_screen.show()
 		get_tree().paused = true

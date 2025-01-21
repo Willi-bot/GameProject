@@ -5,14 +5,12 @@ class_name AssetButton
 @export var asset: Asset
 
 
-func initialize(asset_type: String, asset_name: String, battle_manager) -> void:
-	var path = "res://scenes/entities/asset/" + asset_type + "s/" + asset_name + ".tscn"
-	asset = load(path).instantiate()
+func initialize(assetEntity: Asset, battle_manager) -> void:
+	asset = assetEntity
 	asset.battle_manager = battle_manager
 
 func _on_button_pressed(character: Node2D):
-	if asset:
-		asset.execute(character)
+	asset.execute(character)
 
 
 func _on_mouse_entered(select_icon: TextureRect, info_text: Label) -> void:

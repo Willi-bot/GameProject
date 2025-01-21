@@ -1,0 +1,74 @@
+[gd_scene load_steps=9 format=3 uid="uid://b2v7h066l6yr7"]
+
+[ext_resource type="Script" path="res://entities/enemy/enemy.gd" id="1_884q3"]
+[ext_resource type="Script" path="res://entities/base_entity.gd" id="2_lhtl4"]
+[ext_resource type="Script" path="res://assets/skill.gd" id="3_c5pe7"]
+[ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://textures/battle/icons/target_icon.png" id="4_h3ijf"]
+[ext_resource type="Shader" path="res://shaders/outline.gdshader" id="5_hlaug"]
+[ext_resource type="Texture2D" uid="uid://daxks0gv1u1nt" path="res://textures/entities/meanion_front.png" id="6_8nqax"]
+
+[sub_resource type="Resource" id="Resource_efdqj"]
+script = ExtResource("2_lhtl4")
+name = ""
+type = 0
+max_hp = 0
+current_hp = 0
+max_mp = 0
+current_mp = 0
+mp_regen_rate = 1
+damage = 0
+intelligence = 0
+agility = 0
+skills = Array[ExtResource("3_c5pe7")]([])
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_23uiq"]
+shader = ExtResource("5_hlaug")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+
+[node name="EnemyEntity" type="Node2D" groups=["EnemyEntity"]]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_884q3")
+entity = SubResource("Resource_efdqj")
+
+[node name="TargetIcon" type="TextureRect" parent="."]
+visible = false
+z_index = 1
+offset_left = -32.0
+offset_top = -210.0
+offset_bottom = -178.0
+scale = Vector2(2, 2)
+size_flags_horizontal = 0
+texture = ExtResource("4_h3ijf")
+stretch_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(200, 0)
+offset_left = -100.0
+offset_top = -160.0
+offset_right = 100.0
+offset_bottom = -130.0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_23uiq")
+texture = ExtResource("6_8nqax")
+
+[node name="Sprite" type="Button" parent="Sprite"]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -128.0
+offset_right = -128.0
+offset_bottom = -128.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"FlatButton"
+keep_pressed_outside = true
+flat = true
+
+[connection signal="pressed" from="Sprite/Sprite" to="." method="_on_character_sprite_pressed"]

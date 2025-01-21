@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://sqh3853au6bu"]
 
 [ext_resource type="Shader" path="res://shaders/outline.gdshader" id="2_vbg51"]
-[ext_resource type="Texture2D" uid="uid://hmvu8uptgkg6" path="res://imgs/overworld_icons/heart_icon.png" id="3_ifian"]
+[ext_resource type="Texture2D" uid="uid://hmvu8uptgkg6" path="res://textures/overworld/icons/heart.png" id="3_ifian"]
 
 [sub_resource type="GDScript" id="GDScript_fe2dw"]
 script/source = "extends Node2D
@@ -54,7 +54,6 @@ func _on_button_mouse_exited() -> void:
 
 func _on_button_pressed() -> void:
 	buttonPressed.emit(target_scene)
-	print(\"HELLO :D\")
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_58eb4"]

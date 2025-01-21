@@ -27,12 +27,15 @@ func reset():
 	for child in rooms.get_children():
 		rooms.remove_child(child)
 
+
 func generate_new_map() -> void:
+	reset()
 	camera.position = Vector2.ZERO
 	floors_climbed = 0
 	map_data = map_generator.generate_map()
 	create_map()
 	unlock_floor(0)
+
 
 func create_map():			
 	for current_floor: Array in map_data:
@@ -116,7 +119,7 @@ func _on_map_room_selected(room: Room):
 	map_exited.emit(room.type)
 
 
-func serialize_map() -> Dictionary:
+func serialize() -> Dictionary:
 	var serialized_map = []
 	for floor in map_data:
 		var serialized_floor = []
@@ -131,7 +134,7 @@ func serialize_map() -> Dictionary:
 	}
 
 
-func deserialize_map(data: Dictionary) -> void:
+func deserialize(data: Dictionary) -> void:
 	floors_climbed = data.get("floors_climbed", 0)
 	last_room = null
 	if data["last_room"]:		

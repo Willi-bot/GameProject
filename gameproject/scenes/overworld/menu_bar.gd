@@ -23,12 +23,12 @@ func update_elapsed_time_label() -> void:
 	time_label.text = formatted_time
 
 func update_level_label() -> void:
-	level_label.text = "%02d" % [Global.current_level]
+	level_label.text = "%02d" % [Global.overworld.floors_climbed]
 
 func set_player_name() -> void:
-	player_name.text = Global.player.entity.name
+	player_name.text = Global.player.name
 
 func update_health_label() -> void:
-	var entity = Global.player.entity
+	var entity = Global.player
 	
 	health_label.text = str(entity.current_hp).pad_zeros(2) + "/" + str(entity.max_hp).pad_zeros(2)

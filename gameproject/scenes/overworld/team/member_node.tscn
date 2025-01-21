@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c0pfp75dpttco"]
 
 [ext_resource type="Shader" path="res://shaders/sprite_grayscale.gdshader" id="1_2h076"]
-[ext_resource type="Texture2D" uid="uid://chjiveiumyfuf" path="res://creatures/sprites/hazard.png" id="1_8y75c"]
+[ext_resource type="Texture2D" uid="uid://chjiveiumyfuf" path="res://textures/entities/hazard_front.png" id="1_8y75c"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nggx8"]
 border_width_left = 2

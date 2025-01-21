@@ -25,7 +25,7 @@ func _on_close_pressed() -> void:
 	resume()
 
 
-func _populate_bench(bench: HBoxContainer, active: bool, team: Array[PlayerEntity]):
+func _populate_bench(bench: HBoxContainer, active: bool, team: Array[BaseEntity]):
 	for entity in team:
 		var new_member = member_node.instantiate() as PanelContainer
 		bench.add_child(new_member)

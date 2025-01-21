@@ -5,11 +5,11 @@ signal selected(room: Room)
 
 const ICONS := {
 	Room.Type.NOT_ASSIGNED: [null, Vector2.ONE],
-	Room.Type.MONSTER: [preload("res://imgs/overworld_icons/battle_icon.png"), Vector2.ONE],
-	Room.Type.SUPRISE: [preload("res://imgs/overworld_icons/question_mark_icon.png"), Vector2.ONE],
-	Room.Type.CAMPFIRE: [preload("res://imgs/overworld_icons/heart_icon.png"), Vector2.ONE],
-	Room.Type.SHOP: [preload("res://imgs/overworld_icons/coin_icon.png"), Vector2.ONE],
-	Room.Type.BOSS: [preload("res://imgs/overworld_icons/hard_battle_icon.png"), Vector2(3, 3)],
+	Room.Type.MONSTER: [preload("res://textures/overworld/icons/battle.png"), Vector2.ONE],
+	Room.Type.SUPRISE: [preload("res://textures/overworld/icons/question_mark.png"), Vector2.ONE],
+	Room.Type.CAMPFIRE: [preload("res://textures/overworld/icons/heart.png"), Vector2.ONE],
+	Room.Type.SHOP: [preload("res://textures/overworld/icons/coin.png"), Vector2.ONE],
+	Room.Type.BOSS: [preload("res://textures/overworld/icons/hard_battle.png"), Vector2(3, 3)],
 }
 
 @onready var sprite_2d: Sprite2D = $Visuals/Sprite2D
