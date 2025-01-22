@@ -23,7 +23,8 @@ extends Control
 
 @onready var skill_resource : Resource = preload("res://assets/skill.gd")
 @onready var item_resource : Resource = preload("res://assets/item.gd")
-@onready var asset_button_entity = preload("res://scenes/battle/buttons/asset_button.tscn")
+@onready var asset_button: PackedScene = preload("res://scenes/battle/buttons/asset_button.tscn")
+@onready var target_button: PackedScene = preload("res://scenes/battle/buttons/target_button.tscn")
 @onready var select_icon: TextureRect = $SelectLayer/SelectIcon
 
 @onready var victory_screen: CanvasLayer = $VictoryScreen
@@ -154,8 +155,6 @@ func _attack_enemy() -> void:
 func _choose_skill() -> void:
 	select_icon.visible = false
 	
-	var i = 0
-	
 	for skill in current_turn.entity.skills:
 		var new_button = _create_asset_button(skill)
 		
@@ -163,15 +162,7 @@ func _choose_skill() -> void:
 			new_button.disabled = true
 		
 		skill_container.add_child(new_button)
-		i += 1
-		
-	while i < 8:
-		var invisible_button = Control.new()
-		invisible_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		invisible_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		skill_container.add_child(invisible_button)
-		i += 1
-	
+
 	skill_menu.visible = true
 	
 	
@@ -180,11 +171,7 @@ func _choose_item() -> void:
 	
 	var i = 0
 	for item in Global.inventory:
-		var count = item.count
 		var new_button = _create_asset_button(item)
-		new_button.asset.count = count
-		new_button.text += " (%sx)" % count
-		new_button.asset.use_item.connect(_update_item_count.bind(item))
 		
 		item_container.add_child(new_button)
 		i += 1
@@ -200,24 +187,18 @@ func _choose_item() -> void:
 	
 	
 func _create_asset_button(asset: Asset) -> Button:
-	var new_button = asset_button_entity.instantiate() as AssetButton
-	new_button.initialize(asset, self)
+	var btn = asset_button.instantiate() as AssetButton
+	btn.initialize(asset, self)
 	
-	new_button.text = new_button.asset.name
-	new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	new_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	new_button.pressed.connect(Callable(new_button, "_on_button_pressed").bind(current_turn))
-	new_button.mouse_entered.connect(Callable(new_button, "_on_mouse_entered").bind(select_icon, info_text))
-	new_button.mouse_exited.connect(Callable(new_button, "_on_mouse_exited").bind(info_text))
-	new_button.asset.turn_ended.connect(_next_turn)
+	btn.pressed.connect(Callable(btn, "_on_button_pressed").bind(current_turn.entity))
+	btn.mouse_entered.connect(Callable(btn, "_on_mouse_entered").bind(select_icon, info_text))
+	btn.mouse_exited.connect(Callable(btn, "_on_mouse_exited").bind(info_text))
+	btn.asset.turn_ended.connect(_next_turn)
 	
-	return new_button
+	return btn
 	
 	
-func _update_item_count(item) -> void:
-	item.count -= 1
-	if item.count == 0:
-		Global.inventory.erase(item)
+
 	
 	
 func _choose_target(target: Node2D) -> void:
@@ -300,7 +281,6 @@ func process_ally_death(ally):
 	if(ally.entity.type == BaseEntity.Type.PLAYER):
 		game_over = true
 		defeat_screen.show()
-		get_tree().paused = true
 		
 		return
 	
@@ -308,6 +288,9 @@ func process_ally_death(ally):
 	ally_battlers.erase(ally)
 	
 	ally.sprite.self_modulate = Color.BLACK
+	
+	Global.team.erase(ally.entity)
+
 
 func adjust_select_icon(button: Button) -> void:
 	select_icon.show()
@@ -345,7 +328,7 @@ func _on_item_button_mouse_exited() -> void:
 
 
 func _on_neg_button_mouse_entered() -> void:
-	info_text.text = "Start Negotiation with a Monster"
+	info_text.text = "Start Negotiation with a Creature"
 	adjust_select_icon(neg_button)
 
 
@@ -355,10 +338,8 @@ func _on_neg_button_mouse_exited() -> void:
 
 func get_player_target() -> Node2D:
 	for character in ally_battlers:
-		var target_button = Button.new()
+		var target_button = target_button.instantiate()
 		target_button.text = character.entity.name
-		target_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		target_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		target_button.pressed.connect(Callable(self, "_chosen_player").bind(character))
 		target_button.mouse_entered.connect(Callable(self, "adjust_select_icon").bind(target_button))
 		

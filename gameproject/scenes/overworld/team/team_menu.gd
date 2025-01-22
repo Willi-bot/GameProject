@@ -31,7 +31,7 @@ func _populate_bench(bench: HBoxContainer, active: bool, team: Array[BaseEntity]
 		bench.add_child(new_member)
 		
 		var texture_rect = new_member.get_node("Sprite") as TextureRect
-		texture_rect.texture = entity.entity.texture
+		texture_rect.texture = entity.front_texture
 
 		texture_rect.material = texture_rect.material.duplicate()
 

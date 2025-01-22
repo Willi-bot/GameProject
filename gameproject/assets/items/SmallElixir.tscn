@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://rstrlkftyx5o"]
-
-[ext_resource type="Script" path="res://assets/items/SmallElixir.gd" id="1_egj8a"]
-
-[node name="SmallElixier" type="Node"]
-script = ExtResource("1_egj8a")
-description = "A small elixier that recovers 40 HP."

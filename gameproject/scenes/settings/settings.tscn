@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://uofwoknn6ei8"]
+[gd_scene load_steps=5 format=3 uid="uid://bw7ldgl8qj7ak"]
 
 [ext_resource type="Script" path="res://scenes/settings/settings.gd" id="1_llf1e"]
 [ext_resource type="AudioStream" uid="uid://mqjlk2nhlbxe" path="res://scenes/settings/bgm.mp3" id="2_salj4"]
-[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="2_wyk5j"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="2_wyk5j"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0g7f2"]
 bg_color = Color(0.50532, 0.651007, 0.425991, 1)

@@ -4,7 +4,6 @@ extends Node2D
 @onready var map_texture: TextureRect = $TextureRect
 @onready var camera: Camera2D = $Camera2D
 @onready var top_menu: MenuBar = $TopMenu/TopMenu
-@onready var menus: CanvasLayer = $MenuLayer
 
 const MAP_ROOM = preload("res://scenes/overworld/map_room.tscn")
 const MAP_LINE = preload("res://scenes/overworld/map_line.tscn")

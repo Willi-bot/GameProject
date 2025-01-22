@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/overworld/team/team_menu.gd" id="1_d6qbb"]
 [ext_resource type="Shader" path="res://shaders/background_grayscale.gdshader" id="2_xdjwe"]
 [ext_resource type="Texture2D" uid="uid://cnnuw6fwsulon" path="res://textures/overworld/icons/quit.png" id="3_88gxv"]
-[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="3_gfvmk"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="3_gfvmk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5rp5v"]
 shader = ExtResource("2_xdjwe")

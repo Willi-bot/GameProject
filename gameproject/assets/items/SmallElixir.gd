@@ -2,11 +2,13 @@ class_name SmallElixir
 extends Item
 
 func _init():
-	name = "Small Elixir"
+	super._init()
+	
 	description = "Heal yourself by 40 points"
+	name = "Small Elixir"
 
 
-func execute(character: Node2D):
+func execute(entity: BaseEntity):
 	use_item.emit()
-	character.entity.heal(40)
+	entity.heal(40)
 	turn_ended.emit()

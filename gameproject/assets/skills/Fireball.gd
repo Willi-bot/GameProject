@@ -3,13 +3,15 @@ extends Skill
 
 
 func _init():
-	name = "Sweep"
+	super._init()
+	
+	name = "Fireball"
 	description = "Shoot za fireball"
+	mp_cost = 2
 
-
-func execute(character: Node2D) -> void:
-	character.entity.use_mp(mp_cost)
+func execute(entity: BaseEntity) -> void:
+	entity.use_mp(mp_cost)
 	var target = battle_manager.selected_target
-	var damage = character.entity.intelligence * 2
-	target.entity.be_damaged(damage)
+	var damage = entity.intelligence * 2
+	entity.be_damaged(damage)
 	turn_ended.emit()

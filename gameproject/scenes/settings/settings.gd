@@ -1,48 +1,33 @@
 extends Control
 
-
-@export var resolutions = {
-	"3840x2160": Vector2(3840,2160),
-	"2560x1440": Vector2(2560,1440),
-	"1920x1080": Vector2(1920,1080),
-	"1366x768": Vector2(1366,768),
-	"1280x720": Vector2(1280,720),
-	"1440x900": Vector2(1440,900),
-	"1600x900": Vector2(1600,900),
-	"1024x600": Vector2(1024,600),
-	"800x600": Vector2(800,600),
-	"640x360": Vector2(640,360)
-}
-
-@onready var resolution_option_button = $PanelContainer/MenuOptions/ResolutionOption/OptionButton
+@onready var resolution_option_button: OptionButton = $PanelContainer/MenuOptions/ResolutionOption/OptionButton
 @onready var master_slider = $PanelContainer/MenuOptions/VolumeSliders/Controls/MasterSlider
 @onready var music_slider = $PanelContainer/MenuOptions/VolumeSliders/Controls/MusicSlider
 @onready var effect_slider = $PanelContainer/MenuOptions/VolumeSliders/Controls/EffectsSlider
 @onready var mute_checkbox = $PanelContainer/MenuOptions/MuteOption/MuteCheckBox
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
-	
-	if LoadSettings.save_dict != {}:
-		master_slider.value = LoadSettings.save_dict["master_vol"]
-		music_slider.value = LoadSettings.save_dict["music_vol"]
-		effect_slider.value = LoadSettings.save_dict["effect_vol"]
-		
-		mute_checkbox.button_pressed = LoadSettings.save_dict["muted"]
-		
-		for r in resolutions:
+	for r in Settings.resolutions.keys():
 			resolution_option_button.add_item(r)
-			
-		resolution_option_button.select(LoadSettings.save_dict["res"])
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
+	
+	var settings = Settings.save_dict
+	
+	if settings != {}:
+		master_slider.value = settings["master_vol"]
+		music_slider.value = settings["music_vol"]
+		effect_slider.value = settings["effect_vol"]
+		
+		mute_checkbox.button_pressed = settings["muted"]
+		
+		resolution_option_button.select(settings["res"])
+	else:
+		# Select last one if no preset (640 x 360)
+		resolution_option_button.select(len(Settings.resolutions) - 1)
 
 func _on_exit_button_pressed() -> void:
 	var save_nodes = get_tree().get_nodes_in_group("Persist")
+	
 	var save_dict = {
 		"res": resolution_option_button.get_selected_id(),
 		"master_vol": master_slider.value,
@@ -52,10 +37,10 @@ func _on_exit_button_pressed() -> void:
 	}
 	
 	var save_file = FileAccess.open("user://settings.cfg", FileAccess.WRITE)
-	# JSON provides a static method to serialized JSON string.
+
 	var json_string = JSON.stringify(save_dict)
 	
-	# Store the save dictionary as a new line in the save file.
+
 	save_file.store_line(json_string)
 	
 	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
@@ -82,11 +67,11 @@ func _on_mute_check_box_toggled(toggled_on: bool) -> void:
 
 func update_button_values():
 	var window_size_string = str(get_window().size.x, "x", get_window().size.x, "y")
-	var resolutions_index = resolutions.keys().find(window_size_string)
+	var resolutions_index = Settings.resolutions.keys().find(window_size_string)
 	resolution_option_button.selected = resolutions_index
 
 
 func _on_option_button_item_selected(index: int) -> void:
 	var key = resolution_option_button.get_item_text(index)
-	get_window().set_size(resolutions[key])
+	get_window().set_size(Settings.resolutions[key])
 	get_window().move_to_center()

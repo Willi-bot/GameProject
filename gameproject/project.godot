@@ -14,10 +14,14 @@ config/name="GameProject"
 run/main_scene="res://RootScene.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 
+[audio]
+
+buses/default_bus_layout="res://Audio.tres"
+
 [autoload]
 
 Global="*res://Global.gd"
-LoadSettings="*res://LoadSettings.gd"
+Settings="*res://Settings.gd"
 
 [display]
 

@@ -26,6 +26,7 @@ func _on_restart_pressed() -> void:
 	resume()
 
 func _on_quit_pressed() -> void:
+	Global.save_state()
 	Global.quit_game()
 
 func _on_close_pressed() -> void:

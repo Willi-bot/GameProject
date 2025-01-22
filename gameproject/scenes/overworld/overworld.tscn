@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cxqs6rnw10f0g" path="res://textures/overworld/icons/coin.png" id="8_8w8om"]
 [ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://textures/battle/icons/target_icon.png" id="9_lpb8i"]
 [ext_resource type="Script" path="res://scenes/overworld/menu_layer.gd" id="10_77ouk"]
-[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://BaseTheme.tres" id="10_m6pb5"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="10_m6pb5"]
 [ext_resource type="PackedScene" uid="uid://dnnke485su8a5" path="res://scenes/overworld/team/team_menu.tscn" id="12_ot02u"]
 [ext_resource type="PackedScene" uid="uid://cey85v4ldsstb" path="res://scenes/overworld/items/items_menu.tscn" id="13_1g3oo"]
 [ext_resource type="Script" path="res://scenes/overworld/MapGenerator.gd" id="15_jhbcx"]

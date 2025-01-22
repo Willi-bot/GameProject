@@ -41,65 +41,13 @@ var inventory_data: Array
 var overworld_data: Dictionary
 @export var overworld: Overworld
 
-var default_player = {
-	"name": "Humprey",
-	"max_hp": 300,
-	"current_hp": 300,
-	"max_mp": 5,
-	"mp_regen_rate": 1,
-	"current_mp": 5,
-	"damage": 80,
-	"intelligence": 50,
-	"agility": 5,
-	"skills": ["Sweep"],
-	"front_texture": "res://textures/entities/player_front.png",
-	"back_texture": "res://textures/entities/player_back.png",
-	"type":  BaseEntity.Type.PLAYER
-}
-
-var default_team = [
-	{
-			"name": "Hazard",
-			"max_hp": 300,
-			"current_hp": 300,
-			"max_mp": 5,
-			"current_mp": 5,
-			"mp_regen_rate": 1,
-			"damage": 80,
-			"intelligence": 50,
-			"agility": 5,
-			"skills": ["Sweep"],
-			"front_texture": "res://textures/entities/hazard_front.png",
-			"back_texture": "res://textures/entities/hazard_back.png",
-			"type":  BaseEntity.Type.ALLY
-		},
-		{
-			"name": "Meanion",
-			"max_hp": 300,
-			"current_hp": 300,
-			"max_mp": 5,
-			"current_mp": 5,
-			"mp_regen_rate": 1,
-			"damage": 80,
-			"intelligence": 10,
-			"agility": 5,
-			"skills": ["Heal"],
-			"front_texture": "res://textures/entities/meanion_front.png",
-			"back_texture": "res://textures/entities/meanion_back.png",
-			"type":  BaseEntity.Type.ALLY
-		}
-]
-
-var default_inventory = [{"name": "Small Elixir", "count": 3, "description": "Minor healing for one ally"}]
-
-var map_data = null
 
 func _process(delta: float) -> void:
 	elapsed_time += delta
 
 
 func _ready() -> void:
-	load_state()
+	init_game_state()
 
 	_change_view(MAIN_MENU_SCENE)
 
@@ -110,6 +58,7 @@ func _change_view(scene: PackedScene):
 		
 	get_tree().paused = false
 	var new_view = scene.instantiate()
+	
 	add_child(new_view)	
 	
 	current_view = new_view
@@ -130,9 +79,9 @@ func _show_map() -> void:
 
 
 func start_new_run() -> void:
-	player_data = default_player
-	inventory_data = default_inventory
-	team_data = default_team
+	player_data = load_json("res://default_values/player.json")
+	team_data = load_json("res://default_values/team.json")
+	inventory_data = load_json("res://default_values/inventory.json")
 	
 	instantiate_game()
 	
@@ -151,7 +100,7 @@ func continue_run():
 	
 	if current_view:
 		remove_child(current_view)
-	overworld.deserialize(map_data)
+	overworld.deserialize(overworld_data)
 	overworld.show_map()
 	
 
@@ -168,7 +117,7 @@ func save_state() -> void:
 		"player": player.serialize(),
 		"team": team_data,
 		"inventory": items_data,
-		"map": overworld.serialize(),
+		"overworld": overworld.serialize(),
 		"elapsed_time": elapsed_time,
 		"gold": gold,
 	}
@@ -178,8 +127,28 @@ func save_state() -> void:
 	file.close()
 
 
-func load_state() -> bool:
-	var file = FileAccess.open("user://save_game.json", FileAccess.READ)
+func init_game_state() -> bool:
+	var data = load_json("user://save_game.json")
+	
+	if !data.has("player") or !data.has("team") or !data.has("overworld"):
+		print("Missing required data in save file")
+		return false
+	
+	player_data = data["player"]
+	team_data = data["team"]
+
+	elapsed_time = data["elapsed_time"]
+	gold = data["gold"]
+	overworld_data = data["overworld"]
+	inventory_data = data["inventory"]
+	
+	run_in_progress = true
+
+	return true
+
+
+func load_json(path: String) -> Variant:
+	var file = FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		print("Error opening file")
 		return false
@@ -193,24 +162,8 @@ func load_state() -> bool:
 		file.close()
 		return false
 	
-	var data = json.get_data()
+	return json.get_data()
 	
-	if not data.has("player") or not data.has("team") or not data.has("map"):
-		print("Missing required data in save file")
-		file.close()
-		return false
-	
-	player_data = data["player"]
-	team_data = data["team"]
-
-	elapsed_time = data["elapsed_time"]
-	gold = data["gold"]
-	map_data = data["map"]
-	inventory_data = data["inventory"]
-	
-	run_in_progress = true
-
-	return true
 
 func instantiate_game():
 	instantiate_entities()		
@@ -234,8 +187,8 @@ func instantiate_inventory():
 	var classes = get_item_classes()
 	
 	for item in inventory_data:
-		var instance = classes[item.name].new()
-
+		var instance = classes[item.name].new() as Item
+		instance._init()
 		instance.deserialize(item)
 		inventory.append(instance)
 
@@ -248,6 +201,11 @@ func instantiate_overworld():
 	overworld.hide_map()
 
 
+func _update_item_count(item) -> void:
+	item.count -= 1
+	if item.count == 0:
+		Global.inventory.erase(item)
+
 func game_over():
 	if FileAccess.file_exists("user://save_game.json"):
 		DirAccess.remove_absolute("res://save_game.json")
@@ -255,7 +213,6 @@ func game_over():
 
 
 func quit_game() -> void:
-	save_state()
 	get_tree().quit()
 
 
@@ -276,4 +233,5 @@ func enter_scene(type: Room.Type) -> void:
 func get_item_classes() -> Dictionary:
 	var classes = {}
 	classes["Small Elixir"] = SmallElixir
+	classes["Fairy Tear"] = FairyTear
 	return classes
