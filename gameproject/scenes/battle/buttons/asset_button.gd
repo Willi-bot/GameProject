@@ -3,11 +3,15 @@ class_name AssetButton
 
 @export var asset: Asset
 
-func initialize(assetEntity: Asset, battle_manager) -> void:
+func initialize(assetEntity: Asset, battle_manager: BattleManager) -> void:
 	asset = assetEntity
 	asset.battle_manager = battle_manager
-	text = "%s (%d)" % [asset.name, asset.count] if asset.type == Asset.Type.ITEM else asset.name
-
+	if asset.type == Asset.Type.ITEM:
+		text = "%s (%d)" % [asset.name, asset.count]
+	elif asset.type == Asset.Type.SKILL:
+		text = asset.name
+		disabled = battle_manager.current_turn.entity.current_mp < asset.mp_cost
+	
 
 func _on_button_pressed(entity: BaseEntity) -> void:
 	asset.execute(entity)

@@ -226,6 +226,7 @@ text = "Settings"
 
 [node name="MenuLayer" type="CanvasLayer" parent="."]
 process_mode = 3
+visible = false
 script = ExtResource("10_77ouk")
 
 [node name="PauseMenu" parent="MenuLayer" instance=ExtResource("1_bkvdd")]

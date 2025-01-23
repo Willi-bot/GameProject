@@ -15,7 +15,6 @@ func _to_string() -> String:
 	return "%s (%s)" % [column, Type.keys()[type][0]]
 
 
-# We only need the position for corretly placing the lines and uniquely identifying the room
 func serialize_next_room(room: Room):
 	return {
 		"position": [room.position.x, room.position.y]

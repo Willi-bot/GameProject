@@ -51,7 +51,7 @@ func set_room(new_data: Room) -> void:
 
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if not available or not event.is_action_pressed("left_mouse"):
+	if not available or not event.is_action_pressed("Left_Mouse"):
 		return 
 	
 	mark_selected()

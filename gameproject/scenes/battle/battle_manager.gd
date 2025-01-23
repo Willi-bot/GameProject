@@ -1,3 +1,4 @@
+class_name BattleManager
 extends Control
 
 @onready var menu_box = $MenuBox
@@ -56,13 +57,9 @@ func _ready() -> void:
 	battlers = ally_battlers + enemy_battlers
 	battlers.sort_custom(func(a, b): return a.entity.agility > b.entity.agility)
 
-	_connect_buttons()
-	_connect_ally_callbacks(ally_battlers)
-	_connect_enemy_callbacks(enemy_battlers)
+	_connect_callbacks()
 
-	_setup_box(skill_box)
-	_setup_box(item_box)
-	_setup_box(target_menu_box)
+	_setup_boxes([skill_box, item_box, target_menu_box])
 
 	current_turn = battlers[current_turn_idx]
 	_update_turn()
@@ -85,31 +82,28 @@ func _spawn_entity_nodes(entities, start_pos, offset_x):
 		start_pos.x += offset_x
 
 
-func _connect_buttons():
+func _connect_callbacks():
 	attack_button.pressed.connect(_attack_enemy)
 	skill_button.pressed.connect(_choose_skill)
 	item_button.pressed.connect(_choose_item)
 	neg_button.pressed.connect(_choose_neg_target)
 
-
-func _connect_ally_callbacks(allies):
-	for ally in allies:
+	for ally in ally_battlers:
 		ally.entity.turn_ended.connect(_next_turn)
 		ally.entity.death.connect(process_ally_death.bind(ally))
-
-
-func _connect_enemy_callbacks(enemies):
-	for enemy in enemies:
+		
+	for enemy in enemy_battlers:
 		enemy.entity.turn_ended.connect(_next_turn)
 		enemy.deal_damage.connect(_attack_random_ally)
 		enemy.target_enemy.connect(_choose_target)
 		enemy.entity.death.connect(process_enemy_death.bind(enemy))
 
 
-func _setup_box(box : Container):
-	box.size = $MenuBox.size
-	box.size.x /= 2
-	box.position = $MenuBox.position
+func _setup_boxes(boxes : Array[Container]):
+	for box in boxes:
+		box.size = $MenuBox.size
+		box.size.x /= 2
+		box.position = $MenuBox.position
 
 
 func get_button(name: String) -> Button:
@@ -127,8 +121,6 @@ func load_enemy_data() -> Array[BaseEntity]:
 		var instance = Global.BASE_ENTITY.new() as BaseEntity
 		instance.deserialize(creature)
 		enemies.append(instance)
-	
-	# TODO: Add logic for dynamically loading enemies based on level
 	
 	return enemies
 
@@ -148,42 +140,29 @@ func _add_entity_to_battle(entity: BaseEntity, pos) -> Node2D:
 
 
 func _attack_enemy() -> void:
-	var target = selected_target
-	current_turn.entity.start_attacking(target)
+	current_turn.entity.start_attacking(selected_target)
 		
 		
 func _choose_skill() -> void:
 	select_icon.visible = false
 	
+	clear_menu(skill_container)
+	
 	for skill in current_turn.entity.skills:
-		var new_button = _create_asset_button(skill)
-		
-		if current_turn.entity.current_mp < new_button.asset.mp_cost:
-			new_button.disabled = true
-		
-		skill_container.add_child(new_button)
+		skill_container.add_child(_create_asset_button(skill))
 
-	skill_menu.visible = true
+	skill_menu.show()
 	
 	
 func _choose_item() -> void:
 	select_icon.visible = false
 	
-	var i = 0
-	for item in Global.inventory:
-		var new_button = _create_asset_button(item)
-		
-		item_container.add_child(new_button)
-		i += 1
-		
-	while i < 8:
-		var invisible_button = Control.new()
-		invisible_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		invisible_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		skill_container.add_child(invisible_button)
-		i += 1
+	clear_menu(item_container)
 	
-	item_menu.visible = true
+	for item in Global.inventory:
+		item_container.add_child(_create_asset_button(item))
+
+	item_menu.show()
 	
 	
 func _create_asset_button(asset: Asset) -> Button:
@@ -196,9 +175,6 @@ func _create_asset_button(asset: Asset) -> Button:
 	btn.asset.turn_ended.connect(_next_turn)
 	
 	return btn
-	
-	
-
 	
 	
 func _choose_target(target: Node2D) -> void:
@@ -243,13 +219,8 @@ func _update_turn() -> void:
 	
 	current_turn.entity.regen_mp()
 		
-	clear_menu(skill_container)
 	skill_menu.hide()
-	
-	clear_menu(item_container)
 	item_menu.hide()
-	
-	clear_menu(target_container)
 	target_menu.hide()
 		
 	current_turn.start_turn()
@@ -257,9 +228,7 @@ func _update_turn() -> void:
 	
 func clear_menu(container) -> void:
 	for n in container.get_children():
-		container.remove_child(n)
 		n.queue_free()
-	target_menu.hide()
 
 
 func process_enemy_death(enemy):
@@ -281,7 +250,7 @@ func process_ally_death(ally):
 	if(ally.entity.type == BaseEntity.Type.PLAYER):
 		game_over = true
 		defeat_screen.show()
-		
+	
 		return
 	
 	battlers.erase(ally)
@@ -337,6 +306,8 @@ func _on_neg_button_mouse_exited() -> void:
 
 
 func get_player_target() -> Node2D:
+	clear_menu(target_container)
+	
 	for character in ally_battlers:
 		var target_button = target_button.instantiate()
 		target_button.text = character.entity.name
@@ -360,18 +331,11 @@ func _chosen_player(character: Node2D) -> void:
 	target_chosen.emit(character)
 
 
-func restore_nodes():
-	for ally in ally_battlers:
-		remove_child(ally)
-
-
 func _on_continue_game_pressed() -> void:
-	restore_nodes()
 	Global._show_map()
 
 
 func _on_quit_game_pressed() -> void:
-	restore_nodes()
 	Global.game_over()
 
 

@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://d3kf5n17j1yo6"]
+[gd_scene load_steps=2 format=3 uid="uid://d3kf5n17j1yo6"]
+
+[ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="1_1qmvg"]
 
 [node name="TargetButton" type="Button"]
 anchors_preset = 15
@@ -7,3 +9,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+theme = ExtResource("1_1qmvg")
