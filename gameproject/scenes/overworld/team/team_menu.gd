@@ -8,21 +8,13 @@ extends "res://scenes/overworld/menu_interface.gd"
 var active_entities
 var inactive_entities
 
-func _ready():
-	self.visible = false
-
-
 func resume():
-	self.visible = false
-	get_tree().paused = false
 	_clear_benches()
+
 
 func pause():
 	_populate_bench(active_bench, true, Global.team + Global.team)
 	_populate_bench(inactive_bench, false, Global.team)
-
-func _on_close_pressed() -> void:
-	resume()
 
 
 func _populate_bench(bench: HBoxContainer, active: bool, team: Array[BaseEntity]):
@@ -36,6 +28,7 @@ func _populate_bench(bench: HBoxContainer, active: bool, team: Array[BaseEntity]
 		texture_rect.material = texture_rect.material.duplicate()
 
 		texture_rect.material.set_shader_parameter("active", !active)
+
 
 func _clear_benches():
 	for bench in [active_bench, inactive_bench]:

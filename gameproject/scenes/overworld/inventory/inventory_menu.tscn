@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=3 uid="uid://cey85v4ldsstb"]
+
+[ext_resource type="Script" path="res://scenes/overworld/inventory/inventory_menu.gd" id="1_wqkn4"]
+[ext_resource type="Shader" path="res://shaders/background_grayscale.gdshader" id="2_84ve2"]
+[ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="3_4i8s2"]
+[ext_resource type="Texture2D" uid="uid://cnnuw6fwsulon" path="res://textures/overworld/icons/quit.png" id="3_b15mb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kskb7"]
+shader = ExtResource("2_84ve2")
+shader_parameter/gray_level = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_80xk2"]
+bg_color = Color(1, 1, 1, 0)
+
+[node name="InventoryMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wqkn4")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_kskb7")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Container" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_4i8s2")
+
+[node name="Rows" type="VBoxContainer" parent="Container"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="PanelContainer" parent="Container/Rows"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_80xk2")
+
+[node name="Close" type="TextureButton" parent="Container/Rows/Header"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture_normal = ExtResource("3_b15mb")
+
+[node name="Label" type="Label" parent="Container/Rows/Header"]
+layout_mode = 2
+text = "Items"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Container/Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="VBoxContainer" parent="Container/Rows/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[connection signal="pressed" from="Container/Rows/Header/Close" to="." method="_on_close_pressed"]

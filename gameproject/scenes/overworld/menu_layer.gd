@@ -2,7 +2,7 @@ extends CanvasLayer
 
 @onready var pauseMenu: Control = $PauseMenu
 @onready var teamMenu: Control = $TeamMenu
-@onready var itemsMenu: Control = $ItemsMenu
+@onready var inventoryMenu: Control = $InventoryMenu
 
 var currentMenu: Control = null
 var menus: Dictionary = {}
@@ -11,18 +11,20 @@ func _ready():
 	menus = {
 		"Pause": pauseMenu,
 		"Team": teamMenu,
-		"Items": itemsMenu
+		"Inventory": inventoryMenu
 	}
 	currentMenu = pauseMenu
 
 func resume():
 	get_tree().paused = false
 	currentMenu.resume()
+	currentMenu.hide()
 	visible = false
 
 func pause():
 	get_tree().paused = true
 	currentMenu.pause()
+	currentMenu.show()
 	visible = true
 	currentMenu.show()
 
@@ -30,8 +32,8 @@ func switch_menu(menu_key: String):
 	var new_menu = menus[menu_key]
 	if currentMenu != new_menu:
 		currentMenu.resume()
+		currentMenu.hide()
 		currentMenu = new_menu
-		currentMenu._ready()
 	if get_tree().paused:
 		resume()
 	else:
@@ -46,12 +48,12 @@ func _input(event: InputEvent) -> void:
 		switch_menu("Team")
 		return
 		
-	if event.is_action("Items") and event.is_pressed():
-		switch_menu("Items")
+	if event.is_action("Inventory") and event.is_pressed():
+		switch_menu("Inventory")
 		return
 		
 func _on_items_pressed() -> void:
-	switch_menu("Items")
+	switch_menu("Inventory")
 
 
 func _on_team_pressed() -> void:

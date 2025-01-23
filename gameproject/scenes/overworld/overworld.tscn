@@ -13,7 +13,7 @@
 [ext_resource type="Script" path="res://scenes/overworld/menu_layer.gd" id="10_77ouk"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="10_m6pb5"]
 [ext_resource type="PackedScene" uid="uid://dnnke485su8a5" path="res://scenes/overworld/team/team_menu.tscn" id="12_ot02u"]
-[ext_resource type="PackedScene" uid="uid://cey85v4ldsstb" path="res://scenes/overworld/items/items_menu.tscn" id="13_1g3oo"]
+[ext_resource type="PackedScene" uid="uid://cey85v4ldsstb" path="res://scenes/overworld/inventory/inventory_menu.tscn" id="13_1g3oo"]
 [ext_resource type="Script" path="res://scenes/overworld/MapGenerator.gd" id="15_jhbcx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ioep"]
@@ -236,8 +236,7 @@ visible = false
 process_mode = 3
 visible = false
 
-[node name="ItemsMenu" parent="MenuLayer" instance=ExtResource("13_1g3oo")]
-process_mode = 3
+[node name="InventoryMenu" parent="MenuLayer" instance=ExtResource("13_1g3oo")]
 visible = false
 
 [node name="MapGenerator" type="Node" parent="."]
