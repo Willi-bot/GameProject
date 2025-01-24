@@ -341,3 +341,20 @@ func _on_quit_game_pressed() -> void:
 
 func _on_new_run_pressed() -> void:
 	Global.start_new_run()
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action("Back") and event.is_pressed():
+		exit_sub_menu()
+		return
+
+
+func exit_sub_menu() -> void:
+	if target_menu.visible:
+		target_menu.hide()
+	elif skill_menu.visible:
+		skill_menu.hide()
+	elif item_menu.visible:
+		item_menu.hide()
+	
+	return
