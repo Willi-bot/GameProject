@@ -10,7 +10,7 @@ enum Type {
 @export var description: String
 @export var type: Type
 
-var battle_manager
+var battle_manager: BattleManager
 
 signal turn_ended
 

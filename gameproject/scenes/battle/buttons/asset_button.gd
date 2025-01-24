@@ -17,7 +17,23 @@ func _on_button_pressed(entity: BaseEntity) -> void:
 	asset.execute(entity)
 
 
-func _on_mouse_entered(select_icon: TextureRect, info_text: Label) -> void:
+func _on_mouse_entered() -> void:
+	set_active_button(asset.battle_manager.select_icon, asset.battle_manager.info_text)
+
+
+func _on_focus_entered() -> void:
+	set_active_button(asset.battle_manager.select_icon, asset.battle_manager.info_text)
+
+
+func _on_focus_exited() -> void:
+	asset.battle_manager.info_text.text = "Choose your next action"
+
+func _on_mouse_exited() -> void:
+	asset.battle_manager.info_text.text = "Choose your next action"
+
+
+
+func set_active_button(select_icon: TextureRect, info_text: Label):
 	select_icon.visible = true
 	select_icon.global_position = global_position
 	select_icon.position -= Vector2(
@@ -25,7 +41,3 @@ func _on_mouse_entered(select_icon: TextureRect, info_text: Label) -> void:
 		-select_icon.size.y * select_icon.scale.y / 8
 	)
 	info_text.text = asset.description
-
-
-func _on_mouse_exited(info_text: Label) -> void:
-	info_text.text = "Choose your next action"

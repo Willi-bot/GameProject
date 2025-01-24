@@ -15,11 +15,13 @@ func _ready():
 	}
 	currentMenu = pauseMenu
 
+
 func resume():
 	get_tree().paused = false
 	currentMenu.resume()
 	currentMenu.hide()
 	visible = false
+
 
 func pause():
 	get_tree().paused = true
@@ -27,6 +29,7 @@ func pause():
 	currentMenu.show()
 	visible = true
 	currentMenu.show()
+
 
 func switch_menu(menu_key: String):
 	var new_menu = menus[menu_key]
@@ -38,6 +41,7 @@ func switch_menu(menu_key: String):
 		resume()
 	else:
 		pause()
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action("Escape") and event.is_pressed():
@@ -51,6 +55,20 @@ func _input(event: InputEvent) -> void:
 	if event.is_action("Inventory") and event.is_pressed():
 		switch_menu("Inventory")
 		return
+	
+	if event.is_action("Map") and event.is_pressed() and Global.current_view:
+		switch_overworld()
+		return 
+
+
+func switch_overworld():
+	if Global.overworld.is_visible_in_tree():
+		Global.overworld.hide_map()
+		Global.current_view.show()
+	else:
+		Global.overworld.show_map()
+		Global.overworld.top_menu.hide()
+		Global.current_view.hide()
 		
 func _on_items_pressed() -> void:
 	switch_menu("Inventory")

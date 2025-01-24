@@ -1,6 +1,6 @@
 extends Node
 
-var current_view: Control
+var current_view: Control = null
 
 const PLAYER_SCENE := preload("res://entities/player/player.tscn")
 const ENEMY_SCENE := preload("res://entities/enemy/enemy.tscn")
@@ -73,6 +73,7 @@ func _show_map() -> void:
 	overworld.top_menu
 	if current_view:
 		remove_child(current_view)
+		current_view = null
 		
 	overworld.show_map()
 	overworld.unlock_next_rooms()
@@ -87,6 +88,7 @@ func start_new_run() -> void:
 	
 	if current_view:
 		remove_child(current_view)
+		current_view = null
 		
 	overworld.generate_new_map()
 	overworld.show_map()
@@ -100,6 +102,8 @@ func continue_run():
 	
 	if current_view:
 		remove_child(current_view)
+		current_view = null
+	
 	overworld.deserialize(overworld_data)
 	overworld.show_map()
 	
@@ -205,6 +209,7 @@ func _update_item_count(item) -> void:
 	item.count -= 1
 	if item.count == 0:
 		Global.inventory.erase(item)
+
 
 func game_over():
 	if FileAccess.file_exists("user://save_game.json"):

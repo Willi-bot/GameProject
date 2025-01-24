@@ -3,27 +3,23 @@ extends Control
 
 @onready var menu_box = $MenuBox
 @onready var button_panel = $MenuBox/ButtonPanel
-@onready var button_box = $MenuBox/ButtonPanel/ButtonBox
-
-@onready var attack_button = get_button("LeftSide/AttackButton")
-@onready var skill_button = get_button("RightSide/SkillButton")
-@onready var item_button = get_button("LeftSide/ItemButton")
-@onready var neg_button = get_button("RightSide/NegButton")
+@onready var button_box: ButtonBox = $MenuBox/ButtonPanel/ButtonBox
 
 @onready var info_text : Label = $MenuBox/PanelContainer/InfoText
 
-@onready var skill_menu : CanvasLayer = button_box.get_node("SkillMenu")
-@onready var skill_box : PanelContainer = button_box.get_node("SkillMenu/SkillBox")
-@onready var skill_container : GridContainer =  button_box.get_node("SkillMenu/SkillBox/SkillContainer")
-@onready var item_menu : CanvasLayer = button_box.get_node("ItemMenu")
-@onready var item_box : PanelContainer = button_box.get_node("ItemMenu/ItemBox")
-@onready var item_container : GridContainer =  button_box.get_node("ItemMenu/ItemBox/ItemContainer")
-@onready var target_menu : CanvasLayer = button_box.get_node("PlayerTargetMenu")
-@onready var target_menu_box : PanelContainer = button_box.get_node("PlayerTargetMenu/TargetBox")
-@onready var target_container : HBoxContainer = button_box.get_node("PlayerTargetMenu/TargetBox/TargetContainer")
+@onready var skill_menu : CanvasLayer = $MenuBox/ButtonPanel/SkillMenu
+@onready var skill_box : PanelContainer = skill_menu.get_node("SkillBox")
+@onready var skill_container : GridContainer = $MenuBox/ButtonPanel/SkillMenu/SkillBox/SkillContainer
+@onready var item_menu : CanvasLayer = $MenuBox/ButtonPanel/ItemMenu
+@onready var item_box : PanelContainer = $MenuBox/ButtonPanel/ItemMenu/ItemBox
+@onready var item_container : GridContainer = $MenuBox/ButtonPanel/ItemMenu/ItemBox/ItemContainer
+@onready var target_menu : CanvasLayer = $MenuBox/ButtonPanel/PlayerTargetMenu
+@onready var target_menu_box : PanelContainer = $MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox
+@onready var target_container : HBoxContainer = $MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox/TargetContainer
 
 @onready var skill_resource : Resource = preload("res://assets/skill.gd")
 @onready var item_resource : Resource = preload("res://assets/item.gd")
+@onready var main_button: PackedScene = preload("res://scenes/battle/buttons/main_button.tscn")
 @onready var asset_button: PackedScene = preload("res://scenes/battle/buttons/asset_button.tscn")
 @onready var target_button: PackedScene = preload("res://scenes/battle/buttons/target_button.tscn")
 @onready var select_icon: TextureRect = $SelectLayer/SelectIcon
@@ -32,6 +28,10 @@ extends Control
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
 
 var enemy_scene = preload("res://entities/enemy/enemy.tscn")
+
+var visible_menu = null
+var item_btn = null
+var neg_btn = null
 
 var battlers = []
 var ally_battlers = []
@@ -58,6 +58,8 @@ func _ready() -> void:
 	battlers.sort_custom(func(a, b): return a.entity.agility > b.entity.agility)
 
 	_connect_callbacks()
+	_create_main_buttons()
+
 
 	_setup_boxes([skill_box, item_box, target_menu_box])
 
@@ -66,6 +68,7 @@ func _ready() -> void:
 	
 	_choose_target(enemy_battlers[0])
 
+	visible_menu = button_box
 
 func _spawn_entity_nodes(entities, start_pos, offset_x):
 	var index = 0
@@ -83,11 +86,6 @@ func _spawn_entity_nodes(entities, start_pos, offset_x):
 
 
 func _connect_callbacks():
-	attack_button.pressed.connect(_attack_enemy)
-	skill_button.pressed.connect(_choose_skill)
-	item_button.pressed.connect(_choose_item)
-	neg_button.pressed.connect(_choose_neg_target)
-
 	for ally in ally_battlers:
 		ally.entity.turn_ended.connect(_next_turn)
 		ally.entity.death.connect(process_ally_death.bind(ally))
@@ -163,15 +161,38 @@ func _choose_item() -> void:
 		item_container.add_child(_create_asset_button(item))
 
 	item_menu.show()
+
+func _create_main_buttons():
+	var attack_btn = main_button.instantiate() as MainButton
+	attack_btn.initialize(self, "Attack", "Attack an enemy")	
+	button_box.add_child(attack_btn)
+	attack_btn.pressed.connect(_attack_enemy)
 	
+	var skill_btn = main_button.instantiate() as MainButton
+	skill_btn.initialize(self, "Skills", "Choose a skill")	
+	button_box.add_child(skill_btn)
+	skill_btn.pressed.connect(_choose_skill)
+	
+	item_btn = main_button.instantiate() as MainButton
+	item_btn.initialize(self, "Item", "Choose an item")	
+	button_box.add_child(item_btn)
+	item_btn.pressed.connect(_choose_item)
+	
+	neg_btn = main_button.instantiate() as MainButton
+	neg_btn.initialize(self, "Negotiate", "Negotiate with enemy")	
+	button_box.add_child(neg_btn)
+	# TODO: neg_btn.pressed.connect()
+	
+	button_box.init_button_dict()
+
 	
 func _create_asset_button(asset: Asset) -> Button:
 	var btn = asset_button.instantiate() as AssetButton
 	btn.initialize(asset, self)
 	
 	btn.pressed.connect(Callable(btn, "_on_button_pressed").bind(current_turn.entity))
-	btn.mouse_entered.connect(Callable(btn, "_on_mouse_entered").bind(select_icon, info_text))
-	btn.mouse_exited.connect(Callable(btn, "_on_mouse_exited").bind(info_text))
+	btn.mouse_entered.connect(Callable(btn, "_on_mouse_entered"))
+	btn.mouse_exited.connect(Callable(btn, "_on_mouse_exited"))
 	btn.asset.turn_ended.connect(_next_turn)
 	
 	return btn
@@ -214,8 +235,8 @@ func _update_turn() -> void:
 	menu_box.visible = isAlly
 	select_icon.visible = false
 
-	item_button.visible = isPlayer
-	neg_button.visible = isPlayer
+	item_btn.visible = isPlayer
+	neg_btn.visible = isPlayer
 	
 	current_turn.entity.regen_mp()
 		
@@ -269,42 +290,6 @@ func adjust_select_icon(button: Button) -> void:
 	select_icon	.position.x -= (select_icon.size.x * select_icon.scale.x) / 4
 
 
-func _on_attack_button_mouse_entered() -> void:
-	info_text.text = "Attack the target"
-	adjust_select_icon(attack_button)
-
-
-func _on_attack_button_mouse_exited() -> void:
-	info_text.text = "Choose your next action"
-
-
-func _on_skill_button_mouse_entered() -> void:
-	info_text.text = "Use a Skill"
-	adjust_select_icon(skill_button)
-
-
-func _on_skill_button_mouse_exited() -> void:
-	info_text.text = "Choose your next action"
-
-
-func _on_item_button_mouse_entered() -> void:
-	info_text.text = "Use Item"
-	adjust_select_icon(item_button)
-
-
-func _on_item_button_mouse_exited() -> void:
-	info_text.text = "Choose your next action"
-
-
-func _on_neg_button_mouse_entered() -> void:
-	info_text.text = "Start Negotiation with a Creature"
-	adjust_select_icon(neg_button)
-
-
-func _on_neg_button_mouse_exited() -> void:
-	info_text.text = "Choose your next action"
-
-
 func get_player_target() -> Node2D:
 	clear_menu(target_container)
 	
@@ -341,3 +326,14 @@ func _on_quit_game_pressed() -> void:
 
 func _on_new_run_pressed() -> void:
 	Global.start_new_run()
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action("Down") and event.is_pressed():
+		visible_menu.adjust_position("Down")
+	if event.is_action("Up") and event.is_pressed():
+		visible_menu.adjust_position("Up")
+	if event.is_action("Left") and event.is_pressed():
+		visible_menu.adjust_position("Left")
+	if event.is_action("Right")	and event.is_pressed():
+		visible_menu.adjust_position("Right")

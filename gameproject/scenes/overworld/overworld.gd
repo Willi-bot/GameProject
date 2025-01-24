@@ -65,7 +65,7 @@ func unlock_next_rooms() -> void:
 				map_room.available = true			
 
 
-func show_map() -> void:
+func show_map(input_allowed: bool = true) -> void:
 	show()
 	top_menu.show()
 	top_menu.update()

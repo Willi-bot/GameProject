@@ -8,7 +8,7 @@
 	"damage": 80,
 	"intelligence": 50,
 	"agility": 5,
-	"skills": ["Sweep"],
+	"skills": ["Sweep", "Heal", "Sweep"],
 	"front_texture": "res://textures/entities/player_front.png",
 	"back_texture": "res://textures/entities/player_back.png",
 	"type":  0

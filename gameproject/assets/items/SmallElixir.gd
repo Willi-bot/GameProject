@@ -9,6 +9,6 @@ func _init():
 
 
 func execute(entity: BaseEntity):
-	use_item.emit()
+	Global._update_item_count(self)
 	entity.heal(40)
 	turn_ended.emit()

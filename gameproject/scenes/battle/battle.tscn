@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=12 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://textures/battle/maps/map_1.png" id="2_ygs6r"]
 [ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://textures/battle/icons/select_cursor.png" id="4_70km2"]
+[ext_resource type="Script" path="res://scenes/battle/button_box.gd" id="4_p577l"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="6_qhg0e"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
@@ -95,80 +96,50 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_gyji5")
 
-[node name="ButtonBox" type="HBoxContainer" parent="MenuBox/ButtonPanel"]
+[node name="ButtonBox" type="GridContainer" parent="MenuBox/ButtonPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 6
+columns = 2
+script = ExtResource("4_p577l")
 
-[node name="LeftSide" type="VBoxContainer" parent="MenuBox/ButtonPanel/ButtonBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="AttackButton" type="Button" parent="MenuBox/ButtonPanel/ButtonBox/LeftSide"]
-layout_mode = 2
-theme = ExtResource("2_7y84o")
-text = "Attack"
-
-[node name="ItemButton" type="Button" parent="MenuBox/ButtonPanel/ButtonBox/LeftSide"]
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_7y84o")
-text = "Items"
-
-[node name="RightSide" type="VBoxContainer" parent="MenuBox/ButtonPanel/ButtonBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SkillButton" type="Button" parent="MenuBox/ButtonPanel/ButtonBox/RightSide"]
-layout_mode = 2
-size_flags_vertical = 8
-theme = ExtResource("2_7y84o")
-text = "Skills"
-
-[node name="NegButton" type="Button" parent="MenuBox/ButtonPanel/ButtonBox/RightSide"]
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_7y84o")
-text = "Start Negotiation"
-
-[node name="SkillMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel/ButtonBox"]
+[node name="SkillMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel"]
 visible = false
 
-[node name="SkillBox" type="PanelContainer" parent="MenuBox/ButtonPanel/ButtonBox/SkillMenu"]
+[node name="SkillBox" type="PanelContainer" parent="MenuBox/ButtonPanel/SkillMenu"]
 offset_right = 16.0
 offset_bottom = 16.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
 
-[node name="SkillContainer" type="GridContainer" parent="MenuBox/ButtonPanel/ButtonBox/SkillMenu/SkillBox"]
+[node name="SkillContainer" type="GridContainer" parent="MenuBox/ButtonPanel/SkillMenu/SkillBox"]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 4
 columns = 4
 
-[node name="ItemMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel/ButtonBox"]
+[node name="PlayerTargetMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel"]
 visible = false
 
-[node name="ItemBox" type="PanelContainer" parent="MenuBox/ButtonPanel/ButtonBox/ItemMenu"]
-offset_right = 16.0
-offset_bottom = 16.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
-
-[node name="ItemContainer" type="GridContainer" parent="MenuBox/ButtonPanel/ButtonBox/ItemMenu/ItemBox"]
-layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 4
-columns = 4
-
-[node name="PlayerTargetMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel/ButtonBox"]
-visible = false
-
-[node name="TargetBox" type="PanelContainer" parent="MenuBox/ButtonPanel/ButtonBox/PlayerTargetMenu"]
+[node name="TargetBox" type="PanelContainer" parent="MenuBox/ButtonPanel/PlayerTargetMenu"]
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
 
-[node name="TargetContainer" type="HBoxContainer" parent="MenuBox/ButtonPanel/ButtonBox/PlayerTargetMenu/TargetBox"]
+[node name="TargetContainer" type="HBoxContainer" parent="MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox"]
 layout_mode = 2
+
+[node name="ItemMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel"]
+visible = false
+
+[node name="ItemBox" type="PanelContainer" parent="MenuBox/ButtonPanel/ItemMenu"]
+offset_right = 16.0
+offset_bottom = 16.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
+
+[node name="ItemContainer" type="GridContainer" parent="MenuBox/ButtonPanel/ItemMenu/ItemBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 4
+columns = 4
 
 [node name="PanelContainer" type="PanelContainer" parent="MenuBox"]
 layout_mode = 2
@@ -182,6 +153,7 @@ theme = ExtResource("2_7y84o")
 text = "Choose your next action"
 
 [node name="SelectLayer" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="SelectIcon" type="TextureRect" parent="SelectLayer"]
 visible = false
@@ -336,14 +308,6 @@ text = "Quit Game"
 layout_mode = 2
 text = "New Run	"
 
-[connection signal="mouse_entered" from="MenuBox/ButtonPanel/ButtonBox/LeftSide/AttackButton" to="." method="_on_attack_button_mouse_entered"]
-[connection signal="mouse_exited" from="MenuBox/ButtonPanel/ButtonBox/LeftSide/AttackButton" to="." method="_on_attack_button_mouse_exited"]
-[connection signal="mouse_entered" from="MenuBox/ButtonPanel/ButtonBox/LeftSide/ItemButton" to="." method="_on_item_button_mouse_entered"]
-[connection signal="mouse_exited" from="MenuBox/ButtonPanel/ButtonBox/LeftSide/ItemButton" to="." method="_on_item_button_mouse_exited"]
-[connection signal="mouse_entered" from="MenuBox/ButtonPanel/ButtonBox/RightSide/SkillButton" to="." method="_on_skill_button_mouse_entered"]
-[connection signal="mouse_exited" from="MenuBox/ButtonPanel/ButtonBox/RightSide/SkillButton" to="." method="_on_skill_button_mouse_exited"]
-[connection signal="mouse_entered" from="MenuBox/ButtonPanel/ButtonBox/RightSide/NegButton" to="." method="_on_neg_button_mouse_entered"]
-[connection signal="mouse_exited" from="MenuBox/ButtonPanel/ButtonBox/RightSide/NegButton" to="." method="_on_neg_button_mouse_exited"]
 [connection signal="pressed" from="VictoryScreen/Panel Container/HBoxContainer/ContinueGame" to="." method="_on_continue_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/NewRun" to="." method="_on_new_run_pressed"]
