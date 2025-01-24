@@ -134,6 +134,9 @@ func save_state() -> void:
 func init_game_state() -> bool:
 	var data = load_json("user://save_game.json")
 	
+	if !data:
+		return false
+	
 	if !data.has("player") or !data.has("team") or !data.has("overworld"):
 		print("Missing required data in save file")
 		return false

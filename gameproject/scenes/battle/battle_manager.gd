@@ -329,6 +329,10 @@ func _on_new_run_pressed() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event.is_action("Back") and event.is_pressed():
+    		exit_sub_menu()
+    		return
+    			
 	if event.is_action("Down") and event.is_pressed():
 		visible_menu.adjust_position("Down")
 	if event.is_action("Up") and event.is_pressed():
@@ -337,3 +341,14 @@ func _input(event: InputEvent) -> void:
 		visible_menu.adjust_position("Left")
 	if event.is_action("Right")	and event.is_pressed():
 		visible_menu.adjust_position("Right")
+
+
+func exit_sub_menu() -> void:
+	if target_menu.visible:
+		target_menu.hide()
+	elif skill_menu.visible:
+		skill_menu.hide()
+	elif item_menu.visible:
+		item_menu.hide()
+	
+	return
