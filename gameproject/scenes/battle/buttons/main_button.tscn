@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfc8i52knp1j4"]
+
+[ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="1_ir7d8"]
+[ext_resource type="Script" path="res://scenes/battle/buttons/main_button.gd" id="2_ayeb2"]
+
+[node name="MainButton" type="Button"]
+size_flags_horizontal = 3
+focus_mode = 0
+theme = ExtResource("1_ir7d8")
+script = ExtResource("2_ayeb2")
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
