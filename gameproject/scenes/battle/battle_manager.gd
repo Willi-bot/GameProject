@@ -38,9 +38,10 @@ var enemy_battlers = []
 
 var current_turn : Node2D
 var current_turn_idx : int
+
 var selected_target : Node2D 
 
-var game_over: bool
+var game_over: bool = false
 
 # Used for keyboard selection
 var btn_dict = {}
@@ -48,6 +49,7 @@ var btn_index = Vector2.ZERO
 var active_btn: BattleButton = null
 var max_rows = 0
 var max_cols = 0
+var ally_turn: bool = true
 
 signal target_chosen(index: int)
 
@@ -145,10 +147,14 @@ func _add_entity_to_battle(entity: BaseEntity, pos) -> Node2D:
 
 
 func _attack_enemy() -> void:
+	if game_over:
+		return
 	current_turn.entity.start_attacking(selected_target)
 		
 		
 func _choose_skill() -> void:
+	if game_over:
+		return
 	select_icon.visible = false
 	
 	clear_menu(skill_container)
@@ -218,6 +224,8 @@ func _choose_neg_target() -> void:
 	
 	
 func _attack_random_ally() -> void:
+	if game_over:
+		return
 	await get_tree().create_timer(1).timeout 
 	var ally = ally_battlers[randi_range(0, ally_battlers.size() - 1)]
 	current_turn.entity.start_attacking(ally)
@@ -230,6 +238,7 @@ func _next_turn() -> void:
 	current_turn.set_inactive()
 	current_turn_idx = (current_turn_idx + 1) % battlers.size()
 	current_turn = battlers[current_turn_idx]
+	
 	_update_turn()
 	
 	
@@ -238,12 +247,12 @@ func _update_turn() -> void:
 	
 	var type = current_turn.entity.type
 	var isPlayer = type == BaseEntity.Type.PLAYER
-	var isAlly = isPlayer or type == BaseEntity.Type.ALLY
+	ally_turn = isPlayer or type == BaseEntity.Type.ALLY
 	
-	if isAlly:
+	if ally_turn:
 		change_active_menu(main_box)
 	
-	menu_box.visible = isAlly
+	menu_box.visible = ally_turn
 	select_icon.visible = false
 
 	item_btn.visible = isPlayer
@@ -264,28 +273,29 @@ func clear_menu(container: GridContainer) -> void:
 
 
 func process_enemy_death(enemy):
+	if game_over:
+		return
 	enemy_battlers.erase(enemy)
 	battlers.erase(enemy)
 	remove_child(enemy)
 	
 	if(enemy_battlers.size() == 0):
 		game_over = true
-		victory_screen.set_process_input(false)
-		victory_screen.show()
 		get_tree().paused = true
-		
+		victory_screen.show()
 		return
 		
 	_choose_target(enemy_battlers[0])
 	
 	
-func process_ally_death(ally):	
+func process_ally_death(ally):
+	if game_over:
+		return	
 	if(ally.entity.type == BaseEntity.Type.PLAYER):
-		game_over = true
 		get_tree().paused = true
-		victory_screen.set_process_input(false)
+		game_over = true
+		
 		defeat_screen.show()
-	
 		return
 	
 	battlers.erase(ally)
@@ -346,14 +356,27 @@ func _on_new_run_pressed() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if game_over:
+		return
+	
 	if event.is_action("Back") and event.is_pressed():
-			exit_sub_menu()
-			return
+		exit_sub_menu()
+		return
 	
 	if event.is_action("Confirm") and event.is_pressed():
-		print("EVENT REGISTERED")
 		active_btn.pressed.emit()	
 		return	
+				
+	
+	if ally_turn and event.is_action_pressed("ShoulderLeft"):
+		var id = enemy_battlers.find(selected_target)
+		_choose_target(enemy_battlers[(id + 1) % len(enemy_battlers)])
+		return
+		
+	if ally_turn and event.is_action_pressed("ShoulderRight"):
+		var id = enemy_battlers.find(selected_target)
+		_choose_target(enemy_battlers[id - 1])
+		return 
 				
 	var new_index = btn_index
 				

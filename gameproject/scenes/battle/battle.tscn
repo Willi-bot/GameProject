@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=13 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://textures/battle/icons/select_cursor.png" id="4_70km2"]
 [ext_resource type="Script" path="res://scenes/battle/victory_screen.gd" id="5_2c0ih"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="6_qhg0e"]
+[ext_resource type="Script" path="res://scenes/battle/defeat_screen.gd" id="7_van4q"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
 texture = ExtResource("2_ygs6r")
@@ -266,6 +267,7 @@ text = "Continue"
 process_mode = 2
 layer = 3
 visible = false
+script = ExtResource("7_van4q")
 
 [node name="SettingsBackground" type="Panel" parent="DefeatScreen"]
 anchors_preset = 15
@@ -313,5 +315,6 @@ text = "New Run	"
 
 [connection signal="visibility_changed" from="VictoryScreen" to="VictoryScreen" method="_on_visibility_changed"]
 [connection signal="pressed" from="VictoryScreen/Panel Container/HBoxContainer/ContinueGame" to="." method="_on_continue_game_pressed"]
+[connection signal="visibility_changed" from="DefeatScreen" to="DefeatScreen" method="_on_visibility_changed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/NewRun" to="." method="_on_new_run_pressed"]
