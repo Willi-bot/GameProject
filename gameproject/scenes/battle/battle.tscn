@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://textures/battle/maps/map_1.png" id="2_ygs6r"]
 [ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://textures/battle/icons/select_cursor.png" id="4_70km2"]
-[ext_resource type="Script" path="res://scenes/battle/button_box.gd" id="4_p577l"]
+[ext_resource type="Script" path="res://scenes/battle/victory_screen.gd" id="5_2c0ih"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="6_qhg0e"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
@@ -100,7 +100,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_gyji5")
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
-script = ExtResource("4_p577l")
 
 [node name="SkillMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel"]
 visible = false
@@ -124,8 +123,9 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
 
-[node name="TargetContainer" type="HBoxContainer" parent="MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox"]
+[node name="TargetContainer" type="GridContainer" parent="MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox"]
 layout_mode = 2
+columns = 3
 
 [node name="ItemMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel"]
 visible = false
@@ -165,8 +165,10 @@ texture = ExtResource("4_70km2")
 stretch_mode = 3
 
 [node name="VictoryScreen" type="CanvasLayer" parent="."]
-process_mode = 3
+process_mode = 2
+layer = 3
 visible = false
+script = ExtResource("5_2c0ih")
 
 [node name="SettingsBackground" type="Panel" parent="VictoryScreen"]
 anchors_preset = 15
@@ -261,7 +263,8 @@ size_flags_horizontal = 4
 text = "Continue"
 
 [node name="DefeatScreen" type="CanvasLayer" parent="."]
-process_mode = 3
+process_mode = 2
+layer = 3
 visible = false
 
 [node name="SettingsBackground" type="Panel" parent="DefeatScreen"]
@@ -308,6 +311,7 @@ text = "Quit Game"
 layout_mode = 2
 text = "New Run	"
 
+[connection signal="visibility_changed" from="VictoryScreen" to="VictoryScreen" method="_on_visibility_changed"]
 [connection signal="pressed" from="VictoryScreen/Panel Container/HBoxContainer/ContinueGame" to="." method="_on_continue_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/NewRun" to="." method="_on_new_run_pressed"]

@@ -3,7 +3,7 @@ extends Control
 
 @onready var menu_box = $MenuBox
 @onready var button_panel = $MenuBox/ButtonPanel
-@onready var button_box: ButtonBox = $MenuBox/ButtonPanel/ButtonBox
+@onready var main_box = $MenuBox/ButtonPanel/ButtonBox
 
 @onready var info_text : Label = $MenuBox/PanelContainer/InfoText
 
@@ -15,7 +15,7 @@ extends Control
 @onready var item_container : GridContainer = $MenuBox/ButtonPanel/ItemMenu/ItemBox/ItemContainer
 @onready var target_menu : CanvasLayer = $MenuBox/ButtonPanel/PlayerTargetMenu
 @onready var target_menu_box : PanelContainer = $MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox
-@onready var target_container : HBoxContainer = $MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox/TargetContainer
+@onready var target_container : GridContainer = $MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox/TargetContainer
 
 @onready var skill_resource : Resource = preload("res://assets/skill.gd")
 @onready var item_resource : Resource = preload("res://assets/item.gd")
@@ -29,7 +29,6 @@ extends Control
 
 var enemy_scene = preload("res://entities/enemy/enemy.tscn")
 
-var visible_menu = null
 var item_btn = null
 var neg_btn = null
 
@@ -42,6 +41,13 @@ var current_turn_idx : int
 var selected_target : Node2D 
 
 var game_over: bool
+
+# Used for keyboard selection
+var btn_dict = {}
+var btn_index = Vector2.ZERO
+var active_btn: BattleButton = null
+var max_rows = 0
+var max_cols = 0
 
 signal target_chosen(index: int)
 
@@ -68,7 +74,8 @@ func _ready() -> void:
 	
 	_choose_target(enemy_battlers[0])
 
-	visible_menu = button_box
+	change_active_menu(main_box)
+
 
 func _spawn_entity_nodes(entities, start_pos, offset_x):
 	var index = 0
@@ -105,7 +112,7 @@ func _setup_boxes(boxes : Array[Container]):
 
 
 func get_button(name: String) -> Button:
-	return button_box.get_node(name)
+	return main_box.get_node(name)
 
 
 func load_enemy_data() -> Array[BaseEntity]:
@@ -150,6 +157,7 @@ func _choose_skill() -> void:
 		skill_container.add_child(_create_asset_button(skill))
 
 	skill_menu.show()
+	change_active_menu(skill_container)
 	
 	
 func _choose_item() -> void:
@@ -161,29 +169,29 @@ func _choose_item() -> void:
 		item_container.add_child(_create_asset_button(item))
 
 	item_menu.show()
+	change_active_menu(item_container)
+
 
 func _create_main_buttons():
 	var attack_btn = main_button.instantiate() as MainButton
 	attack_btn.initialize(self, "Attack", "Attack an enemy")	
-	button_box.add_child(attack_btn)
+	main_box.add_child(attack_btn)
 	attack_btn.pressed.connect(_attack_enemy)
 	
 	var skill_btn = main_button.instantiate() as MainButton
 	skill_btn.initialize(self, "Skills", "Choose a skill")	
-	button_box.add_child(skill_btn)
+	main_box.add_child(skill_btn)
 	skill_btn.pressed.connect(_choose_skill)
 	
 	item_btn = main_button.instantiate() as MainButton
 	item_btn.initialize(self, "Item", "Choose an item")	
-	button_box.add_child(item_btn)
+	main_box.add_child(item_btn)
 	item_btn.pressed.connect(_choose_item)
 	
 	neg_btn = main_button.instantiate() as MainButton
 	neg_btn.initialize(self, "Negotiate", "Negotiate with enemy")	
-	button_box.add_child(neg_btn)
+	main_box.add_child(neg_btn)
 	# TODO: neg_btn.pressed.connect()
-	
-	button_box.init_button_dict()
 
 	
 func _create_asset_button(asset: Asset) -> Button:
@@ -232,6 +240,9 @@ func _update_turn() -> void:
 	var isPlayer = type == BaseEntity.Type.PLAYER
 	var isAlly = isPlayer or type == BaseEntity.Type.ALLY
 	
+	if isAlly:
+		change_active_menu(main_box)
+	
 	menu_box.visible = isAlly
 	select_icon.visible = false
 
@@ -247,9 +258,9 @@ func _update_turn() -> void:
 	current_turn.start_turn()
 	
 	
-func clear_menu(container) -> void:
+func clear_menu(container: GridContainer) -> void:
 	for n in container.get_children():
-		n.queue_free()
+		container.remove_child(n)
 
 
 func process_enemy_death(enemy):
@@ -259,6 +270,7 @@ func process_enemy_death(enemy):
 	
 	if(enemy_battlers.size() == 0):
 		game_over = true
+		victory_screen.set_process_input(false)
 		victory_screen.show()
 		get_tree().paused = true
 		
@@ -270,6 +282,8 @@ func process_enemy_death(enemy):
 func process_ally_death(ally):	
 	if(ally.entity.type == BaseEntity.Type.PLAYER):
 		game_over = true
+		get_tree().paused = true
+		victory_screen.set_process_input(false)
 		defeat_screen.show()
 	
 		return
@@ -294,8 +308,8 @@ func get_player_target() -> Node2D:
 	clear_menu(target_container)
 	
 	for character in ally_battlers:
-		var target_button = target_button.instantiate()
-		target_button.text = character.entity.name
+		var target_button = target_button.instantiate() as TargetButton
+		target_button.initialize(self, character.entity.name)
 		target_button.pressed.connect(Callable(self, "_chosen_player").bind(character))
 		target_button.mouse_entered.connect(Callable(self, "adjust_select_icon").bind(target_button))
 		
@@ -303,6 +317,9 @@ func get_player_target() -> Node2D:
 	
 	skill_menu.hide()
 	target_menu.show()
+	select_icon.visible = false
+	change_active_menu(target_container)
+	
 	info_text.text = "Choose a player character"
 	
 	var target = await target_chosen
@@ -330,17 +347,31 @@ func _on_new_run_pressed() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action("Back") and event.is_pressed():
-    		exit_sub_menu()
-    		return
-    			
+			exit_sub_menu()
+			return
+	
+	if event.is_action("Confirm") and event.is_pressed():
+		print("EVENT REGISTERED")
+		active_btn.pressed.emit()	
+		return	
+				
+	var new_index = btn_index
+				
 	if event.is_action("Down") and event.is_pressed():
-		visible_menu.adjust_position("Down")
+		new_index.x = btn_index.x + 1
 	if event.is_action("Up") and event.is_pressed():
-		visible_menu.adjust_position("Up")
+		new_index.x = max(0, btn_index.x - 1)
 	if event.is_action("Left") and event.is_pressed():
-		visible_menu.adjust_position("Left")
+		new_index.y = max(0, btn_index.y - 1)
 	if event.is_action("Right")	and event.is_pressed():
-		visible_menu.adjust_position("Right")
+		new_index.y = btn_index.y + 1
+
+	if new_index != btn_index:
+		if new_index in btn_dict:
+			btn_index = new_index
+			
+		active_btn = btn_dict[btn_index]
+		call_deferred("_activate_button")
 
 
 func exit_sub_menu() -> void:
@@ -352,3 +383,33 @@ func exit_sub_menu() -> void:
 		item_menu.hide()
 	
 	return
+
+
+func change_active_menu(button_box: GridContainer):
+	btn_index = Vector2.ZERO
+	var children = button_box.get_children()
+
+	btn_dict = {}
+	
+	var index = ''
+	var current_row = 0
+	var current_col = 0
+	for btn in children:
+		if btn.visible == false or is_instance_valid(btn) == false:
+			continue
+		
+		index = Vector2(current_row, current_col)
+		btn_dict[index] = btn
+		current_col += 1
+		if current_col == button_box.columns:
+			current_col = 0
+			current_row += 1
+
+	if btn_dict[Vector2.ZERO]:
+		active_btn = btn_dict[Vector2.ZERO]
+		call_deferred("_activate_button")
+
+
+func _activate_button():
+	if active_btn:
+		active_btn._set_active()

@@ -204,6 +204,9 @@ func instantiate_overworld():
 	overworld = OVERWORLD_SCENE.instantiate()
 	overworld.map_exited.connect(enter_scene)
 	
+	for child in get_children():
+		remove_child(child)
+	
 	add_child(overworld)
 	overworld.hide_map()
 
