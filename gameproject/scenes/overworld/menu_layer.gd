@@ -18,6 +18,7 @@ func _ready():
 
 func resume():
 	get_tree().paused = false
+	Global.paused = false
 	currentMenu.resume()
 	currentMenu.hide()
 	visible = false
@@ -25,6 +26,7 @@ func resume():
 
 func pause():
 	get_tree().paused = true
+	Global.paused = true
 	currentMenu.pause()
 	currentMenu.show()
 	visible = true

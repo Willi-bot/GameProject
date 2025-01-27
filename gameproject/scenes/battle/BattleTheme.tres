@@ -39,7 +39,7 @@ corner_radius_bottom_left = 4
 anti_aliasing = false
 
 [resource]
-Button/font_sizes/font_size = 14
+Button/font_sizes/font_size = 9
 Button/styles/focus = SubResource("StyleBoxFlat_jxmxu")
 Button/styles/hover = SubResource("StyleBoxFlat_7qakj")
 Button/styles/normal = SubResource("StyleBoxFlat_774t7")
