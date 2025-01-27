@@ -8,7 +8,7 @@ extends Node2D
 @onready var target_icon: TextureRect = $TargetIcon
 
 signal deal_damage
-signal target_enemy(id: int)
+signal target_enemy(e: Node2D)
 
 
 func _ready() -> void:

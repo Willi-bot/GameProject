@@ -40,16 +40,13 @@ var current_turn : Node2D
 var current_turn_idx : int
 
 var selected_target : Node2D 
-
+var ally_turn: bool = true
 var game_over: bool = false
 
 # Used for keyboard selection
 var btn_dict = {}
 var btn_index = Vector2.ZERO
 var active_btn: BattleButton = null
-var max_rows = 0
-var max_cols = 0
-var ally_turn: bool = true
 
 signal target_chosen(index: int)
 
@@ -359,39 +356,41 @@ func _input(event: InputEvent) -> void:
 	if game_over:
 		return
 	
-	if event.is_action("Back") and event.is_pressed():
+	if event.is_action_pressed("Back"):
 		exit_sub_menu()
 		return
 	
-	if event.is_action("Confirm") and event.is_pressed():
+	if event.is_action_pressed("Confirm"):
 		active_btn.pressed.emit()	
 		return	
 				
 	
-	if ally_turn and event.is_action_pressed("ShoulderLeft"):
-		var id = enemy_battlers.find(selected_target)
-		_choose_target(enemy_battlers[(id + 1) % len(enemy_battlers)])
-		return
+	if ally_turn:		
+		var enemy_index = enemy_battlers.find(selected_target)
 		
-	if ally_turn and event.is_action_pressed("ShoulderRight"):
-		var id = enemy_battlers.find(selected_target)
-		_choose_target(enemy_battlers[id - 1])
-		return 
+		if event.is_action_pressed("ShoulderLeft"):
+			enemy_index = (enemy_index + 1) % len(enemy_battlers)
+			_choose_target(enemy_battlers[enemy_index])
+			return
+			
+		if event.is_action_pressed("ShoulderRight"):
+			enemy_index = (enemy_index - 1) % len(enemy_battlers)
+			_choose_target(enemy_battlers[enemy_index])
+			return
 				
 	var new_index = btn_index
 				
-	if event.is_action("Down") and event.is_pressed():
+	if event.is_action_pressed("Down"):
 		new_index.x = btn_index.x + 1
-	if event.is_action("Up") and event.is_pressed():
+	if event.is_action_pressed("Up"):
 		new_index.x = max(0, btn_index.x - 1)
-	if event.is_action("Left") and event.is_pressed():
+	if event.is_action_pressed("Left"):
 		new_index.y = max(0, btn_index.y - 1)
-	if event.is_action("Right")	and event.is_pressed():
+	if event.is_action_pressed("Right"):
 		new_index.y = btn_index.y + 1
 
-	if new_index != btn_index:
-		if new_index in btn_dict:
-			btn_index = new_index
+	if new_index in btn_dict and new_index != btn_index:
+		btn_index = new_index
 			
 		active_btn = btn_dict[btn_index]
 		call_deferred("_activate_button")
@@ -404,7 +403,6 @@ func exit_sub_menu() -> void:
 		skill_menu.hide()
 	elif item_menu.visible:
 		item_menu.hide()
-	
 	return
 
 
