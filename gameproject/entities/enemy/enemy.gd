@@ -1,3 +1,4 @@
+class_name Enemy
 extends Node2D
 
 @export var entity: BaseEntity
@@ -5,7 +6,6 @@ extends Node2D
 
 @onready var health_bar: ProgressBar = $HealthBar
 @onready var sprite: Sprite2D = $Sprite
-@onready var target_icon: TextureRect = $TargetIcon
 
 signal deal_damage
 signal target_enemy(e: Node2D)
@@ -27,6 +27,10 @@ func _update_health_bar() -> void:
 
 func _on_character_sprite_pressed() -> void:
 	target_enemy.emit(self)
+
+func set_target(target_icon: AnimatedSprite2D):
+	target_icon.global_position = health_bar.global_position
+	target_icon.global_position.x += (health_bar.size.x / 4)
 
 func set_active() -> void:
 	sprite.material.set_shader_parameter("width", 2)

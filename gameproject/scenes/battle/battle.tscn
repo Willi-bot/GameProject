@@ -1,12 +1,16 @@
-[gd_scene load_steps=16 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=21 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://w1gybd0e0wt7" path="res://textures/battle/maps/map_1.png" id="2_ygs6r"]
 [ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://textures/battle/icons/select_cursor.png" id="4_70km2"]
 [ext_resource type="Script" path="res://scenes/battle/victory_screen.gd" id="5_2c0ih"]
+[ext_resource type="Texture2D" uid="uid://bdb6wuawnaht" path="res://textures/battle/icons/target_icon_1.png" id="5_ov65g"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="6_qhg0e"]
+[ext_resource type="Texture2D" uid="uid://df646vmg2b5lf" path="res://textures/battle/icons/target_icon_2.png" id="6_xoad2"]
 [ext_resource type="Script" path="res://scenes/battle/defeat_screen.gd" id="7_van4q"]
+[ext_resource type="Texture2D" uid="uid://mi6skpp7kd0h" path="res://textures/battle/icons/target_icon_3.png" id="7_yueyb"]
+[ext_resource type="Texture2D" uid="uid://cys2my43gnb22" path="res://textures/battle/icons/target_icon_4.png" id="8_rw4mk"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
 texture = ExtResource("2_ygs6r")
@@ -99,6 +103,35 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 anti_aliasing = false
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_77sx5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_ov65g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_xoad2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_yueyb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_rw4mk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_yueyb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_xoad2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ov65g")
+}],
+"loop": true,
+"name": &"default",
+"speed": 6.0
+}]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gdtqs"]
 bg_color = Color(0, 0, 0, 0.901961)
@@ -199,12 +232,16 @@ size_flags_horizontal = 6
 theme = ExtResource("2_7y84o")
 text = "Choose your next action"
 
-[node name="SelectLayer" type="CanvasLayer" parent="."]
+[node name="IconLayer" type="CanvasLayer" parent="."]
 layer = 2
 
-[node name="SelectIcon" type="Sprite2D" parent="SelectLayer"]
-visible = false
+[node name="SelectIcon" type="Sprite2D" parent="IconLayer"]
 texture = ExtResource("4_70km2")
+
+[node name="TargetIcon" type="AnimatedSprite2D" parent="IconLayer"]
+sprite_frames = SubResource("SpriteFrames_77sx5")
+autoplay = "default"
+frame_progress = 0.471844
 
 [node name="VictoryScreen" type="CanvasLayer" parent="."]
 process_mode = 2

@@ -25,7 +25,8 @@ extends Control
 @onready var main_button: PackedScene = preload("res://scenes/battle/buttons/main_button.tscn")
 @onready var asset_button: PackedScene = preload("res://scenes/battle/buttons/asset_button.tscn")
 @onready var target_button: PackedScene = preload("res://scenes/battle/buttons/target_button.tscn")
-@onready var select_icon: Sprite2D = $SelectLayer/SelectIcon
+@onready var select_icon: Sprite2D = $IconLayer/SelectIcon
+@onready var target_icon: AnimatedSprite2D = $IconLayer/TargetIcon
 
 @onready var victory_screen: CanvasLayer = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
@@ -203,11 +204,9 @@ func _create_asset_button(asset: Asset) -> Button:
 	return btn
 	
 	
-func _choose_target(target: Node2D) -> void:
-	if selected_target:
-		selected_target.target_icon.hide()
+func _choose_target(target: Enemy) -> void:
 	selected_target = target
-	selected_target.target_icon.show()
+	selected_target.set_target(target_icon)
 	
 	
 func _choose_neg_target() -> void:
