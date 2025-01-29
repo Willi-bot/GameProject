@@ -43,8 +43,8 @@ func _on_exit_button_pressed() -> void:
 
 	save_file.store_line(json_string)
 	
-	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
-
+	Global._change_view(Global.MAIN_MENU_SCENE)
+	get_parent().remove_child(self)
 
 func _on_master_slider_value_changed(value: float) -> void:
 	var master_index = AudioServer.get_bus_index("Master")
