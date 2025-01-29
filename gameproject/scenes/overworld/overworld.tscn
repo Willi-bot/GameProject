@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://hmvu8uptgkg6" path="res://textures/overworld/icons/heart.png" id="7_c1tb4"]
 [ext_resource type="Texture2D" uid="uid://b2tgn71mejkg6" path="res://textures/overworld/icons/question_mark.png" id="8_7ftgb"]
 [ext_resource type="Texture2D" uid="uid://cxqs6rnw10f0g" path="res://textures/overworld/icons/coin.png" id="8_8w8om"]
-[ext_resource type="Texture2D" uid="uid://c16f4sj5ycduf" path="res://textures/battle/icons/target_icon.png" id="9_lpb8i"]
 [ext_resource type="Script" path="res://scenes/overworld/menu_layer.gd" id="10_77ouk"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="10_m6pb5"]
 [ext_resource type="PackedScene" uid="uid://dnnke485su8a5" path="res://scenes/overworld/team/team_menu.tscn" id="12_ot02u"]
@@ -37,6 +36,9 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qeuob"]
+load_path = "res://.godot/imported/target_icon.png-1bfc0a0fb3f7b1eb3a34a560741b5f97.ctex"
 
 [sub_resource type="Theme" id="Theme_7keqo"]
 
@@ -196,7 +198,7 @@ text = "12:30"
 
 [node name="TimeIcon" type="TextureRect" parent="TopMenu/TopMenu/Info/GameInfo/TimeContainer/TimeBox"]
 layout_mode = 2
-texture = ExtResource("9_lpb8i")
+texture = SubResource("CompressedTexture2D_qeuob")
 expand_mode = 2
 
 [node name="Controls" type="HBoxContainer" parent="TopMenu/TopMenu/Info"]

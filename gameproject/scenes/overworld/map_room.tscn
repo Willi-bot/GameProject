@@ -59,7 +59,6 @@ texture = ExtResource("2_1bv51")
 visible = false
 points = PackedVector2Array(-33.452, -14.8676, -34.1119, 3.26729, -29.7351, 18.5845, -6.60079, 29.2305, 17.402, 23.8474, 24.4432, 17.3355, 33.2924, 3.26434, 29.7351, -14.8676, 11.1507, -29.7351, -7.43378, -29.7351, -18.5845, -26.0182)
 closed = true
-default_color = Color(1, 0.23, 0.23, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -71,3 +70,5 @@ libraries = {
 }
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

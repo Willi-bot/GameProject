@@ -2,6 +2,8 @@ extends Node
 
 var current_view: Control = null
 
+var paused = false
+
 const PLAYER_SCENE := preload("res://entities/player/player.tscn")
 const ENEMY_SCENE := preload("res://entities/enemy/enemy.tscn")
 
@@ -193,6 +195,8 @@ func instantiate_entities():
 func instantiate_inventory():
 	var classes = get_item_classes()
 	
+	inventory = []
+	
 	for item in inventory_data:
 		var instance = classes[item.name].new() as Item
 		instance._init()
@@ -203,6 +207,9 @@ func instantiate_inventory():
 func instantiate_overworld():
 	overworld = OVERWORLD_SCENE.instantiate()
 	overworld.map_exited.connect(enter_scene)
+	
+	for child in get_children():
+		remove_child(child)
 	
 	add_child(overworld)
 	overworld.hide_map()

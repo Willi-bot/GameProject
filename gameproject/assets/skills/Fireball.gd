@@ -11,7 +11,7 @@ func _init():
 
 func execute(entity: BaseEntity) -> void:
 	entity.use_mp(mp_cost)
-	var target = battle_manager.selected_target
+	var target = bm.selected_target
 	var damage = entity.intelligence * 2
 	entity.be_damaged(damage)
 	turn_ended.emit()

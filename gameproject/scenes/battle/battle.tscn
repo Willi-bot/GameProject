@@ -1,14 +1,22 @@
-[gd_scene load_steps=12 format=3 uid="uid://ddcqmwgt0m5rv"]
+[gd_scene load_steps=21 format=3 uid="uid://ddcqmwgt0m5rv"]
 
 [ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://cqdohsgvnt34a" path="res://textures/battle/maps/map_1.png" id="2_ygs6r"]
 [ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://textures/battle/icons/select_cursor.png" id="4_70km2"]
-[ext_resource type="Script" path="res://scenes/battle/button_box.gd" id="4_p577l"]
+[ext_resource type="Script" path="res://scenes/battle/victory_screen.gd" id="5_2c0ih"]
+[ext_resource type="Texture2D" uid="uid://bdb6wuawnaht" path="res://textures/battle/icons/target_icon_1.png" id="5_ov65g"]
 [ext_resource type="Theme" uid="uid://6y50peg58foq" path="res://themes/BaseTheme.tres" id="6_qhg0e"]
+[ext_resource type="Texture2D" uid="uid://df646vmg2b5lf" path="res://textures/battle/icons/target_icon_2.png" id="6_xoad2"]
+[ext_resource type="Script" path="res://scenes/battle/defeat_screen.gd" id="7_van4q"]
+[ext_resource type="Texture2D" uid="uid://mi6skpp7kd0h" path="res://textures/battle/icons/target_icon_3.png" id="7_yueyb"]
+[ext_resource type="Texture2D" uid="uid://cys2my43gnb22" path="res://textures/battle/icons/target_icon_4.png" id="8_rw4mk"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6e2ut"]
 texture = ExtResource("2_ygs6r")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x63ku"]
+draw_center = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gyji5"]
 content_margin_left = 8.0
@@ -28,19 +36,59 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qq4u7"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.39864, 0.44, 0.0264, 0.705882)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.39864, 0.44, 0.0264, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b26lg"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.091, 0.2431, 0.26, 0.705882)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.091, 0.2431, 0.26, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yvhga"]
 content_margin_left = 8.0
 content_margin_top = 8.0
 content_margin_right = 8.0
 content_margin_bottom = 8.0
-bg_color = Color(0.287, 0.31115, 0.35, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
+bg_color = Color(0.287, 0.31115, 0.35, 0.705882)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
 border_color = Color(0.4756, 0.51388, 0.58, 1)
 border_blend = true
-corner_detail = 1
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iom26"]
 bg_color = Color(0.101961, 0.101961, 0.101961, 0.705882)
@@ -55,6 +103,35 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 anti_aliasing = false
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_77sx5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_ov65g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_xoad2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_yueyb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_rw4mk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_yueyb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_xoad2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ov65g")
+}],
+"loop": true,
+"name": &"default",
+"speed": 6.0
+}]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gdtqs"]
 bg_color = Color(0, 0, 0, 0.901961)
@@ -79,94 +156,97 @@ theme = ExtResource("2_7y84o")
 theme_override_styles/panel = SubResource("StyleBoxTexture_6e2ut")
 
 [node name="MenuBox" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 76)
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -80.0
-offset_right = -10.0
-offset_bottom = -10.0
+offset_left = -322.0
+offset_top = -64.0
+offset_right = 322.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/separation = 0
 
-[node name="ButtonPanel" type="PanelContainer" parent="MenuBox"]
+[node name="MenuContainer" type="PanelContainer" parent="MenuBox"]
+custom_minimum_size = Vector2(310, 72)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_x63ku")
+
+[node name="MainBox" type="PanelContainer" parent="MenuBox/MenuContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_gyji5")
 
-[node name="ButtonBox" type="GridContainer" parent="MenuBox/ButtonPanel"]
+[node name="Buttons" type="GridContainer" parent="MenuBox/MenuContainer/MainBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
-script = ExtResource("4_p577l")
 
-[node name="SkillMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel"]
+[node name="ItemBox" type="PanelContainer" parent="MenuBox/MenuContainer"]
 visible = false
-
-[node name="SkillBox" type="PanelContainer" parent="MenuBox/ButtonPanel/SkillMenu"]
-offset_right = 16.0
-offset_bottom = 16.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
-
-[node name="SkillContainer" type="GridContainer" parent="MenuBox/ButtonPanel/SkillMenu/SkillBox"]
-layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 4
-columns = 4
-
-[node name="PlayerTargetMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel"]
-visible = false
-
-[node name="TargetBox" type="PanelContainer" parent="MenuBox/ButtonPanel/PlayerTargetMenu"]
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
-
-[node name="TargetContainer" type="HBoxContainer" parent="MenuBox/ButtonPanel/PlayerTargetMenu/TargetBox"]
-layout_mode = 2
-
-[node name="ItemMenu" type="CanvasLayer" parent="MenuBox/ButtonPanel"]
-visible = false
-
-[node name="ItemBox" type="PanelContainer" parent="MenuBox/ButtonPanel/ItemMenu"]
-offset_right = 16.0
-offset_bottom = 16.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
-
-[node name="ItemContainer" type="GridContainer" parent="MenuBox/ButtonPanel/ItemMenu/ItemBox"]
-layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 4
-columns = 4
-
-[node name="PanelContainer" type="PanelContainer" parent="MenuBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_qq4u7")
+
+[node name="Buttons" type="GridContainer" parent="MenuBox/MenuContainer/ItemBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 4
+columns = 4
+
+[node name="SkillBox" type="PanelContainer" parent="MenuBox/MenuContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b26lg")
+
+[node name="Buttons" type="GridContainer" parent="MenuBox/MenuContainer/SkillBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 4
+columns = 4
+
+[node name="TargetBox" type="PanelContainer" parent="MenuBox/MenuContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yvhga")
+
+[node name="Buttons" type="GridContainer" parent="MenuBox/MenuContainer/TargetBox"]
+layout_mode = 2
+columns = 3
+
+[node name="DescriptionContainer" type="PanelContainer" parent="MenuBox"]
+custom_minimum_size = Vector2(310, 72)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_iom26")
 
-[node name="InfoText" type="Label" parent="MenuBox/PanelContainer"]
+[node name="InfoText" type="Label" parent="MenuBox/DescriptionContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme = ExtResource("2_7y84o")
 text = "Choose your next action"
 
-[node name="SelectLayer" type="CanvasLayer" parent="."]
-layer = 2
-
-[node name="SelectIcon" type="TextureRect" parent="SelectLayer"]
-visible = false
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(0.5, 0.5)
-mouse_filter = 2
+[node name="SelectIcon" type="Sprite2D" parent="."]
 texture = ExtResource("4_70km2")
-stretch_mode = 3
+
+[node name="TargetIcon" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_77sx5")
+autoplay = "default"
+frame = 3
+frame_progress = 0.743204
 
 [node name="VictoryScreen" type="CanvasLayer" parent="."]
-process_mode = 3
+process_mode = 2
+layer = 2
 visible = false
+script = ExtResource("5_2c0ih")
 
 [node name="SettingsBackground" type="Panel" parent="VictoryScreen"]
 anchors_preset = 15
@@ -261,8 +341,10 @@ size_flags_horizontal = 4
 text = "Continue"
 
 [node name="DefeatScreen" type="CanvasLayer" parent="."]
-process_mode = 3
+process_mode = 2
+layer = 2
 visible = false
+script = ExtResource("7_van4q")
 
 [node name="SettingsBackground" type="Panel" parent="DefeatScreen"]
 anchors_preset = 15
@@ -308,6 +390,8 @@ text = "Quit Game"
 layout_mode = 2
 text = "New Run	"
 
+[connection signal="visibility_changed" from="VictoryScreen" to="VictoryScreen" method="_on_visibility_changed"]
 [connection signal="pressed" from="VictoryScreen/Panel Container/HBoxContainer/ContinueGame" to="." method="_on_continue_game_pressed"]
+[connection signal="visibility_changed" from="DefeatScreen" to="DefeatScreen" method="_on_visibility_changed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/NewRun" to="." method="_on_new_run_pressed"]

@@ -28,12 +28,24 @@ func set_available(new_value: bool) -> void:
 		return
 
 	animation_player.play("RESET")
+	
+	line_2d.rotation = randf() * 360
+
+
+func show_highlight():
+	line_2d.show()
+
+func hide_highlight():
+	line_2d.hide()
+
 
 func mark_selected():
-	var random_rotation = randf() * 360
-	line_2d.rotation = random_rotation
+	line_2d.default_color = Color("ff3b3b")
 	line_2d.show()
 	
+	room.selected = true	
+
+
 func mark_inactive():
 	var shader = load("res://shaders/sprite_grayscale.gdshader")
 	
@@ -51,11 +63,9 @@ func set_room(new_data: Room) -> void:
 
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if not available or not event.is_action_pressed("Left_Mouse"):
+	if not available:
 		return 
 	
-	mark_selected()
-	
-	room.selected = true
-	selected.emit(room)	
-	
+	if event.is_action_pressed("LeftMouse"):
+		mark_selected()
+		selected.emit(room)

@@ -2,7 +2,7 @@
 	{
 			"name": "Hazard",
 			"max_hp": 300,
-			"current_hp": 300,
+			"current_hp": 29,
 			"max_mp": 5,
 			"current_mp": 5,
 			"mp_regen_rate": 1,
@@ -17,7 +17,7 @@
 		{
 			"name": "Meanion",
 			"max_hp": 300,
-			"current_hp": 300,
+			"current_hp": 20,
 			"max_mp": 5,
 			"current_mp": 5,
 			"mp_regen_rate": 1,
