@@ -188,6 +188,7 @@ size_flags_horizontal = 3
 columns = 2
 
 [node name="ItemBox" type="PanelContainer" parent="MenuBox/MenuContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -232,20 +233,18 @@ size_flags_horizontal = 6
 theme = ExtResource("2_7y84o")
 text = "Choose your next action"
 
-[node name="IconLayer" type="CanvasLayer" parent="."]
-layer = 2
-
-[node name="SelectIcon" type="Sprite2D" parent="IconLayer"]
+[node name="SelectIcon" type="Sprite2D" parent="."]
 texture = ExtResource("4_70km2")
 
-[node name="TargetIcon" type="AnimatedSprite2D" parent="IconLayer"]
+[node name="TargetIcon" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_77sx5")
 autoplay = "default"
-frame_progress = 0.471844
+frame = 3
+frame_progress = 0.743204
 
 [node name="VictoryScreen" type="CanvasLayer" parent="."]
 process_mode = 2
-layer = 3
+layer = 2
 visible = false
 script = ExtResource("5_2c0ih")
 
@@ -343,7 +342,7 @@ text = "Continue"
 
 [node name="DefeatScreen" type="CanvasLayer" parent="."]
 process_mode = 2
-layer = 3
+layer = 2
 visible = false
 script = ExtResource("7_van4q")
 

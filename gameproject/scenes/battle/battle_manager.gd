@@ -25,8 +25,8 @@ extends Control
 @onready var main_button: PackedScene = preload("res://scenes/battle/buttons/main_button.tscn")
 @onready var asset_button: PackedScene = preload("res://scenes/battle/buttons/asset_button.tscn")
 @onready var target_button: PackedScene = preload("res://scenes/battle/buttons/target_button.tscn")
-@onready var select_icon: Sprite2D = $IconLayer/SelectIcon
-@onready var target_icon: AnimatedSprite2D = $IconLayer/TargetIcon
+@onready var select_icon: Sprite2D = $SelectIcon
+@onready var target_icon: AnimatedSprite2D = $TargetIcon
 
 @onready var victory_screen: CanvasLayer = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen

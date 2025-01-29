@@ -59,11 +59,11 @@ func _input(event: InputEvent) -> void:
 		return
 	
 	if event.is_action("Map") and event.is_pressed() and Global.current_view:
-		switch_overworld()
+		switch_to_overworld()
 		return 
 
 
-func switch_overworld():
+func switch_to_overworld():
 	if Global.overworld.is_visible_in_tree():
 		Global.overworld.hide_map()
 		Global.current_view.show()
