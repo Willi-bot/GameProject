@@ -28,8 +28,11 @@ extends Control
 @onready var select_icon: Sprite2D = $SelectIcon
 @onready var target_icon: AnimatedSprite2D = $TargetIcon
 
-@onready var victory_screen: CanvasLayer = $VictoryScreen
+@onready var victory_screen: VictoryScreen = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
+
+var em: EntityManager = preload("res://scenes/battle/entity_manager.gd").new()
+var vm: VictoryManager = preload("res://scenes/battle/victory_manager.gd").new()
 
 var enemy_scene = preload("res://entities/enemy/enemy.tscn")
 
@@ -37,8 +40,9 @@ var item_btn = null
 var neg_btn = null
 
 var battlers = []
-var ally_battlers = []
-var enemy_battlers = []
+var player_battlers: Array[PlayerNode] = []
+var enemy_battlers: Array[EnemyNode] = []
+var slain_enemies: Array[EnemyEntity] = []
 
 var current_turn : Node2D
 var current_turn_idx : int
@@ -57,18 +61,13 @@ signal target_chosen(index: int)
 func _ready() -> void:
 	game_over = false
 	
-	var enemy_data = load_enemy_data()
-	_spawn_entity_nodes(enemy_data, Vector2(480, 120), -120)
-	
-	var ally_data = [Global.player] + Global.team
-	_spawn_entity_nodes(ally_data, Vector2(75, 215), 120)
+	player_battlers = em.spawn_team(Vector2(237, 215), 120, self)
+	enemy_battlers = em.spawn_enemies(Vector2(408, 110), -120, self)
 
-	battlers = ally_battlers + enemy_battlers
-	battlers.sort_custom(func(a, b): return a.entity.agility > b.entity.agility)
+	battlers = em.get_action_order(player_battlers, enemy_battlers)
 
 	_connect_callbacks()
 	_create_main_buttons()
-
 
 	call_deferred("_setup_boxes")
 
@@ -80,25 +79,10 @@ func _ready() -> void:
 	change_active_menu(main_box)
 
 
-func _spawn_entity_nodes(entities, start_pos, offset_x):
-	var index = 0
-	var scene_node = null
-	
-	for entity in entities:
-		scene_node = _add_entity_to_battle(entity, start_pos)
-		
-		if entity.type == BaseEntity.Type.ENEMY:
-			enemy_battlers.append(scene_node)
-		else:
-			ally_battlers.append(scene_node)
-		add_child(scene_node)
-		start_pos.x += offset_x
-
-
 func _connect_callbacks():
-	for ally in ally_battlers:
-		ally.entity.turn_ended.connect(_next_turn)
-		ally.entity.death.connect(process_ally_death.bind(ally))
+	for player in player_battlers:
+		player.entity.turn_ended.connect(_next_turn)
+		player.entity.death.connect(process_ally_death.bind(player))
 		
 	for enemy in enemy_battlers:
 		enemy.entity.turn_ended.connect(_next_turn)
@@ -124,20 +108,6 @@ func load_enemy_data() -> Array[BaseEntity]:
 		enemies.append(instance)
 	
 	return enemies
-
-
-func _add_entity_to_battle(entity: BaseEntity, pos) -> Node2D:	
-	var isAlly = entity.type != BaseEntity.Type.ENEMY
-	var scene = Global.PLAYER_SCENE if isAlly else Global.ENEMY_SCENE
-	var instance = scene.instantiate()
-	instance.entity = entity
-	
-	var sprite = instance.get_node("Sprite")
-	sprite.texture = entity.back_texture if isAlly else entity.front_texture
-	
-	instance.position = pos
-	
-	return instance
 
 
 func _attack_enemy() -> void:
@@ -204,7 +174,7 @@ func _create_asset_button(asset: Asset) -> Button:
 	return btn
 	
 	
-func _choose_target(target: Enemy) -> void:
+func _choose_target(target: EnemyNode) -> void:
 	selected_target = target
 	selected_target.set_target(target_icon)
 	
@@ -218,7 +188,7 @@ func _attack_random_ally() -> void:
 		return
 		
 	await get_tree().create_timer(1).timeout 
-	var ally = ally_battlers[randi_range(0, ally_battlers.size() - 1)]
+	var ally = player_battlers[randi_range(0, player_battlers.size() - 1)]
 	current_turn.entity.start_attacking(ally)
 	
 	
@@ -262,7 +232,8 @@ func clear_menu(grid: GridContainer) -> void:
 func process_enemy_death(enemy):
 	if game_over or Global.paused:
 		return
-		
+	
+	slain_enemies.append(enemy.entity)	
 	enemy_battlers.erase(enemy)
 	battlers.erase(enemy)
 	remove_child(enemy)
@@ -270,7 +241,8 @@ func process_enemy_death(enemy):
 	if(enemy_battlers.size() == 0):
 		game_over = true
 		get_tree().paused = true
-		victory_screen.show()
+		var earned_exp = vm.calculate_experience(slain_enemies)
+		victory_screen.show_results(earned_exp)
 		return
 		
 	_choose_target(enemy_battlers[0])
@@ -288,7 +260,7 @@ func process_ally_death(ally):
 		return
 	
 	battlers.erase(ally)
-	ally_battlers.erase(ally)
+	player_battlers.erase(ally)
 	
 	ally.sprite.self_modulate = Color.BLACK
 	
@@ -298,7 +270,7 @@ func process_ally_death(ally):
 func get_player_target() -> Node2D:
 	clear_menu(target_grid)
 	
-	for character in ally_battlers:
+	for character in player_battlers:
 		var target_button = target_button.instantiate() as TargetButton
 		target_button.initialize(self, character.entity.name)
 		target_button.pressed.connect(Callable(self, "_chosen_player").bind(character))
@@ -322,6 +294,9 @@ func _chosen_player(character: Node2D) -> void:
 
 
 func _on_continue_game_pressed() -> void:
+	var earned_exp = vm.calculate_experience(slain_enemies)
+	vm.distribute_exp(player_battlers, earned_exp)
+	
 	Global._show_map()
 
 

@@ -17,13 +17,16 @@ enum Type {
 @export var current_mp: int
 @export var mp_regen_rate: int = 1
 
-@export var damage : int
+@export var strength : int
 @export var intelligence : int
 @export var agility : int
+@export var luck : int
+
+@export var level : int
+
 @export var skills : Array[Skill] = []
 
-@export var front_texture: Texture
-@export var back_texture: Texture
+@export var texture: Texture
 
 signal turn_ended
 signal health_changed
@@ -31,7 +34,7 @@ signal mp_changed
 signal death
 
 func start_attacking(enemy_target : Node2D) -> void:
-	enemy_target.entity.be_damaged(damage)
+	enemy_target.entity.be_damaged(strength)
 	
 	turn_ended.emit()
 	
@@ -58,8 +61,8 @@ func use_mp(amount : int) -> void:
 func regen_mp() -> void:
 	current_mp = min(max_mp, current_mp + mp_regen_rate)
 	mp_changed.emit()
-	
-	
+
+
 func serialize() -> Dictionary:
 	var data = {
 		"name": name,
@@ -69,12 +72,11 @@ func serialize() -> Dictionary:
 		"max_mp": max_mp,
 		"current_mp": current_mp,
 		"mp_regen_rate": mp_regen_rate,
-		"damage": damage,
+		"strength": strength,
+		"luck": luck,
 		"intelligence": intelligence,
 		"agility": agility,
 		"skills": [],
-		"front_texture": front_texture.resource_path,
-		"back_texture": back_texture.resource_path
 	}
 	
 	for skill in skills:
@@ -88,21 +90,38 @@ func deserialize(data: Dictionary) -> void:
 	
 	name = data["name"]
 	type = data["type"]
-	max_hp = data["max_hp"]
-	current_hp = data["current_hp"]
+	
+	level = data.get("level", 1)
+
+	# Scale with level
+	calculate_stats(data, level)
+	
+	current_hp = data.get("current_hp", max_hp)
 	max_mp = data["max_mp"]
-	current_mp = data["current_mp"]
+	current_mp = data.get("current_mp", max_mp)
 	mp_regen_rate = data["mp_regen_rate"]
-	damage = data["damage"]
-	intelligence = data["intelligence"]
-	agility = data["agility"]
-	front_texture = load(data["front_texture"])
-	back_texture = load(data["back_texture"])
+	
 	
 	for skill_name in data["skills"]:
 		var skill = classes[skill_name].new()
 		skill._init()
 		skills.append(skill)
+
+
+func calculate_stats(data, level):
+	max_hp = data["max_hp"] * level + 10
+	strength = data["strength"] * level
+	intelligence = data["intelligence"] * level
+	agility = data["agility"] * level
+	luck = data["luck"] * level
+
+
+func format_string(input: String) -> String:
+	return input.to_lower().replace(" ", "_")
+
+
+func get_sprite_path(sprite_name, side) -> String:
+	return "res://textures/entities/" + sprite_name + "_" + side + ".png"
 
 
 func get_skill_classes() -> Dictionary:

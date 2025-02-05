@@ -7,7 +7,8 @@ var paused = false
 const PLAYER_SCENE := preload("res://entities/player/player.tscn")
 const ENEMY_SCENE := preload("res://entities/enemy/enemy.tscn")
 
-const BASE_ENTITY: Resource = preload("res://entities/base_entity.gd")
+const PLAYER_ENTITY: Resource = preload("res://entities/player_entity.gd")
+const ENEMY_ENTITY: Resource = preload("res://entities/enemy_entity.gd")
 
 # MAIN SCENES
 const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
@@ -26,14 +27,17 @@ const OVERWORLD_SCENE := preload("res://scenes/overworld/overworld.tscn")
 @export var run_in_progress: bool = false
 @export var elapsed_time: float = 0.0
 @export var gold: int = 0.0
-
+# TODO: Use this once more maps become available
+@export var current_map: int = 0
+@export var floors_climbed: int = 0	
+	
 # PLAYER
 var player_data: Dictionary = {}
-@export var player: BaseEntity
+@export var player: PlayerEntity
 
 # PLAYER TEAM
 var team_data: Array = []
-@export var team: Array[BaseEntity]
+@export var team: Array[PlayerEntity]
 
 # INVENTORY
 var inventory_data: Array
@@ -124,6 +128,8 @@ func save_state() -> void:
 		"team": team_data,
 		"inventory": items_data,
 		"overworld": overworld.serialize(),
+		"floors_climbed": floors_climbed,
+		"current_map": current_map,
 		"elapsed_time": elapsed_time,
 		"gold": gold,
 	}
@@ -150,6 +156,8 @@ func init_game_state() -> bool:
 	gold = data["gold"]
 	overworld_data = data["overworld"]
 	inventory_data = data["inventory"]
+	floors_climbed = data["floors_climbed"]
+	current_map = data["current_map"]
 	
 	run_in_progress = true
 
@@ -181,13 +189,13 @@ func instantiate_game():
 
 		
 func instantiate_entities():
-	player = BASE_ENTITY.new()
+	player = PLAYER_ENTITY.new()
 	player.deserialize(player_data)
 	
 	team = []
 	
 	for member_data in team_data:
-		var member = BASE_ENTITY.new()
+		var member = PLAYER_ENTITY.new()
 		member.deserialize(member_data)
 		team.append(member)
 

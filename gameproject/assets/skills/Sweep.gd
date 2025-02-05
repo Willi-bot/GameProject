@@ -6,7 +6,7 @@ func _init():
 	super._init()
 	
 	name = "Sweep"
-	description = "Hawk tuah sweep on that thang"
+	description = "Attack all enemies dealing physical damage"
 	mp_cost = 3
 
 func execute(entity: BaseEntity) -> void:
@@ -14,6 +14,6 @@ func execute(entity: BaseEntity) -> void:
 	
 	var all_enemies = bm.enemy_battlers.duplicate()
 	for target in all_enemies:
-		target.entity.be_damaged(220)
+		target.entity.be_damaged(entity.strength * 10)
 	turn_ended.emit()
 	

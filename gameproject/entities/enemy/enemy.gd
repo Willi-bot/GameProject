@@ -1,7 +1,7 @@
-class_name Enemy
+class_name EnemyNode
 extends Node2D
 
-@export var entity: BaseEntity
+@export var entity: EnemyEntity
 @export var scale_factor: float
 
 @onready var health_bar: ProgressBar = $HealthBar

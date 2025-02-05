@@ -1,0 +1,41 @@
+[
+	{
+		"name": "Meanion",
+		"max_hp": 20,
+		"max_mp": 5,
+		"mp_regen_rate": 1,		
+		"strength": 3,
+		"intelligence": 2,
+		"agility": 3,
+		"luck": 1,
+		"skills": ["Fireball"],
+		"type": 2,
+		"difficulty": 1
+	},
+	{
+		"name": "Lonely shadow",
+		"max_hp": 20,
+		"max_mp": 5,
+		"mp_regen_rate": 1,		
+		"strength": 3,
+		"intelligence": 2,
+		"agility": 3,
+		"luck": 1,
+		"skills": ["Fireball"],
+		"type": 2,
+		"difficulty": 2
+	},
+		{
+		"name": "Hazard",
+		"max_hp": 20,
+		"max_mp": 5,
+		"mp_regen_rate": 1,		
+		"strength": 1,
+		"intelligence": 2,
+		"agility": 3,
+		"luck": 1,
+		"skills": ["Fireball"],
+		"type": 2,
+		"difficulty": 1
+	}
+]

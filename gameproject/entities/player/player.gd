@@ -1,11 +1,12 @@
-class_name PlayerEntity
+class_name PlayerNode
 extends Node2D
 
-@export var entity: BaseEntity
+@export var entity: PlayerEntity
 
 @onready var health_bar: ProgressBar = $Container/Info/HealthBar
 @onready var current_health: Label = $Container/Info/HealthBar/CurrentHP
-@onready var entity_name: Label = $Container/Info/Name
+@onready var entity_name: Label = $Container/Info/TopRow/Name
+@onready var entity_level: Label = $Container/Info/TopRow/Level
 @onready var sprite: Sprite2D = $Sprite
 @onready var back_sprite: Sprite2D = $BackSprite
 
@@ -16,19 +17,26 @@ extends Node2D
 func _ready() -> void:
 	entity.health_changed.connect(_update_health_indicator)
 	entity.mp_changed.connect(_update_mana_indicator)
+	entity.level_changed.connect(_update_level_indicator)
 	
+	_update_level_indicator()
 	_update_health_indicator()
 	_add_mana_orbs(entity.max_mp)
 	_update_mana_indicator()
 	
 	entity_name.text = entity.name
 	
-	
 func _process(delta: float) -> void:
 	pass
 
 func start_turn() -> void:
 	pass
+	
+	
+func _update_level_indicator():
+	entity_level.text = "Lvl: " + str(entity.level)	
+	_update_health_indicator()
+
 
 func _update_health_indicator():
 	health_bar.max_value = entity.max_hp
@@ -52,6 +60,7 @@ func _update_mana_indicator():
 			orb.texture = mana_texture
 		else:
 			orb.texture = mana_empty_texture
+
 
 func get_hp_color(current_hp: float, max_hp: float) -> Color:
 	current_hp = clamp(current_hp, 0, max_hp)

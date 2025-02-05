@@ -1,11 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://yb54vb3tr2vx"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qsy6x"]
-load_path = "res://.godot/imported/line.png-a3f7c8e98580d81cf9bce7c14cc4085c.ctex"
+[ext_resource type="Texture2D" uid="uid://dolwh570nvqow" path="res://textures/overworld/icons/path.png" id="1_xbdd2"]
 
 [node name="MapLine" type="Line2D"]
 texture_repeat = 2
 width = 16.0
 default_color = Color(0.960784, 0.960784, 0.862745, 1)
-texture = SubResource("CompressedTexture2D_qsy6x")
+texture = ExtResource("1_xbdd2")
 texture_mode = 1

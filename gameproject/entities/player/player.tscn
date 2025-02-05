@@ -14,9 +14,11 @@ current_hp = 0
 max_mp = 0
 current_mp = 0
 mp_regen_rate = 1
-damage = 0
+strength = 0
 intelligence = 0
 agility = 0
+luck = 0
+level = 0
 skills = Array[ExtResource("3_0p4oy")]([])
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efpqj"]
@@ -63,12 +65,29 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 12
 
-[node name="Name" type="Label" parent="Container/Info"]
+[node name="TopRow" type="HBoxContainer" parent="Container/Info"]
+custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Container/Info/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/line_spacing = 12
 theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 16
 text = "Jeremiah"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Level" type="Label" parent="Container/Info/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/line_spacing = 12
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 16
+text = "Lvl: 12"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -93,7 +112,7 @@ anchor_bottom = -0.75
 size_flags_vertical = 1
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "HP"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -112,7 +131,7 @@ grow_horizontal = 0
 size_flags_vertical = 1
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "100"
 horizontal_alignment = 1
 vertical_alignment = 1

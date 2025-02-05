@@ -256,7 +256,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gdtqs")
 
-[node name="Panel Container" type="PanelContainer" parent="VictoryScreen"]
+[node name="Panel" type="PanelContainer" parent="VictoryScreen"]
 anchors_preset = -1
 anchor_left = 0.3
 anchor_top = 0.3
@@ -266,11 +266,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("6_qhg0e")
 
-[node name="HBoxContainer" type="VBoxContainer" parent="VictoryScreen/Panel Container"]
+[node name="HBoxContainer" type="VBoxContainer" parent="VictoryScreen/Panel"]
 layout_mode = 2
 theme_override_constants/separation = 24
 
-[node name="VictoryLabel" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer"]
+[node name="VictoryLabel" type="Label" parent="VictoryScreen/Panel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -279,63 +279,63 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 26
 text = "VICTORY ACHIEVED"
 
-[node name="BattleSummary" type="VBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer"]
+[node name="BattleSummary" type="VBoxContainer" parent="VictoryScreen/Panel/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Gold" type="HBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary"]
+[node name="Gold" type="HBoxContainer" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold"]
+[node name="Label" type="Label" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary/Gold"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Gold:"
 
-[node name="Label2" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold"]
+[node name="Value" type="Label" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary/Gold"]
 layout_mode = 2
 size_flags_horizontal = 10
-text = "1337"
+text = "0"
 
-[node name="Gold2" type="HBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary"]
+[node name="Experience" type="HBoxContainer" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold2"]
+[node name="Label" type="Label" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary/Experience"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Experience:"
 
-[node name="Label2" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold2"]
+[node name="Value" type="Label" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary/Experience"]
 layout_mode = 2
 size_flags_horizontal = 10
 text = "12"
 
-[node name="Gold3" type="HBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary"]
+[node name="Items" type="HBoxContainer" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold3"]
+[node name="Label" type="Label" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Items found:"
 
-[node name="Label2" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold3"]
+[node name="Value" type="Label" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary/Items"]
 layout_mode = 2
 size_flags_horizontal = 10
 text = "None"
 
-[node name="Gold4" type="HBoxContainer" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary"]
+[node name="Creatures" type="HBoxContainer" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold4"]
+[node name="Label" type="Label" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary/Creatures"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Creatures captured:"
 
-[node name="Label2" type="Label" parent="VictoryScreen/Panel Container/HBoxContainer/BattleSummary/Gold4"]
+[node name="Value" type="Label" parent="VictoryScreen/Panel/HBoxContainer/BattleSummary/Creatures"]
 layout_mode = 2
 size_flags_horizontal = 10
 text = "None"
 
-[node name="ContinueGame" type="Button" parent="VictoryScreen/Panel Container/HBoxContainer"]
+[node name="ContinueGame" type="Button" parent="VictoryScreen/Panel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Continue"
@@ -391,7 +391,7 @@ layout_mode = 2
 text = "New Run	"
 
 [connection signal="visibility_changed" from="VictoryScreen" to="VictoryScreen" method="_on_visibility_changed"]
-[connection signal="pressed" from="VictoryScreen/Panel Container/HBoxContainer/ContinueGame" to="." method="_on_continue_game_pressed"]
+[connection signal="pressed" from="VictoryScreen/Panel/HBoxContainer/ContinueGame" to="." method="_on_continue_game_pressed"]
 [connection signal="visibility_changed" from="DefeatScreen" to="DefeatScreen" method="_on_visibility_changed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
 [connection signal="pressed" from="DefeatScreen/Panel Container/HBoxContainer/HBoxContainer/NewRun" to="." method="_on_new_run_pressed"]

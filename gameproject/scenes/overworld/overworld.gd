@@ -14,7 +14,6 @@ const MAP_LINE = preload("res://scenes/overworld/map_line.tscn")
 @onready var visuals: Node2D = $Visuals
 
 var map_data: Array[Array]
-var floors_climbed: int
 var last_room: Room
 var highlight = 0
 var available_rooms: Array[MapRoom] = []
@@ -32,7 +31,7 @@ func reset():
 func generate_new_map() -> void:
 	reset()
 	camera.position = Vector2.ZERO
-	floors_climbed = 0
+	Global.floors_climbed = 0
 	map_data = map_generator.generate_map()
 	create_map()
 	unlock_floor(0)
@@ -52,10 +51,10 @@ func create_map():
 
 	visuals.position.x = (get_viewport_rect().size.x - map_width_pixels) / 2
 	visuals.position.y = map_texture.position.y / 2 + 650
-	camera.position.y = -(floors_climbed * MapGenerator.Y_DIST)
+	camera.position.y = -(Global.floors_climbed * MapGenerator.Y_DIST)
 
 
-func unlock_floor(which_floor: int = floors_climbed) -> void:
+func unlock_floor(which_floor: int = Global.floors_climbed) -> void:
 	for map_room: MapRoom in rooms.get_children():
 		if map_room.room.row == which_floor:
 			available_rooms.append(map_room)
@@ -74,7 +73,7 @@ func unlock_next_rooms() -> void:
 	highlight = 0
 	available_rooms[highlight].show_highlight()
 	
-	camera.position.y = - (MapGenerator.Y_DIST * floors_climbed)
+	camera.position.y = - (MapGenerator.Y_DIST * Global.floors_climbed)
 	
 
 func show_map(input_allowed: bool = true) -> void:
@@ -111,7 +110,7 @@ func _spawn_room(room: Room) -> void:
 	if room.selected:
 		new_map_room.mark_selected()
 	
-	if room.row < floors_climbed:
+	if room.row < Global.floors_climbed:
 		new_map_room.mark_inactive()
 		
 		
@@ -134,7 +133,7 @@ func _on_map_room_selected(room: Room):
  	
 	last_room = room
 	available_rooms = []
-	floors_climbed += 1
+	Global.floors_climbed += 1
 
 	map_exited.emit(room.type)
 
@@ -149,13 +148,11 @@ func serialize() -> Dictionary:
 	
 	return {
 		"map_data": serialized_map,
-		"floors_climbed": floors_climbed,
 		"last_room": last_room.serialize() if last_room else null
 	}
 
 
 func deserialize(data: Dictionary) -> void:
-	floors_climbed = data.get("floors_climbed", 0)
 	last_room = null
 	if data["last_room"]:		
 		last_room = Room.new()

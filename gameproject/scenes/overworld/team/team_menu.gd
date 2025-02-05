@@ -13,7 +13,7 @@ func pause() -> void:
 	populate_bench(inactive_bench, false, Global.team)
 
 
-func populate_bench(bench: HBoxContainer, active: bool, team: Array[BaseEntity]) -> void:
+func populate_bench(bench: HBoxContainer, active: bool, team: Array[PlayerEntity]) -> void:
 	for entity in team:
 		var new_member := member_node.instantiate() as PanelContainer
 		var texture_rect := new_member.get_node("Sprite") as TextureRect
