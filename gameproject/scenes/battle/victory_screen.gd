@@ -9,6 +9,7 @@ func _on_visibility_changed() -> void:
 	if visible:
 		continue_btn.grab_focus.call_deferred()
 
+
 func show_results(exp: int):
 	exp_value.text = str(exp)
 	show()

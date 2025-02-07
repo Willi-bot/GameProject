@@ -1,6 +1,7 @@
 extends Node
 class_name VictoryManager
 
+
 func calculate_experience(enemies: Array[EnemyEntity]):
 	var difficulty_sum = 0
 	var level_sum = 0
