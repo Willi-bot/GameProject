@@ -174,11 +174,13 @@ func deserialize(data: Dictionary) -> void:
 func _input(event: InputEvent) -> void:
 	var new_highlight = highlight
 	
+	
 	if event.is_action_pressed("Left"):
 		new_highlight = (highlight - 1) % len(available_rooms)
 
 	if event.is_action_pressed("Right"):
 		new_highlight = (highlight + 1) % len(available_rooms)
+
 
 	if new_highlight != highlight:
 		available_rooms[highlight].hide_highlight()
@@ -186,8 +188,7 @@ func _input(event: InputEvent) -> void:
 		available_rooms[highlight].show_highlight()
 
 	if event.is_action_pressed("Confirm"):
-		available_rooms[highlight].mark_selected()
-
+		available_rooms[highlight].proceed_to_room()
 
 
 func _on_mouse_entered(room: MapRoom) -> void:

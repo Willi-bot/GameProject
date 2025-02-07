@@ -10,7 +10,6 @@ func serialize() -> Dictionary:
 	return data
 
 
-
 func deserialize(data: Dictionary) -> void:
 	super.deserialize(data)
 	

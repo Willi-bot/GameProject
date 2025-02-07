@@ -18,6 +18,7 @@ func _ready() -> void:
 	entity.health_changed.connect(_update_health_indicator)
 	entity.mp_changed.connect(_update_mana_indicator)
 	entity.level_changed.connect(_update_level_indicator)
+	entity.death.connect(_set_inactive)
 	
 	_update_level_indicator()
 	_update_health_indicator()
@@ -25,14 +26,12 @@ func _ready() -> void:
 	_update_mana_indicator()
 	
 	entity_name.text = entity.name
-	
-func _process(delta: float) -> void:
-	pass
 
-func start_turn() -> void:
-	pass
-	
-	
+
+func start_turn():
+	entity.regen_mp()
+
+
 func _update_level_indicator():
 	entity_level.text = "Lvl: " + str(entity.level)	
 	_update_health_indicator()
@@ -60,6 +59,10 @@ func _update_mana_indicator():
 			orb.texture = mana_texture
 		else:
 			orb.texture = mana_empty_texture
+
+
+func _set_inactive():
+	sprite.self_modulate = Color.BLACK
 
 
 func get_hp_color(current_hp: float, max_hp: float) -> Color:

@@ -1,6 +1,6 @@
 [gd_scene load_steps=21 format=3 uid="uid://ddcqmwgt0m5rv"]
 
-[ext_resource type="Script" path="res://scenes/battle/battle_manager.gd" id="1_a8f3l"]
+[ext_resource type="Script" path="res://scenes/battle/battle.gd" id="1_32k0s"]
 [ext_resource type="Theme" uid="uid://b7xxgdb6l1oo8" path="res://scenes/battle/BattleTheme.tres" id="2_7y84o"]
 [ext_resource type="Texture2D" uid="uid://cqdohsgvnt34a" path="res://textures/battle/maps/map_1.png" id="2_ygs6r"]
 [ext_resource type="Texture2D" uid="uid://bc6lonn54lwe7" path="res://textures/battle/icons/select_cursor.png" id="4_70km2"]
@@ -143,7 +143,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_a8f3l")
+script = ExtResource("1_32k0s")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

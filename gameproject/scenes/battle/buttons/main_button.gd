@@ -1,7 +1,6 @@
 extends BattleButton
 class_name MainButton
 
-func initialize(battle_manager: BattleManager, name: String, desc: String) -> void:
-	bm = battle_manager
+func initialize(name: String, desc: String) -> void:
 	description = desc
 	text = name

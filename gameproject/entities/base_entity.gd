@@ -33,6 +33,7 @@ signal health_changed
 signal mp_changed
 signal death
 
+
 func start_attacking(enemy_target : Node2D) -> void:
 	enemy_target.entity.be_damaged(strength)
 	

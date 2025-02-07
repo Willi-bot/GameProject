@@ -48,6 +48,9 @@ var overworld_data: Dictionary
 @export var overworld: Overworld
 
 
+@export var bm: BattleManager = null
+
+
 func _process(delta: float) -> void:
 	elapsed_time += delta
 
@@ -243,6 +246,7 @@ func enter_scene(type: Room.Type) -> void:
 	match type:
 		Room.Type.MONSTER:
 			_change_view(BATTLE_SCENE)
+			bm = current_view
 		Room.Type.SUPRISE:
 			_change_view(SUPRISE_SCENE)
 		Room.Type.CAMPFIRE:
