@@ -61,11 +61,14 @@ func set_room(new_data: Room) -> void:
 	sprite_2d.texture = ICONS[room.type][0]
 	sprite_2d.scale = ICONS[room.type][1]
 
+func proceed_to_room():
+	mark_selected()
+	selected.emit(room)
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if not available:
 		return 
 	
 	if event.is_action_pressed("LeftMouse"):
-		mark_selected()
-		selected.emit(room)
+		proceed_to_room()
+		return

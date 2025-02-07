@@ -10,8 +10,6 @@ enum Type {
 @export var description: String
 @export var type: Type
 
-var bm: BattleManager
-
 signal turn_ended
 
 func _init():

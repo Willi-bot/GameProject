@@ -28,6 +28,9 @@ extends Control
 @onready var select_icon: Sprite2D = $SelectIcon
 @onready var target_icon: AnimatedSprite2D = $TargetIcon
 
+@onready var negotation_scene = preload("res://scenes/battle/negotiation/Negotiation.tscn")
+@onready var negotiation: Negotiation = null
+
 @onready var victory_screen: VictoryScreen = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
 
@@ -52,12 +55,10 @@ var selected_target : Node2D
 var ally_turn: bool = true
 var game_over: bool = false
 
-# Used for keyboard selection
-var btn_dict = {}
-var btn_index = Vector2.ZERO
-var active_btn: BattleButton = null
+var initiate_negotiation: bool = false
 
 signal target_chosen(index: int)
+
 
 func _ready() -> void:
 	game_over = false
@@ -77,7 +78,7 @@ func _ready() -> void:
 	
 	_choose_target(enemy_battlers[0])
 
-	im = im.new(main_box, item_box, skill_box, target_box)
+	im = im.new(main_box, item_box, skill_box, target_box) as InputManager
 
 	im.change_active_menu(main_box)
 
@@ -91,6 +92,7 @@ func _connect_callbacks():
 		enemy.entity.turn_ended.connect(_next_turn)
 		enemy.deal_damage.connect(_attack_random_ally)
 		enemy.target_enemy.connect(_choose_target)
+		enemy.target_enemy.connect(_start_negotiation)
 		enemy.entity.death.connect(process_enemy_death.bind(enemy))
 
 
@@ -98,31 +100,18 @@ func get_button(name: String) -> Button:
 	return main_box.get_node(name)
 
 
-func load_enemy_data() -> Array[BaseEntity]:
-	var file = FileAccess.open("res://entities/entity_data.json", FileAccess.READ)
-	var json = JSON.new()
-	json.parse(file.get_as_text())
-	
-	var enemies = [] as Array[BaseEntity]
-
-	for creature in json.get_data():
-		var instance = Global.BASE_ENTITY.new() as BaseEntity
-		instance.deserialize(creature)
-		enemies.append(instance)
-	
-	return enemies
-
-
 func _attack_enemy() -> void:
 	if game_over:
 		return
+		
 	current_turn.entity.start_attacking(selected_target)
 		
 		
 func _choose_skill() -> void:
 	if game_over:
 		return
-	select_icon.visible = false
+		
+	select_icon.hide()
 	
 	clear_menu(skill_grid)
 	
@@ -147,29 +136,28 @@ func _create_main_buttons():
 	var container = main_box.get_node("Buttons")
 	
 	var attack_btn = main_button.instantiate() as MainButton
-	attack_btn.initialize(self, "Attack", "Attack an enemy")	
-	container.add_child(attack_btn)
+	attack_btn.initialize("Attack", "Attack an enemy")	
 	attack_btn.pressed.connect(_attack_enemy)
 	
 	var skill_btn = main_button.instantiate() as MainButton
-	skill_btn.initialize(self, "Skills", "Choose a skill")	
-	container.add_child(skill_btn)
+	skill_btn.initialize("Skills", "Choose a skill")	
 	skill_btn.pressed.connect(_choose_skill)
 	
 	item_btn = main_button.instantiate() as MainButton
-	item_btn.initialize(self, "Item", "Choose an item")	
-	container.add_child(item_btn)
+	item_btn.initialize("Item", "Choose an item")	
 	item_btn.pressed.connect(_choose_item)
 	
 	neg_btn = main_button.instantiate() as MainButton
-	neg_btn.initialize(self, "Negotiate", "Negotiate with enemy")	
-	container.add_child(neg_btn)
-	# TODO: neg_btn.pressed.connect()
+	neg_btn.initialize("Negotiate", "Negotiate with enemy")	
+	neg_btn.pressed.connect(_choose_neg_target)
 
-	
+	for c in [attack_btn, skill_btn, item_btn, neg_btn]:
+		container.add_child(c)
+
+
 func _create_asset_button(asset: Asset) -> Button:
 	var btn = asset_button.instantiate() as AssetButton
-	btn.initialize(asset, self)
+	btn.initialize(asset)
 	
 	btn.pressed.connect(Callable(btn, "_on_button_pressed").bind(current_turn.entity))
 	btn.asset.turn_ended.connect(_next_turn)
@@ -180,10 +168,6 @@ func _create_asset_button(asset: Asset) -> Button:
 func _choose_target(target: EnemyNode) -> void:
 	selected_target = target
 	selected_target.set_target(target_icon)
-	
-	
-func _choose_neg_target() -> void:
-	print("Choose a Negotiation Partner")
 	
 	
 func _attack_random_ally() -> void:
@@ -213,6 +197,13 @@ func _update_turn() -> void:
 	var isPlayer = type == BaseEntity.Type.PLAYER
 	ally_turn = isPlayer or type == BaseEntity.Type.ALLY
 	
+	if is_instance_valid(negotiation):
+		select_icon.show()
+		for child in main_grid.get_children():
+			child.show()
+		
+		remove_child(negotiation)
+	
 	if ally_turn:
 		im.change_active_menu(main_box)
 	
@@ -221,8 +212,6 @@ func _update_turn() -> void:
 
 	item_btn.visible = isPlayer
 	neg_btn.visible = isPlayer
-	
-	current_turn.entity.regen_mp()
 		
 	current_turn.start_turn()
 	
@@ -241,11 +230,12 @@ func process_enemy_death(enemy):
 	battlers.erase(enemy)
 	remove_child(enemy)
 	
+	
 	if(enemy_battlers.size() == 0):
 		game_over = true
 		get_tree().paused = true
-		var earned_exp = vm.calculate_experience(slain_enemies)
-		victory_screen.show_results(earned_exp)
+		vm.calculate_experience(slain_enemies)
+		victory_screen.show_results(vm.earned_exp)
 		return
 		
 	_choose_target(enemy_battlers[0])
@@ -265,7 +255,6 @@ func process_ally_death(ally):
 	battlers.erase(ally)
 	player_battlers.erase(ally)
 	
-	ally.sprite.self_modulate = Color.BLACK
 	
 	Global.team.erase(ally.entity)
 
@@ -275,12 +264,13 @@ func get_player_target() -> Node2D:
 	
 	for character in player_battlers:
 		var target_button = target_button.instantiate() as TargetButton
-		target_button.initialize(self, character.entity.name)
+		target_button.initialize(character.entity.name)
 		target_button.pressed.connect(Callable(self, "_chosen_player").bind(character))
 		
 		target_grid.add_child(target_button)
 	
-	select_icon.hide()
+	select_icon.visible = false
+	im.change_active_menu(target_box)
 	
 	info_text.text = "Choose a player character"
 	
@@ -296,8 +286,7 @@ func _chosen_player(character: Node2D) -> void:
 
 
 func _on_continue_game_pressed() -> void:
-	var earned_exp = vm.calculate_experience(slain_enemies)
-	vm.distribute_exp(player_battlers, earned_exp)
+	vm.distribute_exp(player_battlers)
 	
 	Global._show_map()
 
@@ -314,9 +303,44 @@ func _input(event: InputEvent) -> void:
 	if game_over or Global.paused:
 		return
 	
-	if ally_turn and event.is_action_pressed("EnemySelection"):	
-		var index = im.select_enemy(event, selected_target, enemy_battlers)	
-		_choose_target(enemy_battlers[index])
+	if ally_turn and event.is_action_pressed("EnemySelection"):		
+		_choose_target(enemy_battlers[im.select_enemy(event, selected_target, enemy_battlers)])		
 		return
-	
+				
 	im.select_action(event)
+
+
+func _choose_neg_target() -> void:
+	select_icon.hide()
+	for child in main_grid.get_children():
+		child.hide()
+	
+	info_text.text = "Confirm negotiation partner"
+	
+	initiate_negotiation = true
+	
+	# TODO make enemies light up corresponding to success chance
+	
+	
+func _start_negotiation(enemy) -> void:
+	# if initiate negotiation is true pass enemy to Negotiation scene and 
+	# start negotiation
+	if initiate_negotiation:
+		# TODO calculate success chance based on enemy + level diff + damage dealt
+		var success_chance: float = 0.5
+		
+		negotiation = negotation_scene.instantiate()
+		
+		negotiation.set_negotiation_partner(self, success_chance)
+		
+		negotiation.negotiation_end.connect(_process_end_of_negotiation)
+		
+		add_child(negotiation)
+
+
+func _process_end_of_negotiation(success) -> void:
+	if success:
+		# Add enemy to party
+		pass
+	
+	_next_turn()

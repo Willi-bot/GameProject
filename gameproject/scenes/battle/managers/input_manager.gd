@@ -57,6 +57,8 @@ func select_enemy(event: InputEvent, selected_target: EnemyNode, enemy_battlers:
 		enemy_index = (enemy_index - 1) % len(enemy_battlers)
 		return enemy_index
 
+	return enemy_index
+		
 		
 func change_active_menu(menu: PanelContainer):
 	for menu_box in [item_box, target_box, skill_box, main_box]:
