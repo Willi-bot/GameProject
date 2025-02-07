@@ -28,6 +28,9 @@ extends Control
 @onready var select_icon: Sprite2D = $SelectIcon
 @onready var target_icon: AnimatedSprite2D = $TargetIcon
 
+@onready var negotation_scene = preload("res://scenes/battle/negotiation/Negotiation.tscn")
+@onready var negotiation: Negotiation = null
+
 @onready var victory_screen: VictoryScreen = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
 
@@ -50,6 +53,8 @@ var current_turn_idx : int
 var selected_target : Node2D 
 var ally_turn: bool = true
 var game_over: bool = false
+
+var initiate_negotiation: bool = false
 
 # Used for keyboard selection
 var btn_dict = {}
@@ -88,6 +93,7 @@ func _connect_callbacks():
 		enemy.entity.turn_ended.connect(_next_turn)
 		enemy.deal_damage.connect(_attack_random_ally)
 		enemy.target_enemy.connect(_choose_target)
+		enemy.target_enemy.connect(_start_negotiation)
 		enemy.entity.death.connect(process_enemy_death.bind(enemy))
 
 
@@ -161,9 +167,9 @@ func _create_main_buttons():
 	neg_btn = main_button.instantiate() as MainButton
 	neg_btn.initialize(self, "Negotiate", "Negotiate with enemy")	
 	container.add_child(neg_btn)
-	# TODO: neg_btn.pressed.connect()
+	neg_btn.pressed.connect(_choose_neg_target)
 
-	
+
 func _create_asset_button(asset: Asset) -> Button:
 	var btn = asset_button.instantiate() as AssetButton
 	btn.initialize(asset, self)
@@ -177,10 +183,6 @@ func _create_asset_button(asset: Asset) -> Button:
 func _choose_target(target: EnemyNode) -> void:
 	selected_target = target
 	selected_target.set_target(target_icon)
-	
-	
-func _choose_neg_target() -> void:
-	print("Choose a Negotiation Partner")
 	
 	
 func _attack_random_ally() -> void:
@@ -209,6 +211,13 @@ func _update_turn() -> void:
 	var type = current_turn.entity.type
 	var isPlayer = type == BaseEntity.Type.PLAYER
 	ally_turn = isPlayer or type == BaseEntity.Type.ALLY
+	
+	if is_instance_valid(negotiation):
+		select_icon.show()
+		for child in main_grid.get_children():
+			child.show()
+		
+		remove_child(negotiation)
 	
 	if ally_turn:
 		change_active_menu(main_box)
@@ -389,3 +398,40 @@ func change_active_menu(menu: PanelContainer):
 func _activate_button():
 	if active_btn:
 		active_btn._set_active()
+
+
+func _choose_neg_target() -> void:
+	# hide buttons in main box
+	select_icon.hide()
+	for child in main_grid.get_children():
+		child.hide()
+	
+	info_text.text = "Confirm negotiation partner"
+	
+	initiate_negotiation = true
+	
+	# TODO make enemies light up corresponding to success chance
+	
+	
+func _start_negotiation(enemy) -> void:
+	# if initiate negotiation is true pass enemy to Negotiation scene and 
+	# start negotiation
+	if initiate_negotiation:
+		# TODO calculate success chance based on enemy + level diff + damage dealt
+		var success_chance: float = 0.5
+		
+		negotiation = negotation_scene.instantiate()
+		
+		negotiation.set_negotiation_partner(self, success_chance)
+		
+		negotiation.negotiation_end.connect(_process_end_of_negotiation)
+		
+		add_child(negotiation)
+
+
+func _process_end_of_negotiation(success) -> void:
+	if success:
+		# Add enemy to party
+		pass
+	
+	_next_turn()
