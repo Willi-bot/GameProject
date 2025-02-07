@@ -12,15 +12,8 @@ func _ready() -> void:
 	
 	prompt_box.text = prompt
 	
-	var answer_button: Button = Button.new()
-	answer_button.text = "Yes"
-	answer_button.pressed.connect(_sacrifice_life.bind(0.25))
-	answers_container.add_child(answer_button)
-	
-	answer_button = Button.new()
-	answer_button.text = "No"
-	answer_button.pressed.connect(_send_response.bind(-0.25))
-	answers_container.add_child(answer_button)
+	answers_container.add_child(_add_response_button("Yes", _sacrifice_life, 0.25))
+	answers_container.add_child(_add_response_button("No", _send_response, -0.25))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,17 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://btkvjxuti5bte"]
+[gd_scene load_steps=2 format=3 uid="uid://dmw8sv3fitct5"]
 
-[ext_resource type="Script" path="res://scenes/battle/negotiation/stages/demand_health.gd" id="1_pg784"]
+[ext_resource type="Script" path="res://scenes/battle/negotiation/stages/take_action.gd" id="1_ru0rk"]
 
-[node name="DemandHealth" type="Control"]
+[node name="TakeAction" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource("1_pg784")
+script = ExtResource("1_ru0rk")
 
 [node name="Textbox" type="VBoxContainer" parent="."]
 layout_mode = 1
