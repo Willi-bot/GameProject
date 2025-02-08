@@ -20,10 +20,7 @@ func _ready() -> void:
 	await prompt_box.text_completed
 	
 	for key in answers:
-		var answer_button: Button = Button.new()
-		answer_button.text = key
-		answer_button.pressed.connect(_send_response.bind(answers[key]))
-		answers_container.add_child(answer_button)
+		answers_container.add_child(_add_response_button(key, _send_response, answers[key]))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
