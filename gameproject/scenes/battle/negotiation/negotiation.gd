@@ -7,7 +7,6 @@ class_name Negotiation
 
 @onready var stage_scene = preload("res://scenes/battle/negotiation/stages/DemandHealth.tscn")
 
-var bm: BattleManager
 var success_chance: float
 var stages: Array = []
 var current_stage: int = 0
@@ -20,6 +19,7 @@ signal negotiation_end(success: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
 	# TODO determine the amount of stages
 	stages_amount = 3
 	
@@ -32,11 +32,10 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
-
-func set_negotiation_partner(manager, probability) -> void:
-	bm = manager
-	success_chance = probability
+	
+	
+func set_success_chance(chance: float) -> void:
+	success_chance = chance
 
 
 func _show_next_stage() -> void:
@@ -45,7 +44,6 @@ func _show_next_stage() -> void:
 	stage_scene = load("res://scenes/battle/negotiation/stages/%s.tscn" % stage_type)
 	
 	var stage: Stage = stage_scene.instantiate()
-	stage.set_bm(bm)
 	stage.response.connect(_process_response)
 	
 	stage_container.add_child(stage)
@@ -71,8 +69,7 @@ func _process_response(value: float) -> void:
 	current_stage += 1
 	if current_stage == stages_amount:
 		# passed through last stage go to end of negotiation
-		var rn = randf()
-		if rn <= success_chance:
+		if randf() <= success_chance:
 			print("Success")
 			negotiation_end.emit(true)
 		else:

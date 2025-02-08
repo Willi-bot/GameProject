@@ -28,14 +28,12 @@ extends Control
 @onready var select_icon: Sprite2D = $SelectIcon
 @onready var target_icon: AnimatedSprite2D = $TargetIcon
 
-@onready var negotation_scene = preload("res://scenes/battle/negotiation/Negotiation.tscn")
-@onready var negotiation: Negotiation = null
-
 @onready var victory_screen: VictoryScreen = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
 
 var em: EntityManager = preload("res://scenes/battle/managers/entity_manager.gd").new()
 var vm: VictoryManager = preload("res://scenes/battle/managers/victory_manager.gd").new()
+var nm: NegotiationManager = preload("res://scenes/battle/managers/negotiation_manager.gd").new()
 var im: InputManager = preload("res://scenes/battle/managers/input_manager.gd").new()
 
 var enemy_scene = preload("res://entities/enemy/enemy.tscn")
@@ -89,7 +87,6 @@ func _connect_callbacks():
 		enemy.entity.turn_ended.connect(_next_turn)
 		enemy.deal_damage.connect(_attack_random_ally)
 		enemy.target_enemy.connect(_choose_target)
-		enemy.target_enemy.connect(_start_negotiation)
 		enemy.entity.death.connect(process_enemy_death.bind(enemy))
 
 
@@ -193,13 +190,6 @@ func _update_turn() -> void:
 	var type = current_turn.entity.type
 	var isPlayer = type == BaseEntity.Type.PLAYER
 	ally_turn = isPlayer or type == BaseEntity.Type.ALLY
-	
-	if is_instance_valid(negotiation):
-		select_icon.show()
-		for child in main_grid.get_children():
-			child.show()
-		
-		remove_child(negotiation)
 	
 	if ally_turn:
 		im.change_active_menu(main_box)
@@ -309,35 +299,7 @@ func _input(event: InputEvent) -> void:
 
 func _choose_neg_target() -> void:
 	select_icon.hide()
-	for child in main_grid.get_children():
-		child.hide()
+	im.change_active_menu(null)
+	nm.prepare_negotiation()
 	
 	info_text.text = "Confirm negotiation partner"
-	
-	initiate_negotiation = true
-	
-	# TODO make enemies light up corresponding to success chance
-	
-	
-func _start_negotiation(enemy) -> void:
-	# if initiate negotiation is true pass enemy to Negotiation scene and 
-	# start negotiation
-	if initiate_negotiation:
-		# TODO calculate success chance based on enemy + level diff + damage dealt
-		var success_chance: float = 0.5
-		
-		negotiation = negotation_scene.instantiate()
-		
-		negotiation.set_negotiation_partner(self, success_chance)
-		
-		negotiation.negotiation_end.connect(_process_end_of_negotiation)
-		
-		add_child(negotiation)
-
-
-func _process_end_of_negotiation(success) -> void:
-	if success:
-		# Add enemy to party
-		pass
-	
-	_next_turn()

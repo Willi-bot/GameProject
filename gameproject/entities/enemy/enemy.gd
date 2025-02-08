@@ -37,3 +37,17 @@ func set_active() -> void:
 	
 func set_inactive() -> void:
 	sprite.material.set_shader_parameter("width", 0)
+
+
+func set_shader_color(color) -> void:
+	sprite.material.set_shader_parameter("color", color)
+
+
+func _on_sprite_mouse_entered() -> void:
+	if Global.bm.initiate_negotiation:
+		sprite.material.set_shader_parameter("width", 4)
+
+
+func _on_sprite_mouse_exited() -> void:
+	if Global.bm.initiate_negotiation:
+		sprite.material.set_shader_parameter("width", 0)

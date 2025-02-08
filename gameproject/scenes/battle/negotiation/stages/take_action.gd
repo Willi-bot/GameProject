@@ -21,7 +21,7 @@ func _process(delta: float) -> void:
 	
 	
 func _convince() -> void:
-	var enemy_int: int = bm.selected_target.entity.intelligence
+	var enemy_int: int = Global.bm.selected_target.entity.intelligence
 	var player_int: int = Global.player.intelligence
 	
 	if player_int > enemy_int:
@@ -30,7 +30,7 @@ func _convince() -> void:
 		_send_response(-0.25)
 	
 func _intimidate() -> void:
-	var enemy_str: int = bm.selected_target.entity.strength
+	var enemy_str: int = Global.bm.selected_target.entity.strength
 	var player_str: int = Global.player.strength
 	
 	if player_str > enemy_str:
