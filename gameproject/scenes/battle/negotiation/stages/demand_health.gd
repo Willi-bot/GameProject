@@ -1,16 +1,21 @@
 extends Stage
 
 
-@onready var prompt_box = $"Textbox/Prompt"
+@onready var prompt_box: TextScroll = $"Textbox/TextScroll"
 @onready var answers_container = $"Textbox/Answers"
 
 var prompt: String
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
-	prompt = "Can I have some of your life?"
+	prompt = "Can I have some of your life?
+	Pretty pretty please?
+	I might join your team
+	Or not..."
 	
-	prompt_box.text = prompt
+	prompt_box.reveal_text(prompt)
+	
+	await prompt_box.text_completed
 	
 	var answer_button: Button = Button.new()
 	answer_button.text = "Yes"
@@ -22,12 +27,6 @@ func _ready() -> void:
 	answer_button.pressed.connect(_send_response.bind(-0.25))
 	answers_container.add_child(answer_button)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-	
-	
 func _sacrifice_life(percentage_amount) -> void:
 	Global.player.be_damaged(int(percentage_amount * Global.player.max_hp))
 	_send_response(0.25)

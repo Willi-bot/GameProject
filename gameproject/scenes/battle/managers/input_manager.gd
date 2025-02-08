@@ -64,6 +64,9 @@ func change_active_menu(menu: PanelContainer):
 	for menu_box in [item_box, target_box, skill_box, main_box]:
 		menu_box.hide()
 	
+	if not menu:
+		return
+		
 	menu.show()
 	
 	btn_index = Vector2.ZERO

@@ -65,6 +65,7 @@ func proceed_to_room():
 	mark_selected()
 	selected.emit(room)
 
+
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if not available:
 		return 

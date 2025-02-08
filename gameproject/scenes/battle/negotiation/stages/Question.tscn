@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://jo1qhjh3i81c"]
+[gd_scene load_steps=3 format=3 uid="uid://jo1qhjh3i81c"]
 
 [ext_resource type="Script" path="res://scenes/battle/negotiation/stages/question.gd" id="1_613l6"]
+[ext_resource type="Script" path="res://ui_elements/text_scroll/text_scroll.gd" id="2_vl7nj"]
 
 [node name="Question" type="Control"]
 layout_mode = 3
@@ -15,9 +16,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Prompt" type="Label" parent="Textbox"]
+[node name="TextScroll" type="Label" parent="Textbox"]
 layout_mode = 2
-size_flags_vertical = 3
+script = ExtResource("2_vl7nj")
+characters_per_second = 30.0
 
 [node name="Answers" type="GridContainer" parent="Textbox"]
 layout_mode = 2

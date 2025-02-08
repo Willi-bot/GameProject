@@ -5,5 +5,4 @@
 [node name="Sweep" type="Node"]
 script = ExtResource("1_1hrim")
 mp_cost = 3
-asset_name = "Sweep"
 description = "Deals 80 damage to all enemies. (Cost: 3 MP)"

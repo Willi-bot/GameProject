@@ -38,7 +38,6 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qeuob"]
-load_path = "res://.godot/imported/target_icon.png-1bfc0a0fb3f7b1eb3a34a560741b5f97.ctex"
 
 [sub_resource type="Theme" id="Theme_7keqo"]
 

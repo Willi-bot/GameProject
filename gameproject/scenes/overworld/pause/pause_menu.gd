@@ -30,4 +30,5 @@ func _on_quit_pressed() -> void:
 
 func _on_main_menu_pressed() -> void:
 	resume()
+	_on_close_pressed()
 	Global._change_view(Global.MAIN_MENU_SCENE)
