@@ -36,7 +36,7 @@ extends Control
 
 var em: EntityManager = preload("res://scenes/battle/managers/entity_manager.gd").new()
 var vm: VictoryManager = preload("res://scenes/battle/managers/victory_manager.gd").new()
-var im = preload("res://scenes/battle/managers/input_manager.gd")
+var im: InputManager = preload("res://scenes/battle/managers/input_manager.gd").new()
 
 var enemy_scene = preload("res://entities/enemy/enemy.tscn")
 
@@ -63,24 +63,21 @@ signal target_chosen(index: int)
 func _ready() -> void:
 	game_over = false
 	
+	# Spawn entities
 	player_battlers = em.spawn_team(Vector2(237, 215), 120, self)
 	enemy_battlers = em.spawn_enemies(Vector2(408, 110), -120, self)
-
 	battlers = em.get_action_order(player_battlers, enemy_battlers)
 
 	_connect_callbacks()
 	_create_main_buttons()
 
-	call_deferred("_setup_boxes")
-
-	current_turn = battlers[current_turn_idx]
-	_update_turn()
-	
-	_choose_target(enemy_battlers[0])
-
-	im = im.new(main_box, item_box, skill_box, target_box) as InputManager
-
+	im.init(main_box, item_box, skill_box, target_box)
 	im.change_active_menu(main_box)
+
+	# Start battle
+	current_turn = battlers[0]
+	_update_turn()
+	_choose_target(enemy_battlers[0])
 
 
 func _connect_callbacks():
@@ -139,11 +136,11 @@ func _create_main_buttons():
 	attack_btn.initialize("Attack", "Attack an enemy")	
 	attack_btn.pressed.connect(_attack_enemy)
 	
-	var skill_btn = main_button.instantiate() as MainButton
+	var skill_btn = main_button.instantiate()
 	skill_btn.initialize("Skills", "Choose a skill")	
 	skill_btn.pressed.connect(_choose_skill)
 	
-	item_btn = main_button.instantiate() as MainButton
+	item_btn = main_button.instantiate()
 	item_btn.initialize("Item", "Choose an item")	
 	item_btn.pressed.connect(_choose_item)
 	

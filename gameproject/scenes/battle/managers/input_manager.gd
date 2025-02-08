@@ -11,7 +11,7 @@ var btn_index = Vector2.ZERO
 var active_btn: BattleButton = null
 
 
-func _init(main: PanelContainer, item: PanelContainer, skill: PanelContainer, target: PanelContainer):
+func init(main: PanelContainer, item: PanelContainer, skill: PanelContainer, target: PanelContainer):
 	item_box = item
 	target_box = target
 	skill_box = skill

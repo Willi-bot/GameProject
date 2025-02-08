@@ -24,10 +24,10 @@ grow_vertical = 2
 
 [node name="TextScroll" type="Label" parent="Textbox"]
 layout_mode = 2
-script = ExtResource("2_h5ihj")
-characters_per_second = 30.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
+script = ExtResource("2_h5ihj")
+characters_per_second = 30.0
 
 [node name="Answers" type="GridContainer" parent="Textbox"]
 layout_mode = 2
