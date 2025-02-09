@@ -8,6 +8,8 @@ var negotiation_target: EnemyNode
 
 
 func prepare_negotiation() -> void:
+	Global.bm.initiate_negotiation = true
+	
 	for enemy in Global.bm.enemy_battlers:
 		var success_chance: float = 0.5 # replace with standard value for each monster
 		# consider level diff
@@ -32,8 +34,10 @@ func start_negotiation(enemy) -> void:
 
 
 func _terminate_negotiation(success: bool) -> void:
+	Global.bm.initiate_negotiation = false
+	
 	for enemy in Global.bm.enemy_battlers:
-		enemy.set_shader_color(Color(0., 0., 0.))
+		enemy.set_shader_color(Color(1., 1., 1.))
 		
 	Global.bm.remove_child(negotiation)
 	

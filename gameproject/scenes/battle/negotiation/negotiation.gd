@@ -5,14 +5,13 @@ class_name Negotiation
 
 @onready var foo = $"foo"
 
-@onready var stage_scene = preload("res://scenes/battle/negotiation/stages/DemandHealth.tscn")
-
+var stage_scene
 var success_chance: float
 var stages: Array = []
 var current_stage: int = 0
 var stages_amount: int
 
-var stage_categories: Array = ["DemandHealth", "TakeAction"]
+var stage_categories: Array = ["DemandHealth", "TakeAction", "DemandGold"]
 
 signal negotiation_end(success: bool)
 

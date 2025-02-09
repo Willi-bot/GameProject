@@ -11,7 +11,7 @@ var answers: Dictionary
 func _ready() -> void:
 	prompt = "Do you really want me?
 	Im just a small creature...
-	Would i be of any use?"
+	Would I be of any use?"
 	
 	answers = {"Yes": 0.25, "No": -0.25}
 	
@@ -20,7 +20,7 @@ func _ready() -> void:
 	await prompt_box.text_completed
 	
 	for key in answers:
-		answers_container.add_child(_add_response_button(key, _send_response, answers[key]))
+		answers_container.add_child(_add_response_button(key, _send_response, 0, answers[key]))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

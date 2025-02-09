@@ -4,7 +4,7 @@ class_name TextScroll
 signal text_completed
 signal line_completed
 
-@export var characters_per_second: float = 10.0
+@export var characters_per_second: float = 20.0
 @export var punctuation_delay: float = 0.2
 @export var skip_delay_on_spaces: bool = true
 @export var delay_between_lines: float = 0.5
