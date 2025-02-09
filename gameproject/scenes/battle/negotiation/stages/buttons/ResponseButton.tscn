@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://3xr6ts25k4j6"]
+
+[ext_resource type="Script" path="res://scenes/battle/negotiation/stages/buttons/response_button.gd" id="1_rd2jh"]
+
+[node name="ResponseButton" type="Button"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_rd2jh")

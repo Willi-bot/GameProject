@@ -7,12 +7,19 @@ extends Stage
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	prompt_box.text = "Do something?"
+	var prompt = "Do something?"
 	
-	answers_container.add_child(_add_response_button("Convince", _convince))
-	answers_container.add_child(_add_response_button("Intimidate", _intimidate))
-	answers_container.add_child(_add_response_button("Show Compassion", _show_compassion))
-	answers_container.add_child(_add_response_button("Do Nothing", _send_response, 0.))
+	prompt_box.reveal_text(prompt)
+	
+	await prompt_box.text_completed
+	
+	var width = 200
+	var button: ResponseButton
+	
+	answers_container.add_child(_add_response_button("Convince", _convince, width))
+	answers_container.add_child(_add_response_button("Intimidate", _intimidate, width))
+	answers_container.add_child(_add_response_button("Show Compassion", _show_compassion, width))
+	answers_container.add_child(_add_response_button("Do Nothing", _send_response, width, 0.))
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

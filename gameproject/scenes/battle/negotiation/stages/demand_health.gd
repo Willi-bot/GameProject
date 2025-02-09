@@ -17,8 +17,8 @@ func _ready() -> void:
 	
 	await prompt_box.text_completed
 	
-	answers_container.add_child(_add_response_button("Yes", _sacrifice_life, 0.25))
-	answers_container.add_child(_add_response_button("No", _send_response, -0.25))
+	answers_container.add_child(_add_response_button("Yes", _sacrifice_life, 0, 0.25))
+	answers_container.add_child(_add_response_button("No", _send_response, 0, -0.25))
 
 func _sacrifice_life(percentage_amount) -> void:
 	Global.player.be_damaged(int(percentage_amount * Global.player.max_hp))

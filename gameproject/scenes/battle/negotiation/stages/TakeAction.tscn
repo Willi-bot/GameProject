@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmw8sv3fitct5"]
+[gd_scene load_steps=3 format=3 uid="uid://dmw8sv3fitct5"]
 
 [ext_resource type="Script" path="res://scenes/battle/negotiation/stages/take_action.gd" id="1_ru0rk"]
+[ext_resource type="Script" path="res://ui_elements/text_scroll/text_scroll.gd" id="2_a0h7r"]
 
 [node name="TakeAction" type="Control"]
 layout_mode = 3
@@ -23,6 +24,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
+script = ExtResource("2_a0h7r")
 
 [node name="Answers" type="GridContainer" parent="Textbox"]
 layout_mode = 2
