@@ -18,6 +18,8 @@ func _ready():
 
 func resume():
 	get_tree().paused = false
+	Global.overworld.set_process_input(true)
+	Global.overworld.camera.enabled = true
 	Global.paused = false
 	currentMenu.resume()
 	currentMenu.hide()
@@ -26,6 +28,8 @@ func resume():
 
 func pause():
 	get_tree().paused = true
+	Global.overworld.set_process_input(false)
+	Global.overworld.camera.enabled = false
 	Global.paused = true
 	currentMenu.pause()
 	currentMenu.show()

@@ -92,7 +92,6 @@ func hide_map() -> void:
 	top_menu.set_process(false)
 	camera.enabled = false			
 
-
 func _spawn_room(room: Room) -> void:
 	var new_map_room := MAP_ROOM.instantiate() as MapRoom
 	rooms.add_child(new_map_room)

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjys4fc0pu5kt"]
+
+[ext_resource type="Script" path="res://scenes/overworld/team/member_slot.gd" id="1_s8brl"]
+[ext_resource type="Texture2D" uid="uid://chjiveiumyfuf" path="res://textures/entities/hazard_front.png" id="1_x0xrq"]
+
+[node name="MemberSlot" type="PanelContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_s8brl")
+
+[node name="Button" type="TextureButton" parent="."]
+layout_mode = 2
+texture_normal = ExtResource("1_x0xrq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
