@@ -1,34 +1,60 @@
-[
-	{
-			"name": "Hazard",
-			"level": 1,
-			"current_exp": 0,
-			"max_hp": 20,
-			"current_hp": 20,
-			"max_mp": 5,
-			"current_mp": 5,
-			"mp_regen_rate": 1,
-			"strength": 1,
-			"intelligence": 2,
-			"agility": 3,
-			"luck": 1,
-			"skills": ["Sweep"],
-			"type": 1
-		},
-		{
-			"name": "Meanion",
-			"level": 1,
-			"current_exp": 0,
-			"max_hp": 20,
-			"current_hp": 20,
-			"max_mp": 5,
-			"current_mp": 5,
-			"mp_regen_rate": 1,
-			"strength": 1,
-			"intelligence": 2,
-			"agility": 3,
-			"luck": 1,
-			"skills": ["Heal"],
-			"type": 1
-		}
-]
+{
+   "active":[
+	  {
+		 "name":"Lonely Shadow",
+		 "level":1,
+		 "current_exp":0,
+		 "max_hp":20,
+		 "current_hp":20,
+		 "max_mp":5,
+		 "current_mp":5,
+		 "mp_regen_rate":1,
+		 "strength":1,
+		 "intelligence":2,
+		 "agility":3,
+		 "luck":1,
+		 "skills":[
+			"Heal"
+		 ],
+		 "type":1
+	  },
+	  {
+		 "name":"Meanion",
+		 "level":1,
+		 "current_exp":0,
+		 "max_hp":20,
+		 "current_hp":20,
+		 "max_mp":5,
+		 "current_mp":5,
+		 "mp_regen_rate":1,
+		 "strength":1,
+		 "intelligence":2,
+		 "agility":3,
+		 "luck":1,
+		 "skills":[
+			"Heal"
+		 ],
+		 "type":1
+	  }
+   ],
+   "bench":[
+	 {
+		 "name":"Hazard",
+		 "level":1,
+		 "current_exp":0,
+		 "max_hp":20,
+		 "current_hp":20,
+		 "max_mp":5,
+		 "current_mp":5,
+		 "mp_regen_rate":1,
+		 "strength":1,
+		 "intelligence":2,
+		 "agility":3,
+		 "luck":1,
+		 "skills":[
+			"Sweep"
+		 ],
+		 "type":1
+	  },
+   ]
+}

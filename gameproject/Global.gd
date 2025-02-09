@@ -22,7 +22,6 @@ const SETTINGS_SCENE := preload("res://scenes/settings/settings.tscn")
 const MAIN_MENU_SCENE := preload("res://scenes/main_menu/main_menu.tscn")
 const OVERWORLD_SCENE := preload("res://scenes/overworld/overworld.tscn")
 
-
 # MISC
 @export var run_in_progress: bool = false
 @export var elapsed_time: float = 0.0
@@ -39,6 +38,10 @@ var player_data: Dictionary = {}
 var team_data: Array = []
 @export var team: Array[PlayerEntity]
 
+# PLAYER BENCH
+var bench_data: Array = []
+@export var bench: Array[PlayerEntity]
+
 # INVENTORY
 var inventory_data: Array
 @export var inventory: Array[Item]
@@ -49,6 +52,7 @@ var overworld_data: Dictionary
 
 
 @export var bm: BattleManager = null
+@export var tm: TeamManager = preload("res://managers/team_manager.gd").new()
 
 
 func _process(delta: float) -> void:
@@ -90,7 +94,11 @@ func _show_map() -> void:
 
 func start_new_run() -> void:
 	player_data = load_json("res://default_values/player.json")
-	team_data = load_json("res://default_values/team.json")
+	
+	var team_json = load_json("res://default_values/team.json")
+	team_data = team_json["active"]
+	bench_data = team_json["bench"]
+	
 	inventory_data = load_json("res://default_values/inventory.json")
 	
 	instantiate_game()
@@ -101,6 +109,8 @@ func start_new_run() -> void:
 		
 	overworld.generate_new_map()
 	overworld.show_map()
+
+	overworld_data = overworld.serialize()
 
 	get_tree().paused = false
 	run_in_progress = true
@@ -118,9 +128,13 @@ func continue_run():
 	
 
 func save_state() -> void:
-	var team_data = []
-	for team_member in team:
-		team_data.append(team_member.serialize())
+	var ally_data = {"active": [], "bench": []}
+	for t in team:
+		ally_data["active"].append(t.serialize())
+	
+	for b in bench:
+		ally_data["bench"].append(b.serialize())
+
 
 	var items_data = []
 	for item in inventory:
@@ -128,7 +142,7 @@ func save_state() -> void:
 
 	var data = {
 		"player": player.serialize(),
-		"team": team_data,
+		"team": ally_data,
 		"inventory": items_data,
 		"overworld": overworld.serialize(),
 		"floors_climbed": floors_climbed,
@@ -153,7 +167,14 @@ func init_game_state() -> bool:
 		return false
 	
 	player_data = data["player"]
-	team_data = data["team"]
+	
+	var entity_data = data["team"]
+	if !entity_data.has("active") or !entity_data.has("bench"):
+		print("Missing team data")
+		return false
+		
+	team_data = data["team"]["active"]
+	bench_data = data["team"]["bench"]
 
 	elapsed_time = data["elapsed_time"]
 	gold = data["gold"]
@@ -189,18 +210,25 @@ func instantiate_game():
 	instantiate_entities()		
 	instantiate_overworld()
 	instantiate_inventory()	
-
+		
 		
 func instantiate_entities():
 	player = PLAYER_ENTITY.new()
 	player.deserialize(player_data)
 	
 	team = []
+	bench = []
 	
 	for member_data in team_data:
 		var member = PLAYER_ENTITY.new()
 		member.deserialize(member_data)
 		team.append(member)
+
+	for member_data in bench_data:
+		var member = PLAYER_ENTITY.new()
+		member.deserialize(member_data)
+		bench.append(member)
+
 
 
 func instantiate_inventory():
@@ -224,7 +252,6 @@ func instantiate_overworld():
 	
 	add_child(overworld)
 	overworld.hide_map()
-
 
 func _update_item_count(item) -> void:
 	item.count -= 1

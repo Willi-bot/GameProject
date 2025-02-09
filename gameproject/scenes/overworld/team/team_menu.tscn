@@ -100,7 +100,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jwc77")
 
 [node name="Members" type="HBoxContainer" parent="Container/Rows/Active"]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/separation = 12
 
@@ -111,7 +110,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_gh0ov")
 
 [node name="Members" type="HBoxContainer" parent="Container/Rows/Inactive"]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/separation = 12
 
