@@ -31,10 +31,10 @@ extends Control
 @onready var victory_screen: VictoryScreen = $VictoryScreen
 @onready var defeat_screen: CanvasLayer = $DefeatScreen
 
-var em: EntityManager = preload("res://scenes/battle/managers/entity_manager.gd").new()
-var vm: VictoryManager = preload("res://scenes/battle/managers/victory_manager.gd").new()
-var nm: NegotiationManager = preload("res://scenes/battle/managers/negotiation_manager.gd").new()
-var im: InputManager = preload("res://scenes/battle/managers/input_manager.gd").new()
+var em: EntityManager = preload("res://managers/entity_manager.gd").new()
+var vm: VictoryManager = preload("res://managers/victory_manager.gd").new()
+var nm: NegotiationManager = preload("res://managers/negotiation_manager.gd").new()
+var im: InputManager = preload("res://managers/input_manager.gd").new()
 
 var enemy_scene = preload("res://entities/enemy/enemy.tscn")
 

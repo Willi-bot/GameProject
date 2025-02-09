@@ -6,16 +6,7 @@ var negotiation: Negotiation
 var negotiation_chance: Dictionary = {}
 var negotiation_target: EnemyNode
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-	
-	
 func prepare_negotiation() -> void:
 	for enemy in Global.bm.enemy_battlers:
 		var success_chance: float = 0.5 # replace with standard value for each monster

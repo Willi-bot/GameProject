@@ -2,29 +2,35 @@ extends "res://scenes/overworld/menu_interface.gd"
 
 @onready var active_bench: HBoxContainer = $Container/Rows/Active/Members
 @onready var inactive_bench: HBoxContainer = $Container/Rows/Inactive/Members
-@onready var member_node: PackedScene = preload("res://scenes/overworld/team/member_node.tscn")
+@onready var active: PackedScene = preload("res://scenes/overworld/team/active.tscn")
+@onready var inactive: PackedScene = preload("res://scenes/overworld/team/inactive.tscn")
+
 
 func resume() -> void:
 	clear_benches()
 
 
 func pause() -> void:
-	populate_bench(active_bench, true, Global.team + Global.team)
-	populate_bench(inactive_bench, false, Global.team)
+	populate_active(Global.tm.get_active_team())
+	populate_inactive(Global.tm.get_benched_team())
 
-
-func populate_bench(bench: HBoxContainer, active: bool, team: Array[PlayerEntity]) -> void:
+		
+func populate_active(team: Array):
 	for entity in team:
-		var new_member := member_node.instantiate() as PanelContainer
-		var texture_rect := new_member.get_node("Sprite") as TextureRect
-		
-		texture_rect.texture = entity.front_texture
-		
-		var shader_material := texture_rect.material.duplicate()
-		shader_material.set_shader_parameter("active", !active)
-		texture_rect.material = shader_material
-		
-		bench.add_child(new_member)
+		active_bench.add_child(get_instance(entity, active))		
+
+
+func populate_inactive(bench: Array):
+	for entity in bench:
+		inactive_bench.add_child(get_instance(entity, inactive))	
+
+
+func get_instance(entity: PlayerEntity, node: PackedScene):
+	var scene = node.instantiate()
+	
+	#scene.texture_normal = entity.front_texture 		
+	return scene
+
 
 func clear_benches() -> void:
 	for child in active_bench.get_children() + inactive_bench.get_children():

@@ -4,6 +4,8 @@ class_name PlayerEntity
 @export var current_exp : int
 @export var required_exp : int
 
+@export var front_texture: Texture
+
 signal level_changed
 
 func serialize() -> Dictionary:
@@ -24,7 +26,7 @@ func deserialize(data: Dictionary) -> void:
 	var sprite_name = format_string(name) if type != Type.PLAYER else "player"
 	
 	texture = load(get_sprite_path(sprite_name, "back"))
-
+	front_texture = load(get_sprite_path(sprite_name, "front"))
 
 func assign_exp(exp: int) -> void:
 	print("Exp gained: ", exp)
