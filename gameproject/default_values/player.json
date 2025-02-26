@@ -11,6 +11,6 @@
 	"intelligence": 10,
 	"agility": 3,
 	"luck": 1,
-	"skills": ["Sweep", "Heal", "Sweep"],
+	"skills": ["Sweep", "Heal", "Fireball"],
 	"type":  0
 }

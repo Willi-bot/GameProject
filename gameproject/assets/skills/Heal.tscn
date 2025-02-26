@@ -1,17 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://du6un3b23vqnp"]
+[gd_scene load_steps=2 format=3 uid="uid://du6un3b23vqnp"]
 
 [ext_resource type="Script" path="res://assets/skills/Heal.gd" id="1_2bp10"]
-[ext_resource type="PackedScene" uid="uid://c2dppn4ngspry" path="res://textures/animations/heal_animation.tscn" id="2_xopow"]
 
 [node name="Heal" type="Node"]
 script = ExtResource("1_2bp10")
 mp_cost = 2
 description = "Heals 40 HP to Target Character. (Cost: 2 MP))"
-
-[node name="HealAnimation" parent="." instance=ExtResource("2_xopow")]
-visible = false
-
-[node name="AnimationTimer" type="Timer" parent="."]
-wait_time = 1.5
-
-[connection signal="timeout" from="AnimationTimer" to="." method="_on_animation_timer_timeout"]

@@ -1,12 +1,6 @@
 class_name Heal
 extends Skill
 
-
-var animation: PackedScene
-var animation_scene: AnimatedSprite2D
-var timer: Timer
-var target
-
 func _init():
 	super._init()
 	
