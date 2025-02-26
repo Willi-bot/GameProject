@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://c2dppn4ngspry"]
+
+[ext_resource type="Texture2D" uid="uid://u87lr7vi7pch" path="res://textures/animations/heal_frames/heal_f0.png" id="1_hx5te"]
+[ext_resource type="Texture2D" uid="uid://j8qqcgk2vsyk" path="res://textures/animations/heal_frames/heal_f1.png" id="2_ksvgh"]
+[ext_resource type="Texture2D" uid="uid://cepllcswc8rr5" path="res://textures/animations/heal_frames/heal_f2.png" id="3_pa1gn"]
+[ext_resource type="Texture2D" uid="uid://ky80hbmjrdja" path="res://textures/animations/heal_frames/heal_f3.png" id="4_rfjwl"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vjvqh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hx5te")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ksvgh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_pa1gn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_rfjwl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 9.0
+}]
+
+[node name="HealAnimation" type="AnimatedSprite2D"]
+modulate = Color(1, 1, 1, 0.698039)
+sprite_frames = SubResource("SpriteFrames_vjvqh")
+frame_progress = 0.860206
