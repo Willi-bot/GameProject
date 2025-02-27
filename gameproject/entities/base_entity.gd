@@ -29,24 +29,28 @@ enum Type {
 @export var texture: Texture
 
 signal turn_ended
-signal health_changed
+signal health_changed(is_aoe: bool)
 signal mp_changed
 signal death
+signal damage_processed
+
+
+func end_turn():
+	turn_ended.emit()
 
 
 func start_attacking(enemy_target : Node2D) -> void:
 	enemy_target.entity.be_damaged(strength)
-	
-	turn_ended.emit()
-	
 
-func be_damaged(amount : int) -> void:
+
+	
+func be_damaged(amount : int, is_aoe: bool = false) -> void:
 	current_hp = max(0, current_hp - amount)
-	health_changed.emit()
+	
+	health_changed.emit(is_aoe)
 	
 	if current_hp == 0:
 		death.emit()
-	
 	
 func heal(amount : int) -> void:
 	if current_hp < max_hp:

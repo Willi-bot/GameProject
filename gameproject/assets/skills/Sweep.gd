@@ -1,6 +1,8 @@
 class_name Sweep
 extends Skill
 
+var target_count: int = 0
+var enemy_count: int = 0
 
 func _init():
 	super._init()
@@ -12,8 +14,21 @@ func _init():
 func execute(entity: BaseEntity) -> void:
 	entity.use_mp(mp_cost)
 	
-	var all_enemies = Global.bm.enemy_battlers.duplicate()
-	for target in all_enemies:
-		target.entity.be_damaged(entity.strength * 10)
-	turn_ended.emit()
+	target_count = 0
 	
+	var all_enemies = Global.bm.enemy_battlers.duplicate()
+	
+	enemy_count = len(all_enemies)
+	
+	for target in all_enemies:
+		target.entity.damage_processed.connect(increment_state)
+	
+	for target in all_enemies:
+		target.entity.be_damaged(entity.strength * 10, true)
+	
+	
+func increment_state():
+	target_count += 1
+	
+	if target_count == enemy_count:
+		turn_ended.emit()

@@ -15,7 +15,7 @@ extends Node2D
 @export var mana_empty_texture: Texture = preload("res://textures/battle/icons/mana_orb_empty.png")
 
 func _ready() -> void:
-	entity.health_changed.connect(_update_health_indicator)
+	entity.health_changed.connect(_process_health_change)
 	entity.mp_changed.connect(_update_mana_indicator)
 	entity.level_changed.connect(_update_level_indicator)
 	entity.death.connect(_set_inactive)
@@ -43,6 +43,16 @@ func _update_health_indicator():
 	var color = get_hp_color(entity.current_hp, entity.max_hp)
 	health_bar.self_modulate = color
 	current_health.text = str(entity.current_hp)
+
+
+func _process_health_change(is_aoe):
+	_update_health_indicator()
+	
+	if is_aoe:
+		entity.damaged_processed.emit()
+		return 
+		
+	entity.turn_ended.emit()
 	
 
 func _add_mana_orbs(mana_points: int):

@@ -8,6 +8,7 @@ class_name PlayerEntity
 
 signal level_changed
 
+
 func serialize() -> Dictionary:
 	var data = super.serialize()
 	
