@@ -37,6 +37,11 @@ func set_active() -> void:
 	
 func set_inactive() -> void:
 	sprite.material.set_shader_parameter("width", 0)
+	sprite.position.y = 0
+
+
+func set_casting() -> void:
+	sprite.position.y += 40
 
 
 func set_shader_color(color) -> void:

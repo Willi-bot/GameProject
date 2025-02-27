@@ -16,7 +16,7 @@ func _init():
 	push_error("This method must be implemented in a subclass")
 
 func execute(entity: BaseEntity) -> void:
-	push_error("This method must be implemented in a subclass")
+	Global.bm.current_turn.set_casting()
 
 
 func serialize() -> Dictionary:

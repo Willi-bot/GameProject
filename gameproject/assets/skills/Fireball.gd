@@ -12,6 +12,8 @@ func _init():
 
 
 func execute(entity: BaseEntity) -> void:
+	super(entity)
+	
 	entity.use_mp(mp_cost)
 	target = Global.bm.selected_target
 	var damage = entity.intelligence / 10

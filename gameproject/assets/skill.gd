@@ -12,4 +12,4 @@ func _init() -> void:
 	type = Asset.Type.SKILL
 
 func execute(entity: BaseEntity) -> void:
-	push_error("This method must be implemented in a subclass")
+	super(entity)

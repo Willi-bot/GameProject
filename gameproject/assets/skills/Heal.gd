@@ -10,12 +10,14 @@ func _init():
 
 
 func execute(entity: BaseEntity) -> void:
+	super(entity)
+	
 	entity.use_mp(mp_cost)
 	target = await Global.bm.get_player_target()
 	var heal_amount = entity.intelligence * 2
 	target.entity.heal(heal_amount)
 	animation_scene = animation.instantiate() as AnimatedSprite2D
-	target.add_child(animation_scene)
+	target.sprite.add_child(animation_scene)
 	animation_scene.play()
 	
 	timer = Timer.new()
@@ -26,6 +28,6 @@ func execute(entity: BaseEntity) -> void:
 
 
 func timer_timeout() -> void:
-	target.remove_child(animation_scene)
+	target.sprite.remove_child(animation_scene)
 	target.remove_child(timer)
 	turn_ended.emit()

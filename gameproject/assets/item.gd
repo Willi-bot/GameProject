@@ -9,7 +9,7 @@ func _init() -> void:
 	type = Asset.Type.ITEM
 
 func execute(entity: BaseEntity) -> void:
-	push_error("This method must be implemented in a subclass")
+	super(entity)
 
 
 func serialize() -> Dictionary:

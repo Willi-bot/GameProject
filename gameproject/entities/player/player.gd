@@ -3,6 +3,7 @@ extends Node2D
 
 @export var entity: PlayerEntity
 
+@onready var container: PanelContainer = $Container
 @onready var health_bar: ProgressBar = $Container/Info/HealthBar
 @onready var current_health: Label = $Container/Info/HealthBar/CurrentHP
 @onready var entity_name: Label = $Container/Info/TopRow/Name
@@ -14,11 +15,14 @@ extends Node2D
 @export var mana_texture: Texture = preload("res://textures/battle/icons/mana_orb.png")
 @export var mana_empty_texture: Texture = preload("res://textures/battle/icons/mana_orb_empty.png")
 
+@onready var style_box: StyleBoxFlat
+@onready var active_box: StyleBoxFlat
+
 func _ready() -> void:
 	entity.health_changed.connect(_update_health_indicator)
 	entity.mp_changed.connect(_update_mana_indicator)
 	entity.level_changed.connect(_update_level_indicator)
-	entity.death.connect(_set_inactive)
+	entity.death.connect(_set_dead)
 	
 	_update_level_indicator()
 	_update_health_indicator()
@@ -26,6 +30,10 @@ func _ready() -> void:
 	_update_mana_indicator()
 	
 	entity_name.text = entity.name
+	
+	style_box = container.get_theme_stylebox("panel")
+	active_box = style_box.duplicate()
+	active_box.set_border_width_all(2)
 
 
 func start_turn():
@@ -61,7 +69,7 @@ func _update_mana_indicator():
 			orb.texture = mana_empty_texture
 
 
-func _set_inactive():
+func _set_dead():
 	sprite.self_modulate = Color.BLACK
 
 
@@ -76,8 +84,13 @@ func get_hp_color(current_hp: float, max_hp: float) -> Color:
 	
 	
 func set_active() -> void:
-	sprite.position.y -= 40
+	container.add_theme_stylebox_override("panel", active_box)
 	
 	
 func set_inactive() -> void:
-	sprite.position.y += 40
+	container.add_theme_stylebox_override("panel", style_box)
+	sprite.position.y = 0
+	
+	
+func set_casting() -> void:
+	sprite.position.y -= 40
