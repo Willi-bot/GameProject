@@ -12,6 +12,8 @@ func _init():
 	mp_cost = 3
 
 func execute(entity: BaseEntity) -> void:
+	super(entity)
+	
 	entity.use_mp(mp_cost)
 	
 	target_count = 0
