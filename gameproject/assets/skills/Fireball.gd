@@ -13,6 +13,8 @@ func _init():
 
 func execute(entity: BaseEntity) -> void:
 	super(entity)
+	selection_finished.emit()
+
 	
 	entity.use_mp(mp_cost)
 	target = Global.bm.selected_target

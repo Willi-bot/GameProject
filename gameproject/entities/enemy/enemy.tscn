@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b2v7h066l6yr7"]
+[gd_scene load_steps=10 format=3 uid="uid://b2v7h066l6yr7"]
 
 [ext_resource type="Script" path="res://entities/enemy/enemy.gd" id="1_884q3"]
 [ext_resource type="Script" path="res://entities/base_entity.gd" id="2_lhtl4"]
@@ -22,6 +22,27 @@ luck = 0
 level = 0
 skills = Array[ExtResource("3_c5pe7")]([])
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nm4qk"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.150764, 0.163225, 8.42288e-08, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fkl81"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_23uiq"]
 shader = ExtResource("5_hlaug")
 shader_parameter/color = Color(1, 1, 1, 1)
@@ -36,11 +57,19 @@ script = ExtResource("1_884q3")
 entity = SubResource("Resource_efdqj")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
-custom_minimum_size = Vector2(200, 0)
-offset_left = -100.0
-offset_top = -160.0
-offset_right = 100.0
-offset_bottom = -130.0
+self_modulate = Color(0.4, 0.572549, 0.239216, 1)
+custom_minimum_size = Vector2(180, 25)
+offset_left = -90.0
+offset_top = -150.0
+offset_right = 90.0
+offset_bottom = -125.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_nm4qk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fkl81")
+step = 1.0
+value = 20.0
+show_percentage = false
 
 [node name="Sprite" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_23uiq")

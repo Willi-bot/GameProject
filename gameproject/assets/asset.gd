@@ -10,6 +10,7 @@ enum Type {
 @export var description: String
 @export var type: Type
 
+signal selection_finished
 signal turn_ended
 
 func _init():

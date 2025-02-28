@@ -14,6 +14,9 @@ func execute(entity: BaseEntity) -> void:
 	
 	entity.use_mp(mp_cost)
 	target = await Global.bm.get_player_target()
+	
+	selection_finished.emit()
+	
 	var heal_amount = entity.intelligence * 2
 	target.entity.heal(heal_amount)
 	animation_scene = animation.instantiate() as AnimatedSprite2D

@@ -17,6 +17,8 @@ func _ready() -> void:
 	entity.health_changed.connect(_process_health_change)
 	health_bar.max_value = entity.max_hp
 	health_bar.value = entity.current_hp
+	var color = get_hp_color(entity.current_hp, entity.max_hp)
+	health_bar.self_modulate = color
 
 
 func start_turn() -> void:
@@ -25,22 +27,42 @@ func start_turn() -> void:
 
 func _update_health_indicator() -> void:
 	var tween = create_tween()
-	tween.tween_property(health_bar, "value", entity.current_hp, 2)
+	tween.tween_property(health_bar, "value", entity.current_hp, 0.5)
+
+	var target_color = get_hp_color(entity.current_hp, entity.max_hp)
+
+	tween.parallel().tween_property(health_bar, "self_modulate", target_color, 0.5)
+
 	await tween.finished
 
 
 func _process_health_change(is_aoe):
 	await _update_health_indicator()
 	
+	if entity.current_hp == 0:
+		entity.death.emit()
+		return
+	
 	if is_aoe:
 		entity.damage_processed.emit()
 		return 
-		
+	
 	entity.turn_ended.emit()
 	
 
 func _on_character_sprite_pressed() -> void:
 	target_enemy.emit(self)
+
+
+func get_hp_color(current_hp: float, max_hp: float) -> Color:
+	current_hp = clamp(current_hp, 0, max_hp)
+	var health_percentage = current_hp / max_hp
+
+	var red_intensity = 1.0 - health_percentage
+	var green_intensity = health_percentage
+
+	return Color(red_intensity, green_intensity, 0.0)  # No blue component
+
 
 
 func set_target(target_icon: AnimatedSprite2D):

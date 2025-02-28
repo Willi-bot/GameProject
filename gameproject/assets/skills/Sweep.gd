@@ -13,6 +13,9 @@ func _init():
 
 func execute(entity: BaseEntity) -> void:
 	super(entity)
+	selection_finished.emit()
+
+	print("THIS is emited")
 	
 	entity.use_mp(mp_cost)
 	

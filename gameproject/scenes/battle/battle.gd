@@ -52,6 +52,7 @@ var current_turn_idx : int
 var selected_target : Node2D 
 var ally_turn: bool = true
 var game_over: bool = false
+var turn_in_progress: bool = false
 
 var initiate_negotiation: bool = false
 
@@ -152,12 +153,25 @@ func _create_main_buttons():
 func _create_asset_button(asset: Asset) -> Button:
 	var btn = asset_button.instantiate() as AssetButton
 	btn.initialize(asset)
-	
+
 	btn.pressed.connect(Callable(btn, "_on_button_pressed").bind(current_turn.entity))
+	btn.asset.selection_finished.connect(_set_turn_in_progress)
+	
+	btn.asset.turn_ended.connect(_set_turn_finished)
 	btn.asset.turn_ended.connect(_next_turn)
 	
 	return btn
-	
+
+
+func _set_turn_in_progress():
+	turn_in_progress = true
+	menu_box.visible = false
+	select_icon.visible = false
+
+func _set_turn_finished():
+	turn_in_progress = false
+	menu_box.visible = true
+	select_icon.visible = true		
 	
 func _choose_target(target: EnemyNode) -> void:
 	selected_target = target
@@ -174,7 +188,7 @@ func _attack_random_ally() -> void:
 	
 	
 func _next_turn() -> void:
-	if game_over or Global.paused:
+	if turn_in_progress or game_over or Global.paused:
 		return
 
 	current_turn.set_inactive()
@@ -287,7 +301,7 @@ func _on_new_run_pressed() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if game_over or Global.paused:
+	if turn_in_progress or game_over or Global.paused:
 		return
 	
 	if ally_turn and event.is_action_pressed("EnemySelection"):		

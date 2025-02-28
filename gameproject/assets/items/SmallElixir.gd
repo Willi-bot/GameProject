@@ -10,7 +10,8 @@ func _init():
 
 func execute(entity: BaseEntity):
 	super(entity)
-	
+	selection_finished.emit()
+
 	Global._update_item_count(self)
 	entity.heal(40)
 	turn_ended.emit()

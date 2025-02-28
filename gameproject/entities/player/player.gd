@@ -35,6 +35,11 @@ func _ready() -> void:
 	active_box = style_box.duplicate()
 	active_box.set_border_width_all(2)
 
+	health_bar.max_value = entity.max_hp
+	health_bar.value = entity.current_hp
+	health_bar.self_modulate = get_hp_color(entity.current_hp, entity.max_hp)
+	current_health.text = str(entity.current_hp)
+
 
 func start_turn():
 	entity.regen_mp()
@@ -45,22 +50,31 @@ func _update_level_indicator():
 	_update_health_indicator()
 
 
-func _update_health_indicator():
-	health_bar.max_value = entity.max_hp
-	health_bar.value = entity.current_hp
-	var color = get_hp_color(entity.current_hp, entity.max_hp)
-	health_bar.self_modulate = color
+func _update_health_indicator() -> void:
 	current_health.text = str(entity.current_hp)
+	var tween = create_tween()
+	tween.tween_property(health_bar, "value", entity.current_hp, 0.5)
+
+	var target_color = get_hp_color(entity.current_hp, entity.max_hp)
+
+	tween.parallel().tween_property(health_bar, "self_modulate", target_color, 0.5)
+
+	await tween.finished
 
 
 func _process_health_change(is_aoe):
-	_update_health_indicator()
+	await _update_health_indicator()
+	
+	if entity.current_hp == 0:
+		entity.death.emit()
+		return
 	
 	if is_aoe:
-		entity.damaged_processed.emit()
+		entity.damage_processed.emit()
 		return 
-		
+	
 	entity.turn_ended.emit()
+	
 	
 
 func _add_mana_orbs(mana_points: int):

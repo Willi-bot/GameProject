@@ -35,27 +35,20 @@ signal death
 signal damage_processed
 
 
-func end_turn():
-	turn_ended.emit()
-
-
 func start_attacking(enemy_target : Node2D) -> void:
 	enemy_target.entity.be_damaged(strength)
-
 
 	
 func be_damaged(amount : int, is_aoe: bool = false) -> void:
 	current_hp = max(0, current_hp - amount)
 	
 	health_changed.emit(is_aoe)
-	
-	if current_hp == 0:
-		death.emit()
+
 	
 func heal(amount : int) -> void:
 	if current_hp < max_hp:
 		current_hp = min(current_hp + amount, max_hp)
-		health_changed.emit()
+		health_changed.emit(false)
 
 
 func use_mp(amount : int) -> void:
